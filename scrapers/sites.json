@@ -38,6 +38,11 @@
 				"http://midkar.com/jazz/jazz_12",
 				"http://midkar.com/jazz/jazz_13"
 			]
+		},{
+			"name":"notz",
+			"urls":[
+				"http://www.notz.com/jazz_midi.htm"
+			]
 		}
 	]
 }

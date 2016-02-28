@@ -25,13 +25,14 @@ class SiteRequest(threading.Thread):
 		for link in BeautifulSoup(page_contents).findAll('a',href=True):
 			if link['href'].endswith('.mid'):
 				base_url = urljoin(self.base_url,link['href'])
-				print "Scraping " + base_url
+				local_path = self.sitename + "/" + link['href'].split('/')[-1]
 				
-				try:
-					urllib.URLopener().retrieve(base_url, self.sitename 
-						+ "/" + link['href'].split('/')[-1])
-				except IOError,e:
-					print e
+				if not os.path.exists(local_path):
+					print "Downloading " + base_url
+					try:
+						urllib.URLopener().retrieve(base_url, local_path)
+					except IOError,e:
+						print e
 
 if __name__ == '__main__':
 	# open the data file
