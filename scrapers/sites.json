@@ -59,6 +59,11 @@
 				"http://jawor.jazz.midi.fm.interiowo.pl/docs/others/others.htm"
 			],
 			"extension":".zip"
+		},{
+			"name":"oocities",
+			"urls":[
+				"http://www.oocities.org/bourbonstreet/1114/justjaz2.htm"
+			]
 		}
 	]
 }
