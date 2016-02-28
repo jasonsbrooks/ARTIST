@@ -3,17 +3,18 @@
 Jazz MIDI scraper
 USAGE: scrape.py [SITE_JSON]
 """
-import urllib,urllib2,os,sys,json,threading
+import urllib,urllib2,os,sys,json,threading,zipfile
 from urlparse import urljoin
 from BeautifulSoup import BeautifulSoup
 
 # class for site requests (a thread)
 class SiteRequest(threading.Thread):
     
-    def __init__(self, sitename, base_url):
+    def __init__(self, sitename, base_url,extension):
         threading.Thread.__init__(self)
         self.sitename = sitename
         self.base_url = base_url
+        self.extension = extension
 
     def run(self):
 		# request the "homepage"
@@ -23,15 +24,20 @@ class SiteRequest(threading.Thread):
 
 		# grab all the MIDI links
 		for link in BeautifulSoup(page_contents).findAll('a',href=True):
-			if link['href'].endswith('.mid'):
+			if link['href'].endswith(self.extension):
 				base_url = urljoin(self.base_url,link['href'])
 				local_path = self.sitename + "/" + link['href'].split('/')[-1]
-				
+
 				if not os.path.exists(local_path):
 					print "Downloading " + base_url
 					try:
 						urllib.URLopener().retrieve(base_url, local_path)
-					except IOError,e:
+
+						# extract if a .zip file
+						if extension == ".zip":
+							with zipfile.ZipFile(local_path, "r") as z:
+								z.extractall(self.sitename)
+					except (IOError,zipfile.BadZipfile) as e:
 						print e
 
 if __name__ == '__main__':
@@ -47,6 +53,7 @@ if __name__ == '__main__':
 	# iterate through all the sites
 	for site in sites:
 		sitename = site['name']
+		extension = site.get('extension',".mid")
 
 		# and all the urls for this site
 		for base_url in site['urls']:
@@ -55,6 +62,6 @@ if __name__ == '__main__':
 				os.makedirs(sitename)
 
 			# and start the requests
-			t = SiteRequest(sitename,base_url)
+			t = SiteRequest(sitename,base_url,extension)
 			t.start()
 					

@@ -48,6 +48,17 @@
 			"urls":[
 				"http://www.jazclass.aust.com/1books/lib.htm"
 			]
+		},{
+			"name":"jawor",
+			"urls":[
+				"http://jawor.jazz.midi.fm.interiowo.pl/docs/pianobar/pianobar.htm",
+				"http://jawor.jazz.midi.fm.interiowo.pl/docs/small/small.htm",
+				"http://jawor.jazz.midi.fm.interiowo.pl/docs/swing/swing.htm",
+				"http://jawor.jazz.midi.fm.interiowo.pl/docs/fusion/fusion.htm",
+				"http://jawor.jazz.midi.fm.interiowo.pl/docs/latin/latin.htm",
+				"http://jawor.jazz.midi.fm.interiowo.pl/docs/others/others.htm"
+			],
+			"extension":".zip"
 		}
 	]
 }
