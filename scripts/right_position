@@ -1,0 +1,20 @@
+SUCCESS - Valid Joint Solution Found from Seed Type: Current Joint Angles
+
+IK Joint Solution:
+{'right_s0': 0.4499520998248755, 'right_s1': 0.7778612294900361, 'right_w0': 2.771255789773783, 'right_w1': 1.3194911227464332, 'right_w2': -0.32395679472758815, 'right_e0': -2.3708071139227567, 'right_e1': 1.2856667428567157}
+------------------
+Response Message:
+joints: 
+  - 
+    header: 
+      seq: 0
+      stamp: 
+        secs: 0
+        nsecs: 0
+      frame_id: ''
+    name: ['right_s0', 'right_s1', 'right_e0', 'right_e1', 'right_w0', 'right_w1', 'right_w2']
+    position: [0.4499520998248755, 0.7778612294900361, -2.3708071139227567, 1.2856667428567157, 2.771255789773783, 1.3194911227464332, -0.32395679472758815]
+    velocity: []
+    effort: []
+isValid: [True]
+result_type: [2]
