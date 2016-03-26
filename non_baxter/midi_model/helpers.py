@@ -55,64 +55,82 @@ def midi_to_song(midifilename):
     time_sig_events.sort(key=lambda x: x['start_tick'])
     key_sig_events.sort(key=lambda x: x['start_tick'])
 
+    # (!!!) it's possible that no time/key sig given in MIDI file
+    # in these cases, we create a list with a single default key/time signature
+    # according to midi standards:
+    # default key: (0, 0)
+    # default time: (4, 4)
+    if len(key_sig_events) == 0:
+        key_sig_events.append({'start_tick': 0, 'sf': 0, 'mi': 0, 'type': 'key'})
+    if len(time_sig_events) == 0:
+        time_sig_events.append({'start_tick': 0, 'n': 4, 'd': 4, 'type': 'time'})
+
     # iterate thru tracks
     # create appropriate song, track, and note structure
     for track in pattern:
-        for event in track:
-            if type(event) is midi.ProgramChangeEvent:  # only act if actual instrument track!
-                instr_key = event.data[0]  # event.data[0] contains instrument key
-                notes = get_notes(get_note_events(track), resolution)
+        instr_track_data = is_instr_track(track)
+        if instr_track_data:
+            instr_key = instr_track_data[0]
+            instr_name = instr_track_data[1]
+            channel = instr_track_data[2]
 
-                # Create temporary copy of time_sig_events and key_sig_events
-                temp_time_sig_events = time_sig_events[:]
-                temp_key_sig_events = key_sig_events[:]
+            notes = get_notes(get_note_events(track), resolution)
 
-                # Note: this assumes that a key and time signature are intialized at tick 0!
-                ts = temp_time_sig_events.pop(0)  # holds current time signature
-                ks = temp_key_sig_events.pop(0)  # holds current key signature
+            # Create temporary copy of time_sig_events and key_sig_events
+            temp_time_sig_events = time_sig_events[:]
+            temp_key_sig_events = key_sig_events[:]
 
-                all_sig_events = temp_time_sig_events + temp_key_sig_events
-                all_sig_events.sort(key=lambda x: x['start_tick'])
+            # Note: this assumes that a key and time signature are intialized at tick 0!
+            ts = temp_time_sig_events.pop(0)  # holds current time signature
+            ks = temp_key_sig_events.pop(0)  # holds current key signature
 
-                track = Track(time_sig=(ts['n'], ts['d']), key_sig=(ks['sf'], ks['mi']), instrument=instr_key, ppqn=resolution, start_tick=0)
+            all_sig_events = temp_time_sig_events + temp_key_sig_events
+            all_sig_events.sort(key=lambda x: x['start_tick'])
 
-                # init these next temp vars in case no sig events left
-                next_sig_event = None
-                next_track_tick = sys.maxint
+            track = Track(time_sig=(ts['n'], ts['d']), key_sig=(ks['sf'], ks['mi']),
+                          instr_key=instr_key, instr_name=instr_name, channel=channel,
+                          ppqn=resolution, start_tick=0)
 
-                if len(all_sig_events) > 0:
-                    next_sig_event = all_sig_events[0]
-                    next_track_tick = next_sig_event['start_tick']  # holds max tick of current track
+            # init these next temp vars in case no sig events left
+            next_sig_event = None
+            next_track_tick = sys.maxint
 
-                for n in notes:
-                    if n.start_tick < next_track_tick:  # still on current track
-                        track.append(n)
-                    else:  # must append current track to song and create new track for this note
-                        # append current track to song
-                        song.append(track)
+            if len(all_sig_events) > 0:
+                next_sig_event = all_sig_events[0]
+                next_track_tick = next_sig_event['start_tick']  # holds max tick of current track
 
-                        # update key or time signature
-                        if next_sig_event['type'] == 'key':
-                            ks = next_sig_event
-                        elif next_sig_event['type'] == 'time':
-                            ts = next_sig_event
+            for n in notes:
+                if n.start_tick < next_track_tick:  # still on current track
+                    track.append(n)
+                else:  # must append current track to song and create new track for this note
+                    # append current track to song
+                    song.append(track)
 
-                        # create new track and update temporary variables
-                        track = Track(time_sig=(ts['n'], ts['d']), key_sig=(ks['sf'], ks['mi']), instrument=instr_key, ppqn=resolution, start_tick=next_sig_event['start_tick'])
+                    # update key or time signature
+                    if next_sig_event['type'] == 'key':
+                        ks = next_sig_event
+                    elif next_sig_event['type'] == 'time':
+                        ts = next_sig_event
 
-                        all_sig_events.pop(0)
+                    # create new track and update temporary variables
+                    track = Track(time_sig=(ts['n'], ts['d']), key_sig=(ks['sf'], ks['mi']),
+                                  instr_key=instr_key, instr_name=instr_name,
+                                  channel=channel, ppqn=resolution,
+                                  start_tick=next_sig_event['start_tick'])
 
-                        if len(all_sig_events) > 0:
-                            next_sig_event = all_sig_events[0]
-                            next_track_tick = next_sig_event['start_tick']
-                        else:  # if no events left, set next_track_tick to maxint
-                            next_sig_event = None
-                            next_track_tick = sys.maxint
+                    all_sig_events.pop(0)
 
-                        # append note to new track
-                        track.append(n)
+                    if len(all_sig_events) > 0:
+                        next_sig_event = all_sig_events[0]
+                        next_track_tick = next_sig_event['start_tick']
+                    else:  # if no events left, set next_track_tick to maxint
+                        next_sig_event = None
+                        next_track_tick = sys.maxint
 
-                break  # this assumes that there is only one ProgramChangeEvent per instrument track
+                    # append note to new track
+                    track.append(n)
+            song.append(track)  # final append of track
+
     return song
 
 
@@ -123,8 +141,6 @@ def extract(midifilename):
     instr_tracks_dic = {}
     pattern = midi.read_midifile(midifilename)
     pattern.make_ticks_abs()  # makes ticks absolute instead of relative
-    resolution = pattern.resolution  # note pattern.resolution contains resolution (ppqn)
-    print resolution
 
     for track in pattern:
         print track[0:20]
@@ -132,8 +148,6 @@ def extract(midifilename):
             if type(event) is midi.ProgramChangeEvent:  # only act if this track is an actual instrument track!
                 instr_key = event.data[0]  # event.data[0] contains instrument key
                 notes = get_note_events(track)
-                print get_notes(notes, resolution)[0:20]
-
 
                 if not(instr_key in instr_tracks_dic):
                     instr_tracks_dic[instr_key] = [notes]
@@ -142,6 +156,28 @@ def extract(midifilename):
 
                 break  # this assumes that there is only one ProgramChangeEvent per instrument track
     return instr_tracks_dic
+
+
+# checks if midi track object is an instrument track
+# returns dic (instr_key, instr_name (may be empty), channel) if true
+# else returns None
+def is_instr_track(track):
+    should_return = False
+    instr_key = -1
+    instr_name = ""
+    channel=-1
+    for event in track:
+        if type(event) is midi.ProgramChangeEvent:  # only act if actual instrument track!
+            should_return = True
+            instr_key = event.data[0]  # event.data[0] contains instrument key
+            channel = event.channel
+        if type(event) is midi.TrackNameEvent:
+            instr_name = event.text
+
+    if should_return:
+        return (instr_key, instr_name, channel)
+    else:
+        return None
 
 
 # given a list of note events (from function get_note_events)
@@ -254,7 +290,7 @@ def main():
     # print transpose_note_list(test_note_list, 40, 51)
     # print transpose_instr_tracks_dic(test_dic, 40, 51)
 
-    song = midi_to_song("uzeb_cool_it.mid")
+    song = midi_to_song("MIDI_sample.mid")
     print song
 
 
