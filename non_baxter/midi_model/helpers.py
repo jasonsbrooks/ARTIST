@@ -165,7 +165,7 @@ def is_instr_track(track):
     should_return = False
     instr_key = -1
     instr_name = ""
-    channel=-1
+    channel = -1
     for event in track:
         if type(event) is midi.ProgramChangeEvent:  # only act if actual instrument track!
             should_return = True
