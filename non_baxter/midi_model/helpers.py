@@ -1,13 +1,18 @@
 '''
-Todo:
+Complete:
 1) Get all TimeSignatureEvent and SetTempoEvent
 2) tag tracks with this metadata (including time signature and tempo)
+
+Todo:
+2) investigate why occasional on/off note event mismatch errors
 3) duration in get_notes-- subtracting ticks doesn't seem to give you the
     exact right float value...seems to be a bit short everytime
 3b) Figure out how to insert rests into note list from information given
     but do this after you think more about what the duration actually means
 4) figure out a way to NOT include drums (key is 0?  same as piano?)
     idea: drums are always on channel 9 (i.e. 0-indexed 10 from https://www.cs.cmu.edu/~music/cmsip/readings/MIDI%20tutorial%20for%20programmers.html)
+5) Add naive tempo/dynamics in track
+
 Important MIDI Notes:
 1) NoteOnEvent with velocity of 0 === NoteOffEvent
 2) pattern.resolution contains resolution (ppqn)
@@ -19,6 +24,7 @@ from song import Song
 from track import Track
 from note import Note
 
+
 # takes midi file and returns a representative song object
 # a Song is a list of many Tracks
 # a Track is a list of many Notes representing a common
@@ -29,30 +35,86 @@ def midi_to_song(midifilename):
     resolution = pattern.resolution  # note pattern.resolution contains resolution (ppqn)
     print 'Resolution (ppqn): ' + str(resolution)
 
+    # create Song object
+    song = Song(title=midifilename, ppqn=resolution)
+
+    # create ordered list of all time and key signature events
     time_sig_events = []
-    # first, create ordered list of all time and key signature events
+    key_sig_events = []
+    all_sig_events = []
+
     for track in pattern:
         for event in track:
             if type(event) is midi.TimeSignatureEvent:
-                time_sig = (event.data[0], 2**event.data[1])  # (num, denom), note that in MIDI denom is a negative power of 2
+                time_sig = {'start_tick': event.tick, 'n': event.data[0], 'd': 2**event.data[1], 'type': 'time'}  # see track.py, note that in MIDI denom is a negative power of 2
+                time_sig_events.append(time_sig)
+            elif type(event) is midi.KeySignatureEvent:
+                key_sig = {'start_tick': event.tick, 'sf': event.data[0], 'mi': event.data[1], 'type': 'key'}  # see track.py
+                key_sig_events.append(key_sig)
 
+    time_sig_events.sort(key=lambda x: x['start_tick'])
+    key_sig_events.sort(key=lambda x: x['start_tick'])
 
-
-
+    # iterate thru tracks
+    # create appropriate song, track, and note structure
+    for track in pattern:
         for event in track:
-            if type(event) is midi.ProgramChangeEvent:  # only act if this track is an actual instrument track!
+            if type(event) is midi.ProgramChangeEvent:  # only act if actual instrument track!
                 instr_key = event.data[0]  # event.data[0] contains instrument key
-                notes = get_note_events(track)
-                print get_notes(notes, resolution)[0:20]
+                notes = get_notes(get_note_events(track), resolution)
 
+                # Create temporary copy of time_sig_events and key_sig_events
+                temp_time_sig_events = time_sig_events[:]
+                temp_key_sig_events = key_sig_events[:]
 
-                if not(instr_key in instr_tracks_dic):
-                    instr_tracks_dic[instr_key] = [notes]
-                else:
-                    instr_tracks_dic[instr_key].append(notes)
+                # Note: this assumes that a key and time signature are intialized at tick 0!
+                ts = temp_time_sig_events.pop(0)  # holds current time signature
+                ks = temp_key_sig_events.pop(0)  # holds current key signature
+
+                all_sig_events = temp_time_sig_events + temp_key_sig_events
+                all_sig_events.sort(key=lambda x: x['start_tick'])
+
+                track = Track(time_sig=(ts['n'], ts['d']), key_sig=(ks['sf'], ks['mi']), instrument=instr_key, ppqn=resolution, start_tick=0)
+
+                # init these next temp vars in case no sig events left
+                next_sig_event = None
+                next_track_tick = sys.maxint
+
+                if len(all_sig_events) > 0:
+                    next_sig_event = all_sig_events[0]
+                    next_track_tick = next_sig_event['start_tick']  # holds max tick of current track
+
+                for n in notes:
+                    if n.start_tick < next_track_tick:  # still on current track
+                        track.append(n)
+                    else:  # must append current track to song and create new track for this note
+                        # append current track to song
+                        song.append(track)
+
+                        # update key or time signature
+                        if next_sig_event['type'] == 'key':
+                            ks = next_sig_event
+                        elif next_sig_event['type'] == 'time':
+                            ts = next_sig_event
+
+                        # create new track and update temporary variables
+                        track = Track(time_sig=(ts['n'], ts['d']), key_sig=(ks['sf'], ks['mi']), instrument=instr_key, ppqn=resolution, start_tick=next_sig_event['start_tick'])
+
+                        all_sig_events.pop(0)
+
+                        if len(all_sig_events) > 0:
+                            next_sig_event = all_sig_events[0]
+                            next_track_tick = next_sig_event['start_tick']
+                        else:  # if no events left, set next_track_tick to maxint
+                            next_sig_event = None
+                            next_track_tick = sys.maxint
+
+                        # append note to new track
+                        track.append(n)
 
                 break  # this assumes that there is only one ProgramChangeEvent per instrument track
-    return instr_tracks_dic
+    return song
+
 
 # takes midi file and constructs dictionary with following structure:
 # {instr_key: [track1, track2, ...], ...} where track1, track2...are list of tuples returned by get_note_events
@@ -181,16 +243,19 @@ def transpose_instr_tracks_dic(instr_tracks_dic, lo, hi):
 # test helper methods
 def main():
     # test_dic = extract("MIDI_sample.mid")
-    test_dic = extract("uzeb_cool_it.mid")
-    test_note_list = []
+    # test_dic = extract("uzeb_cool_it.mid")
+    # test_note_list = []
 
-    for k, v in test_dic.iteritems():
-        # print repr(k)
-        # print len(v)
-        test_note_list = v[0]
+    # for k, v in test_dic.iteritems():
+    #     # print repr(k)
+    #     # print len(v)
+    #     test_note_list = v[0]
 
     # print transpose_note_list(test_note_list, 40, 51)
     # print transpose_instr_tracks_dic(test_dic, 40, 51)
+
+    song = midi_to_song("uzeb_cool_it.mid")
+    print song
 
 
 if __name__ == "__main__":
