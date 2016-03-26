@@ -5,7 +5,8 @@ class Note(object):
     Properties
         pitch: Integer from 0-127 representing note pitch
             Defaults at 60 (C3)
-        dur: ???
+            Should we have -1 represent a rest?
+        dur: ??? Float where 1.0 ~ quarter note
         tick_dur: Integer representing duration of note in ticks
         start_tick: Integer representing start time of note relative to Song (i.e. 0 is beginning of song)
             Note: NOT relative to Track object, relative to Song object!
@@ -18,3 +19,7 @@ class Note(object):
         self.tick_dur = tick_dur
         self.start_tick = start_tick
         self.ppqn = ppqn
+
+    def __repr__(self):
+        return "note(pitch=%r, dur=%r, start_tick=%r)" % \
+            (self.pitch, self.dur, self.start_tick)
