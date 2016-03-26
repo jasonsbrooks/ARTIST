@@ -89,7 +89,7 @@ def midi_to_song(midifilename):
 
             track = Track(time_sig=(ts['n'], ts['d']), key_sig=(ks['sf'], ks['mi']),
                           instr_key=instr_key, instr_name=instr_name, channel=channel,
-                          ppqn=resolution, start_tick=0)
+                          start_tick=0)
 
             # init these next temp vars in case no sig events left
             next_sig_event = None
@@ -115,7 +115,7 @@ def midi_to_song(midifilename):
                     # create new track and update temporary variables
                     track = Track(time_sig=(ts['n'], ts['d']), key_sig=(ks['sf'], ks['mi']),
                                   instr_key=instr_key, instr_name=instr_name,
-                                  channel=channel, ppqn=resolution,
+                                  channel=channel,
                                   start_tick=next_sig_event['start_tick'])
 
                     all_sig_events.pop(0)
@@ -203,7 +203,7 @@ def get_notes(note_events, ppqn):
                 start_tick = note_on[1]
                 tick_dur = tick - start_tick
                 dur = 1.0 * tick_dur / ppqn
-                note_obj = Note(pitch=pitch, dur=dur, tick_dur=tick_dur, start_tick=start_tick, ppqn=ppqn)
+                note_obj = Note(pitch=pitch, dur=dur, tick_dur=tick_dur, start_tick=start_tick)
                 note_objs.append(note_obj)
                 del unclosed_notes[pitch]  # delete this pitch key in unclosed_notes dictionary
         else:  # Error checking

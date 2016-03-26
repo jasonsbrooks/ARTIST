@@ -26,7 +26,7 @@ class Track(list):
     """
 
     def __init__(self, time_sig=(4, 4), key_sig=(0, 0), instr_key=-1, instr_name="",
-                 channel=0, tempo=120, dynamic="mf", ppqn=100, start_tick=0, notes=[]):
+                 channel=0, tempo=120, dynamic="mf", start_tick=0, notes=[]):
         self.time_sig = time_sig
         self.key_sig = key_sig
         self.instr_key = instr_key
@@ -34,7 +34,6 @@ class Track(list):
         self.channel = channel
         self.tempo = tempo
         self.dynamic = dynamic
-        self.ppqn = ppqn
         self.start_tick = start_tick
         super(Track, self).__init__(notes)
 
