@@ -1,4 +1,4 @@
-class Song(object):
+class Song(list):
     """
     A Song with the following properties:
 
@@ -9,7 +9,7 @@ class Song(object):
 
     def __init__(self, title="", tracks=[]):
         self.title = title
-        self.tracks = tracks
+        super(Song, self).__init__(tracks)
 
     def add_track(self, track):
         """

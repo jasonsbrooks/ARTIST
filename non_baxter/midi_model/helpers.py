@@ -2,22 +2,26 @@
 Todo:
 1) Get all TimeSignatureEvent and SetTempoEvent
 2) tag tracks with this metadata (including time signature and tempo)
+
+Important Notes:
+NoteOnEvent with velocity of 0 === NoteOffEvent
 '''
 
 
 import midi
 import sys
 
-
+#
 # takes midi file and constructs dictionary with following structure:
 # {instr_key: [track1, track2, ...], ...} where track1, track2...are list of tuples returned by get_notes
 # currently assumes there exists only one ProgramChangeEvent per instrument track
 def extract(midifilename):
     instr_tracks_dic = {}
     pattern = midi.read_midifile(midifilename)
+    # note pattern.resolution contains resolution (ppqn)
 
     for track in pattern:
-        print track[0:20]
+        print track[0:80]
         for event in track:
             if type(event) is midi.ProgramChangeEvent:  # only act if this track is an actual instrument track!
                 instr_key = event.data[0]  # event.data[0] contains instrument key

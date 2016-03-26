@@ -1,4 +1,4 @@
-class Track(object):
+class Track(list):
     """
     A Track represents a line of music in a Song with a single
 
@@ -30,10 +30,4 @@ class Track(object):
         self.dynamic = dynamic
         self.ppqn = ppqn
         self.start_tick = start_tick
-        self.notes = notes
-
-    def add_note(self, note):
-        """
-        adds Note object to list of notes
-        """
-        self.notes.append(note)
+        super(Track, self).__init__(notes)
