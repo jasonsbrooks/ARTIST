@@ -25,6 +25,13 @@ from track import Track
 from note import Note
 
 
+# Takes a track object with notes played and time signature
+# Rounds note durations into 'appropriate' durations (decide what to do about time signature)
+# Inserts rests into appropriate other locations
+def track_filter(track):
+    pass
+
+
 # takes midi file and returns a representative song object
 # a Song is a list of many Tracks
 # a Track is a list of many Notes representing a common
@@ -67,14 +74,13 @@ def midi_to_song(midifilename):
 
     # iterate thru tracks
     # create appropriate song, track, and note structure
-    for track in pattern:
-        instr_track_data = is_instr_track(track)
+    for midi_track in pattern:
+        instr_track_data = is_instr_track(midi_track)
         if instr_track_data:
             instr_key = instr_track_data[0]
             instr_name = instr_track_data[1]
             channel = instr_track_data[2]
 
-            notes = get_notes(get_note_events(track), resolution)
 
             # Create temporary copy of time_sig_events and key_sig_events
             temp_time_sig_events = time_sig_events[:]
@@ -98,6 +104,8 @@ def midi_to_song(midifilename):
             if len(all_sig_events) > 0:
                 next_sig_event = all_sig_events[0]
                 next_track_tick = next_sig_event['start_tick']  # holds max tick of current track
+
+            notes = get_notes(get_note_events(midi_track), resolution, ts['n'])
 
             for n in notes:
                 if n.start_tick < next_track_tick:  # still on current track
@@ -181,9 +189,10 @@ def is_instr_track(track):
 
 
 # given a list of note events (from function get_note_events)
-# returns list of note objects with appropriate durations
+#   and ppqn (pulses per quarter note) and qnpm (quarter notes per measure)
+# returns list of note objects with appropriate durations and other properties
 # this method calculates appropriate durations based on ppqn of track
-def get_notes(note_events, ppqn):
+def get_notes(note_events, ppqn, qnpm):
     note_objs = []
     unclosed_notes = {}  # holds running hash of notes that haven't seen an off event yet
                          # key is note pitch (integer from 0-127), value is note_event tuple
@@ -193,7 +202,8 @@ def get_notes(note_events, ppqn):
         pitch = note_event[2]
         if on_off == 1:  # NoteOnEvent
             if pitch in unclosed_notes:  # error check if two consecutive noteonevents without noteoffevent
-                print 'Error: <get_notes> consecutive unclosed NoteOnEvent of same pitch: ' + str(note_event)
+                measure = note_event[1] / (ppqn * qnpm)
+                print 'Error: <get_notes> consecutive unclosed NoteOnEvent of same pitch: ' + str(note_event) + 'measure: ' + str(measure)
             unclosed_notes[pitch] = note_event
         elif on_off == 0:  # NoteOffEvent
             if pitch not in unclosed_notes:
@@ -203,7 +213,9 @@ def get_notes(note_events, ppqn):
                 start_tick = note_on[1]
                 tick_dur = tick - start_tick
                 dur = 1.0 * tick_dur / ppqn
-                note_obj = Note(pitch=pitch, dur=dur, tick_dur=tick_dur, start_tick=start_tick)
+                measure = start_tick / (ppqn * qnpm)
+                note_obj = Note(pitch=pitch, dur=dur, tick_dur=tick_dur, start_tick=start_tick,
+                                measure=measure)
                 note_objs.append(note_obj)
                 del unclosed_notes[pitch]  # delete this pitch key in unclosed_notes dictionary
         else:  # Error checking
@@ -291,7 +303,7 @@ def main():
     # print transpose_instr_tracks_dic(test_dic, 40, 51)
 
     song = midi_to_song("MIDI_sample.mid")
-    print song
+    # print song
 
 
 if __name__ == "__main__":
