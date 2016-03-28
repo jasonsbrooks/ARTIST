@@ -23,6 +23,7 @@ import sys
 from song import Song
 from track import Track
 from note import Note
+from collections import defaultdict
 
 
 # Takes a track object with notes played and time signature
@@ -105,7 +106,7 @@ def midi_to_song(midifilename):
                 next_sig_event = all_sig_events[0]
                 next_track_tick = next_sig_event['start_tick']  # holds max tick of current track
 
-            notes = get_notes(get_note_events(midi_track), resolution, ts['n'])
+            notes = get_notes(get_note_events(midi_track), resolution, track)
 
             for n in notes:
                 if n.start_tick < next_track_tick:  # still on current track
@@ -189,35 +190,36 @@ def is_instr_track(track):
 
 
 # given a list of note events (from function get_note_events)
-#   and ppqn (pulses per quarter note) and qnpm (quarter notes per measure)
+#   and ppqn (pulses per quarter note)
 # returns list of note objects with appropriate durations and other properties
 # this method calculates appropriate durations based on ppqn of track
-def get_notes(note_events, ppqn, qnpm):
+def get_notes(note_events, ppqn, track):
     note_objs = []
-    unclosed_notes = {}  # holds running hash of notes that haven't seen an off event yet
-                         # key is note pitch (integer from 0-127), value is note_event tuple
+    unclosed_notes = defaultdict(lambda: [])  # holds running hash of notes that haven't seen an off event yet
+                                              # key is note pitch (integer from 0-127), value is a QUEUE of note_event tuples
     for note_event in note_events:
         on_off = note_event[0]
         tick = note_event[1]
         pitch = note_event[2]
         if on_off == 1:  # NoteOnEvent
-            if pitch in unclosed_notes:  # error check if two consecutive noteonevents without noteoffevent
-                measure = note_event[1] / (ppqn * qnpm)
-                print 'Error: <get_notes> consecutive unclosed NoteOnEvent of same pitch: ' + str(note_event) + 'measure: ' + str(measure)
-            unclosed_notes[pitch] = note_event
+            # if pitch in unclosed_notes and len(unclosed_notes[pitch]) == 0:  # error check if two consecutive noteonevents without noteoffevent
+            #     measure = note_event[1] / (ppqn * track.time_sig[1])
+            #     print 'Error: <get_notes> consecutive unclosed NoteOnEvent of same pitch: %r, measure: %r, instr: %r, pitch: %r ' % (str(note_event), str(measure), track.instr_name, pitch_to_letter(pitch))
+            unclosed_notes[pitch].append(note_event)
         elif on_off == 0:  # NoteOffEvent
-            if pitch not in unclosed_notes:
-                print 'Error: <get_notes> NoteOffEvent without corresponding NoteOnEvent' + str(note_event)
+            if len(unclosed_notes[pitch]) == 0:
+                measure = note_event[1] / (ppqn * track.time_sig[1])
+                print 'Error: <get_notes> NoteOffEvent without corresponding NoteOnEvent %r, measure: %r, instr: %r, pitch: %r ' % (str(note_event), str(measure), track.instr_name, pitch_to_letter(pitch))
             else:
-                note_on = unclosed_notes[pitch]
+                note_on = unclosed_notes[pitch].pop(0)
                 start_tick = note_on[1]
                 tick_dur = tick - start_tick
                 dur = 1.0 * tick_dur / ppqn
-                measure = start_tick / (ppqn * qnpm)
+                measure = start_tick / (ppqn * track.time_sig[1])
                 note_obj = Note(pitch=pitch, dur=dur, tick_dur=tick_dur, start_tick=start_tick,
                                 measure=measure)
                 note_objs.append(note_obj)
-                del unclosed_notes[pitch]  # delete this pitch key in unclosed_notes dictionary
+                # del unclosed_notes[pitch]  # delete this pitch key in unclosed_notes dictionary
         else:  # Error checking
             print 'Error: <get_notes> Note is neither On nor Off event'
 
@@ -288,6 +290,24 @@ def transpose_instr_tracks_dic(instr_tracks_dic, lo, hi):
     return new_instr_tracks_dic
 
 
+# given a pitch value returns the appropriate note "letter"
+def pitch_to_letter(pitch):
+    p_to_l_dic = {0: 'C',
+                  1: 'C#',
+                  2: 'D',
+                  3: 'D#',
+                  4: 'E',
+                  5: 'F',
+                  6: 'F#',
+                  7: 'G',
+                  8: 'G#',
+                  9: 'A',
+                  10: 'A#',
+                  11: 'B'}
+
+    return p_to_l_dic[pitch % 12]
+
+
 # test helper methods
 def main():
     # test_dic = extract("MIDI_sample.mid")
@@ -303,6 +323,7 @@ def main():
     # print transpose_instr_tracks_dic(test_dic, 40, 51)
 
     song = midi_to_song("MIDI_sample.mid")
+    # song = midi_to_song("uzeb_cool_it.mid")
     # print song
 
 
