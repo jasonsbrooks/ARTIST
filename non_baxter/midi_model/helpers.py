@@ -29,46 +29,6 @@ from collections import defaultdict
 DURKS_PER_QUARTER_NOTE = 8
 
 
-# Takes a track object
-# Inserts rests into appropriate locations (where no pitch is being played)
-# Returns nothing
-# Danger: directly modifies the track object that is passed to it!
-def insert_rests_into_track(track, ppqn):
-    # find total number of durks in track
-    max_durk = track[-1].start + track[-1].dur
-    min_durk = track[0].start
-
-    # initialize rest list (each entry represents one durk)
-    rest_list = [True for i in range(max_durk)]
-
-    # change all durks in rest_list to 0 where note is being played
-    for note in track:
-        for durk in range(note.dur):
-            rest_list[note.start + durk] = False  # set rest_list to False for each durk where a note pitch is playing
-
-    # iterate through completed rest_list and insert appropriate rests into track
-    current_durk = min_durk
-    while current_durk < max_durk:
-        if rest_list[current_durk]:  # rest found!
-            rest_start = current_durk  # store start of rest note
-
-            while rest_list[current_durk]:  # increment current_durk until pitch found
-                current_durk += 1
-
-            rest_dur = current_durk - rest_start
-            rest_measure = rest_start / (DURKS_PER_QUARTER_NOTE * track.time_sig[1])  # note 8 is number of durks per quarter note
-
-            note = Note(pitch=-1, dur=rest_dur, start=rest_start,
-                        tick_dur=-1, start_tick=-1, measure=rest_measure)
-
-            track.append(note)  # store this contiguous rest block as "rest note" in the track
-
-        else:
-            current_durk += 1
-
-    return
-
-
 # takes midi file and returns a representative song object
 # a Song is a list of many Tracks
 # a Track is a list of many Notes representing a common
@@ -178,6 +138,46 @@ def midi_to_song(midifilename):
             song.append(track)  # final append of track
 
     return song
+
+
+# Takes a track object
+# Inserts rests into appropriate locations (where no pitch is being played)
+# Returns nothing
+# Danger: directly modifies the track object that is passed to it!
+def insert_rests_into_track(track, ppqn):
+    # find total number of durks in track
+    max_durk = track[-1].start + track[-1].dur
+    min_durk = track[0].start
+
+    # initialize rest list (each entry represents one durk)
+    rest_list = [True for i in range(max_durk)]
+
+    # change all durks in rest_list to 0 where note is being played
+    for note in track:
+        for durk in range(note.dur):
+            rest_list[note.start + durk] = False  # set rest_list to False for each durk where a note pitch is playing
+
+    # iterate through completed rest_list and insert appropriate rests into track
+    current_durk = min_durk
+    while current_durk < max_durk:
+        if rest_list[current_durk]:  # rest found!
+            rest_start = current_durk  # store start of rest note
+
+            while rest_list[current_durk]:  # increment current_durk until pitch found
+                current_durk += 1
+
+            rest_dur = current_durk - rest_start
+            rest_measure = rest_start / (DURKS_PER_QUARTER_NOTE * track.time_sig[1])  # note 8 is number of durks per quarter note
+
+            note = Note(pitch=-1, dur=rest_dur, start=rest_start,
+                        tick_dur=-1, start_tick=-1, measure=rest_measure)
+
+            track.append(note)  # store this contiguous rest block as "rest note" in the track
+
+        else:
+            current_durk += 1
+
+    return
 
 
 # checks if midi track object is an instrument track
