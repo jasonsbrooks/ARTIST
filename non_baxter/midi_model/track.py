@@ -23,6 +23,7 @@ class Track(list):
         dynamic: (naive) Integer representing dynamic marking (0-127, corresponds to MIDI velocity)
         start_tick: Integer representing start time of track relative to song (i.e. 0 is beginning of song)
         notes: list of Note objects that constitute the track
+            Note: notes are NOT in chronological order by start
     """
 
     def __init__(self, time_sig=(4, 4), key_sig=(0, 0), instr_key=-1, instr_name="",

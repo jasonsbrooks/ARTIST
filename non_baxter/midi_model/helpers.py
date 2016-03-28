@@ -25,12 +25,47 @@ from track import Track
 from note import Note
 from collections import defaultdict
 
+DURKS_PER_QUARTER_NOTE = 8
 
-# Takes a track object with notes played and time signature
-# Rounds note durations into 'appropriate' durations (decide what to do about time signature)
-# Inserts rests into appropriate other locations
-def track_filter(track):
-    pass
+
+# Takes a track object
+# Inserts rests into appropriate locations (where no pitch is being played)
+# Returns nothing
+# Danger: directly modifies the track object that is passed to it!
+def insert_rests_into_track(track, ppqn):
+    # find total number of durks in track
+    max_durk = track[-1].start + track[-1].dur
+    min_durk = track[0].start
+
+    # initialize rest list (each entry represents one durk)
+    rest_list = [True for i in range(max_durk)]
+
+    # change all durks in rest_list to 0 where note is being played
+    for note in track:
+        for durk in range(note.dur):
+            rest_list[note.start + durk] = False  # set rest_list to False for each durk where a note pitch is playing
+
+    # iterate through completed rest_list and insert appropriate rests into track
+    current_durk = min_durk
+    while current_durk < max_durk:
+        if rest_list[current_durk]:  # rest found!
+            rest_start = current_durk  # store start of rest note
+
+            while rest_list[current_durk]:  # increment current_durk until pitch found
+                current_durk += 1
+
+            rest_dur = current_durk - rest_start
+            rest_measure = rest_start / (DURKS_PER_QUARTER_NOTE * track.time_sig[1])  # note 8 is number of durks per quarter note
+
+            note = Note(pitch=-1, dur=rest_dur, start=rest_start,
+                        tick_dur=-1, start_tick=-1, measure=rest_measure)
+
+            track.append(note)  # store this contiguous rest block as "rest note" in the track
+
+        else:
+            current_durk += 1
+
+    return
 
 
 # takes midi file and returns a representative song object
@@ -81,7 +116,6 @@ def midi_to_song(midifilename):
             instr_key = instr_track_data[0]
             instr_name = instr_track_data[1]
             channel = instr_track_data[2]
-
 
             # Create temporary copy of time_sig_events and key_sig_events
             temp_time_sig_events = time_sig_events[:]
@@ -138,33 +172,11 @@ def midi_to_song(midifilename):
 
                     # append note to new track
                     track.append(n)
+
+            insert_rests_into_track(track, resolution)  # insert rests into track
             song.append(track)  # final append of track
 
     return song
-
-
-# takes midi file and constructs dictionary with following structure:
-# {instr_key: [track1, track2, ...], ...} where track1, track2...are list of tuples returned by get_note_events
-# currently assumes there exists only one ProgramChangeEvent per instrument track
-def extract(midifilename):
-    instr_tracks_dic = {}
-    pattern = midi.read_midifile(midifilename)
-    pattern.make_ticks_abs()  # makes ticks absolute instead of relative
-
-    for track in pattern:
-        print track[0:20]
-        for event in track:
-            if type(event) is midi.ProgramChangeEvent:  # only act if this track is an actual instrument track!
-                instr_key = event.data[0]  # event.data[0] contains instrument key
-                notes = get_note_events(track)
-
-                if not(instr_key in instr_tracks_dic):
-                    instr_tracks_dic[instr_key] = [notes]
-                else:
-                    instr_tracks_dic[instr_key].append(notes)
-
-                break  # this assumes that there is only one ProgramChangeEvent per instrument track
-    return instr_tracks_dic
 
 
 # checks if midi track object is an instrument track
@@ -202,24 +214,26 @@ def get_notes(note_events, ppqn, track):
         tick = note_event[1]
         pitch = note_event[2]
         if on_off == 1:  # NoteOnEvent
-            # if pitch in unclosed_notes and len(unclosed_notes[pitch]) == 0:  # error check if two consecutive noteonevents without noteoffevent
-            #     measure = note_event[1] / (ppqn * track.time_sig[1])
-            #     print 'Error: <get_notes> consecutive unclosed NoteOnEvent of same pitch: %r, measure: %r, instr: %r, pitch: %r ' % (str(note_event), str(measure), track.instr_name, pitch_to_letter(pitch))
             unclosed_notes[pitch].append(note_event)
         elif on_off == 0:  # NoteOffEvent
             if len(unclosed_notes[pitch]) == 0:
                 measure = note_event[1] / (ppqn * track.time_sig[1])
-                print 'Error: <get_notes> NoteOffEvent without corresponding NoteOnEvent %r, measure: %r, instr: %r, pitch: %r ' % (str(note_event), str(measure), track.instr_name, pitch_to_letter(pitch))
+                print 'Error: <get_notes> NoteOffEvent without corresponding NoteOnEvent %r, measure: %r, instr: %r, pitch: %r ' % (str(note_event), str(measure), track.instr_name, pitch_to_str(pitch))
             else:
                 note_on = unclosed_notes[pitch].pop(0)
                 start_tick = note_on[1]
                 tick_dur = tick - start_tick
-                dur = 1.0 * tick_dur / ppqn
+
+                start = .25 * start_tick / ppqn  # 1 === whole note, .25 === quarter note
+                start = int(round(start * 32))  # final conversion to durk units: 1 === a 32nd note....32  === a whole note
+                dur = .25 * tick_dur / ppqn  # 1 === whole note, .25 === quarter note
+                dur = int(round(dur * 32))  # final conversion to durk units: 1 === a 32nd note....32  === a whole note
+
                 measure = start_tick / (ppqn * track.time_sig[1])
-                note_obj = Note(pitch=pitch, dur=dur, tick_dur=tick_dur, start_tick=start_tick,
-                                measure=measure)
+
+                note_obj = Note(pitch=pitch, dur=dur, start=start,
+                                tick_dur=tick_dur, start_tick=start_tick, measure=measure)
                 note_objs.append(note_obj)
-                # del unclosed_notes[pitch]  # delete this pitch key in unclosed_notes dictionary
         else:  # Error checking
             print 'Error: <get_notes> Note is neither On nor Off event'
 
@@ -241,6 +255,30 @@ def get_note_events(track):
             notes.append(note)
 
     return notes
+
+
+# takes midi file and constructs dictionary with following structure:
+# {instr_key: [track1, track2, ...], ...} where track1, track2...are list of tuples returned by get_note_events
+# currently assumes there exists only one ProgramChangeEvent per instrument track
+def extract(midifilename):
+    instr_tracks_dic = {}
+    pattern = midi.read_midifile(midifilename)
+    pattern.make_ticks_abs()  # makes ticks absolute instead of relative
+
+    for track in pattern:
+        print track[0:20]
+        for event in track:
+            if type(event) is midi.ProgramChangeEvent:  # only act if this track is an actual instrument track!
+                instr_key = event.data[0]  # event.data[0] contains instrument key
+                notes = get_note_events(track)
+
+                if not(instr_key in instr_tracks_dic):
+                    instr_tracks_dic[instr_key] = [notes]
+                else:
+                    instr_tracks_dic[instr_key].append(notes)
+
+                break  # this assumes that there is only one ProgramChangeEvent per instrument track
+    return instr_tracks_dic
 
 
 # transposes pitch to be same pitch within range [lo,hi] inclusive
@@ -291,7 +329,7 @@ def transpose_instr_tracks_dic(instr_tracks_dic, lo, hi):
 
 
 # given a pitch value returns the appropriate note "letter"
-def pitch_to_letter(pitch):
+def pitch_to_str(pitch):
     p_to_l_dic = {0: 'C',
                   1: 'C#',
                   2: 'D',
@@ -306,6 +344,25 @@ def pitch_to_letter(pitch):
                   11: 'B'}
 
     return p_to_l_dic[pitch % 12]
+
+
+# given a duration returns the appropriate note duration designation
+def dur_to_str(dur):
+    d_to_l_dic = {1: '32nd',
+                  2: '16th',
+                  3: '16th dotted',
+                  4: 'eighth',
+                  6: 'eighth dotted',
+                  8: 'quarter',
+                  12: 'quarter dotted',
+                  16: 'half',
+                  24: 'half dotted',
+                  32: 'whole'}
+
+    if dur not in d_to_l_dic:
+        print 'Error in <dur_to_str>: invalid duration'
+        return
+    return d_to_l_dic[dur]
 
 
 # test helper methods
@@ -324,7 +381,7 @@ def main():
 
     song = midi_to_song("MIDI_sample.mid")
     # song = midi_to_song("uzeb_cool_it.mid")
-    # print song
+    print song
 
 
 if __name__ == "__main__":
