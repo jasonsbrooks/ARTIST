@@ -2,13 +2,14 @@
 Complete:
 1) Get all TimeSignatureEvent and SetTempoEvent
 2) tag tracks with this metadata (including time signature and tempo)
-
-Todo:
 2) investigate why occasional on/off note event mismatch errors
+    Answer: just use queue
 3) duration in get_notes-- subtracting ticks doesn't seem to give you the
     exact right float value...seems to be a bit short everytime
 3b) Figure out how to insert rests into note list from information given
     but do this after you think more about what the duration actually means
+
+Todo:
 4) figure out a way to NOT include drums (key is 0?  same as piano?)
     idea: drums are always on channel 9 (i.e. 0-indexed 10 from https://www.cs.cmu.edu/~music/cmsip/readings/MIDI%20tutorial%20for%20programmers.html)
 5) Add naive tempo/dynamics in track
