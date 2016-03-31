@@ -1,3 +1,10 @@
+'''
+Todo:
+1) Get all TimeSignatureEvent and SetTempoEvent
+2) tag tracks with this metadata (including time signature and tempo)
+'''
+
+
 import midi
 import sys
 
@@ -6,11 +13,11 @@ import sys
 # {instr_key: [track1, track2, ...], ...} where track1, track2...are list of tuples returned by get_notes
 # currently assumes there exists only one ProgramChangeEvent per instrument track
 def extract(midifilename):
-    instr_tracks_dic = {}  # 
+    instr_tracks_dic = {}
     pattern = midi.read_midifile(midifilename)
 
     for track in pattern:
-        # print track[0:20]
+        print track[0:20]
         for event in track:
             if type(event) is midi.ProgramChangeEvent:  # only act if this track is an actual instrument track!
                 instr_key = event.data[0]  # event.data[0] contains instrument key
@@ -88,18 +95,19 @@ def transpose_instr_tracks_dic(instr_tracks_dic, lo, hi):
 
 # test helper methods
 def main():
-    test_dic = extract("MIDI_sample.mid")
+    # test_dic = extract("MIDI_sample.mid")
+    test_dic = extract("uzeb_cool_it.mid")
     test_note_list = []
 
     for k, v in test_dic.iteritems():
         # print repr(k)
-        test_note_list = v[0]
         # print len(v)
+        test_note_list = v[0]
 
-    print transpose_note_list(test_note_list, 40, 51)
-    print transpose_instr_tracks_dic(test_dic, 40, 51)
+    # print transpose_note_list(test_note_list, 40, 51)
+    # print transpose_instr_tracks_dic(test_dic, 40, 51)
 
 
 if __name__ == "__main__":
-    # main()
+    main()
     pass
