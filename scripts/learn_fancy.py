@@ -33,6 +33,8 @@ class Learner(object):
         self.right_gripper = baxter_interface.Gripper('right', CHECK_VERSION)
         self.left_navigator = baxter_interface.Navigator('left', CHECK_VERSION)
         self.right_navigator = baxter_interface.Navigator('right', CHECK_VERSION)
+        self.left_torso_navigator = baxter_interface.Navigator('torso_left', CHECK_VERSION)
+        self.right_torso_navigator = baxter_interface.Navigator('torso_right', CHECK_VERSION)
 
     def clean_shutdown(self):
         """
@@ -46,7 +48,10 @@ class Learner(object):
             print("Disabling robot...")
             self._rs.disable()
 
-    def set_neutral(self):
+    def set_neutral(self,on=True):
+        if not on:
+            return False
+        
         self.left_arm.move_to_joint_positions(CONFIG["neutral"]["left"])
         self.right_arm.move_to_joint_positions(CONFIG["neutral"]["right"])
 
@@ -56,10 +61,15 @@ class Learner(object):
     # send the image corresponding to a given note to the display
     def send_note(self, note):
         path = os.path.join("display/img/", str(note) + ".png")
+        print "Sending", path
+
         img = cv2.imread(path)
         msg = cv_bridge.CvBridge().cv2_to_imgmsg(img, encoding="bgr8")
         pub = rospy.Publisher('/robot/xdisplay', Image, latch=True, queue_size=1)
         pub.publish(msg)
+
+NUM_KEYS = 88
+NEUTRAL_KEY = 0
 
 def main():
     print("Initializing node... ")
@@ -84,47 +94,65 @@ def main():
     left_note = 40
     right_note = 40
 
+    # change the notes and send images to display
     def left_wheel_change(change):
         left_note += change
-        learner.send_note(left_note)
-
-    # change the left note (and send the image)
-    learner.left_navigator.wheel_changed(left_wheel_change)
+        if 0 <= left_note and left_note <= NUM_KEYS:
+            learner.send_note(left_note)
 
     def right_wheel_change(change):
         right_note += change
-        learner.send_note(right_note)
+        if 0 <= right_note and right_note <= NUM_KEYS:
+            learner.send_note(right_note)
 
-    # change the right note (and send the image)
+    # listen for wheel changes
+    learner.left_navigator.wheel_changed(left_wheel_change)
     learner.right_navigator.wheel_changed(right_wheel_change)
+
+    # save a new neutral position
+    def save_neutral(on=True):
+        if not on:
+            return False
+
+        pos = learner.get_joint_angles()
+        CONFIG["neutral"]["left"] = pos[0]
+        CONFIG["neutral"]["right"] = pos[1]
+
+        with open("./src/baxter_artist/scripts/conf.json", "w") as f:
+            json.dump(CONFIG,f)
+            print CONFIG
 
     # save left joint angles
     def save_left(on=True):
         if not on:
             return False
+        elif left_note == NEUTRAL_KEY:
+            save_neutral()
 
         pos = learner.get_joint_angles()[0]
         arm = "left"
         left_arm[left_note] = pos
-        print arm, left_note, pos 
-
-        return True
+        print "Recording", arm, left_note, pos 
 
     # save right joint angles
     def save_right(on=True):
         if not on:
             return False
+        elif right_note == NEUTRAL_KEY:
+            save_neutral()
 
         pos = learner.get_joint_angles()[1]
         arm = "right"
         right_arm[right_note] = pos
-        print arm, right_note, pos
-
-        return True
+        print "Recording", arm, right_note, pos
 
     # listen for button presses
     learner.left_navigator.button0_changed(save_left)
     learner.right_navigator.button0_changed(save_right)
+
+    # torso navigators move to neutral position
+    learner.left_torso_navigator.button0_changed(learner.set_neutral)
+    learner.right_torso_navigator.button0_changed(learner.set_neutral)
 
     inp = raw_input("$ ").split(" ")
     while inp[0] != "exit":
@@ -133,13 +161,7 @@ def main():
         elif inp[0] == "right":
             save_right()
         elif inp[0] == "neutral":
-            pos = learner.get_joint_angles()
-            CONFIG["neutral"]["left"] = pos[0]
-            CONFIG["neutral"]["right"] = pos[1]
-
-            with open("./src/baxter_artist/scripts/conf.json", "w") as f:
-                json.dump(CONFIG,f)
-                print CONFIG
+            save_neutral()
 
         inp = raw_input("$ ").split(" ")
     
