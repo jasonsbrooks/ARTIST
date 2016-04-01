@@ -1,10 +1,10 @@
+#!/usr/bin/env python
+
 import baxter_interface
 from baxter_interface import CHECK_VERSION
-import baxter_external_devices
-import rospy
-import pdb, json
+import rospy, pdb, os, json
 
-with open('conf.json') as f:
+with open("./src/baxter_artist/scripts/conf.json") as f:
     CONFIG = json.load(f)
 
 class Learner(object):
@@ -33,31 +33,31 @@ class Learner(object):
         """
         print("\nExiting example...")
         if self.done:
-            self._set_neutral()
+            self.set_neutral()
         if not self._init_state and self._rs.state().enabled:
             print("Disabling robot...")
             self._rs.disable()
 
-    def _set_neutral(self):
-        self.left_arm.move_to_joint_positions(config["neutral"]["left"])
-        self.right_arm.move_to_joint_positions(config["neutral"]["right"])
+    def set_neutral(self):
+        self.left_arm.move_to_joint_positions(CONFIG["neutral"]["left"])
+        self.right_arm.move_to_joint_positions(CONFIG["neutral"]["right"])
 
-    def close_gripper(gripper):
+    def close_gripper(self,gripper):
         print "open close gripper"
         gripper.calibrate()
         gripper.open()
         gripper.close() 
         
-    def grab_mallet(gripper):
+    def grab_mallet(self,gripper):
         gripper.calibrate()
 
-        inp = input("$ ")
+        inp = raw_input("$ ")
         while inp != "cont":
-            print "Opening / Closing " + gripper
+            print "Opening / Closing ", gripper
             gripper.open()
             gripper.close()
 
-            inp = input("$ ")
+            inp = raw_input("$ ")
 
         print "Successfully grabbed mallet."
 
@@ -70,22 +70,39 @@ def main():
     learner = Learner()
     rospy.on_shutdown(learner.clean_shutdown)
 
+    learner.set_neutral()
+
     print("Learning!...")
     
-    learner.grab_mallet(learner.right_gripper)
-    learner.grab_mallet(learner.left_gripper)
+    # learner.grab_mallet(learner.right_gripper)
+    # learner.grab_mallet(learner.left_gripper)
 
-    inp = input("$ ")
-    while inp != "done":
-        if inp == "left":
-            print "left", learner.get_joint_angles()[0]
-        elif inp == "right":
-            print "right", learner.get_joint_angles()[1]
+    right_arm = {}
+    left_arm = {}
 
-        inp = input("$ ")
+    inp = raw_input("$ ").split(" ")
+    while inp[0] != "exit":
+        key = inp[1]
+
+        if inp[0] == "left":
+            pos = learner.get_joint_angles()[0]
+            arm = "left"
+            left_arm[key] = pos
+            print arm, key, pos  
+
+        elif inp[0] == "right":
+            pos = learner.get_joint_angles()[1]
+            arm = "right"
+            right_arm[key] = pos
+            print arm, key, pos
+
+        inp = raw_input("$ ").split(" ")
     
     rospy.signal_shutdown("Finished learning control")
     print("Done with the learning. A+")
+
+    print os.getcwd()
+    print left_arm, right_arm
 
 
 

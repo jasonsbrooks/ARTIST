@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import baxter_interface
 from baxter_interface import CHECK_VERSION
 import baxter_external_devices
