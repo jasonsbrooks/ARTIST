@@ -4,7 +4,7 @@ import baxter_interface
 from baxter_interface import CHECK_VERSION
 import baxter_external_devices
 import rospy
-import pdb, time, json
+import pdb, time, json, copy
 
 with open("./src/baxter_artist/scripts/conf.json") as f:
     CONFIG = json.load(f)
@@ -47,6 +47,15 @@ class Performer(object):
         self.left_arm.move_to_joint_positions(CONFIG["neutral"]["left"])
         self.right_arm.move_to_joint_positions(CONFIG["neutral"]["right"])
 
+    def flick(self,arm,current_pos):
+        down_pos = copy.deepcopy(current_pos)
+        down_pos[arm + "_w1"] = current_pos[arm + "_w1"] + 0.1
+
+        arm_obj = (self.left_arm if arm == "left" else self.right_arm)
+
+        arm_obj.move_to_joint_positions(down_pos)
+        arm_obj.move_to_joint_positions(current_pos)
+
     def perform(self, KEYS):
         self.set_neutral()
 
@@ -60,17 +69,21 @@ class Performer(object):
 
                 try:
                     start_time = time.time()
-                    
+                    pos = KEYS[inp[1]][inp[2]]
+                    print pos
+
                     if inp[1] == "left":
-                        self.left_arm.move_to_joint_positions(KEYS[inp[1]][inp[2]])
+                        self.left_arm.move_to_joint_positions(pos)
+                        self.flick(inp[1],pos)
                     elif inp[1] == "right":
-                        self.right_arm.move_to_joint_positions(KEYS[inp[1]][inp[2]])
+                        self.right_arm.move_to_joint_positions(pos)
+                        self.flick(inp[1],pos)
                     else:
                         self.set_neutral()
 
                     delta = time.time() - start_time 
                     print "time", delta
-                    
+
                 except KeyError, e:
                     print "KeyError", e
                 
