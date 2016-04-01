@@ -116,13 +116,12 @@ def main():
     learner.right_navigator.wheel_changed(right_wheel_change)
 
     # save a new neutral position
-    def save_neutral(on=True):
+    def save_neutral(arm):
         if not on:
             return False
 
         pos = learner.get_joint_angles()
-        CONFIG["neutral"]["left"] = pos[0]
-        CONFIG["neutral"]["right"] = pos[1]
+        CONFIG["neutral"][arm] = pos[(0 if arm == "left" else 1)]
 
         with open("./src/baxter_artist/scripts/conf.json", "w") as f:
             json.dump(CONFIG,f)
@@ -133,7 +132,7 @@ def main():
         if not on:
             return False
         elif note == NEUTRAL_KEY:
-            save_neutral()
+            save_neutral("left")
 
         pos = learner.get_joint_angles()[0]
         left_arm[note] = pos
@@ -144,7 +143,7 @@ def main():
         if not on:
             return False
         elif right_note == NEUTRAL_KEY:
-            save_neutral()
+            save_neutral("right")
 
         pos = learner.get_joint_angles()[1]
         right_arm[note] = pos
@@ -172,7 +171,8 @@ def main():
             save_right(int(inp[1]))
             learner.send_note(note)
         elif inp[0] == "neutral":
-            save_neutral()
+            save_neutral("left")
+            save_neutral("right")
 
         inp = raw_input("$ ").split(" ")
     
