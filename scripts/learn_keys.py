@@ -4,6 +4,7 @@ import baxter_interface
 from baxter_interface import CHECK_VERSION
 import rospy, pdb, os, json
 
+
 with open("./src/baxter_artist/scripts/conf.json") as f:
     CONFIG = json.load(f)
 
@@ -77,26 +78,40 @@ def main():
     # learner.grab_mallet(learner.right_gripper)
     # learner.grab_mallet(learner.left_gripper)
 
-    with open("./src/baxter_artist/scripts/keys.json") as f:
-        data = json.load(f)
-        left_arm = data["left"]
-        right_arm = data["right"]
+    if os.path.exists("./src/baxter_artist/scripts/keys.json"):
+        with open("./src/baxter_artist/scripts/keys.json") as f:
+            data = json.load(f)
+            left_arm = data["left"]
+            right_arm = data["right"]
+    else:
+        left_arm = {}
+        right_arm = {}
 
     inp = raw_input("$ ").split(" ")
     while inp[0] != "exit":
-        key = inp[1]
-
+        
         if inp[0] == "left":
+            key = inp[1]
             pos = learner.get_joint_angles()[0]
             arm = "left"
             left_arm[key] = pos
             print arm, key, pos  
 
         elif inp[0] == "right":
+            key = inp[1]
             pos = learner.get_joint_angles()[1]
             arm = "right"
             right_arm[key] = pos
             print arm, key, pos
+
+        elif inp[0] == "neutral":
+            pos = learner.get_joint_angles()
+            CONFIG["neutral"]["left"] = pos[0]
+            CONFIG["neutral"]["right"] = pos[1]
+
+            with open("./src/baxter_artist/scripts/conf.json", "w") as f:
+                json.dump(CONFIG,f)
+                print CONFIG
 
         inp = raw_input("$ ").split(" ")
     
