@@ -77,8 +77,10 @@ def main():
     # learner.grab_mallet(learner.right_gripper)
     # learner.grab_mallet(learner.left_gripper)
 
-    right_arm = {}
-    left_arm = {}
+    with open("./src/baxter_artist/scripts/keys.json") as f:
+        data = json.load(f)
+        left_arm = data["left"]
+        right_arm = data["right"]
 
     inp = raw_input("$ ").split(" ")
     while inp[0] != "exit":

@@ -44,8 +44,8 @@ class Performer(object):
             self._rs.disable()
 
     def set_neutral(self):
-        self.left_arm.move_to_joint_positions(CONFIG["neutral"]["left"])
-        self.right_arm.move_to_joint_positions(CONFIG["neutral"]["right"])
+        self.left_arm.set_joint_positions(CONFIG["neutral"]["left"])
+        self.right_arm.set_joint_positions(CONFIG["neutral"]["right"])
 
     def flick(self,arm,current_pos):
         down_pos = copy.deepcopy(current_pos)
@@ -53,8 +53,9 @@ class Performer(object):
 
         arm_obj = (self.left_arm if arm == "left" else self.right_arm)
 
-        arm_obj.move_to_joint_positions(down_pos)
-        arm_obj.move_to_joint_positions(current_pos)
+        arm_obj.set_joint_positions(down_pos)
+        time.sleep(1)
+        arm_obj.set_joint_positions(current_pos)
 
     def perform(self, KEYS):
         self.set_neutral()
@@ -65,7 +66,8 @@ class Performer(object):
 
             if inp[0] == "ls":
                 print KEYS[inp[1]]
-            elif inp[0] == "play":
+
+            elif inp[0] == "move":
 
                 try:
                     start_time = time.time()
@@ -73,13 +75,29 @@ class Performer(object):
                     print pos
 
                     if inp[1] == "left":
-                        self.left_arm.move_to_joint_positions(pos)
-                        self.flick(inp[1],pos)
+                        self.left_arm.set_joint_positions(pos)
                     elif inp[1] == "right":
-                        self.right_arm.move_to_joint_positions(pos)
-                        self.flick(inp[1],pos)
+                        self.right_arm.set_joint_positions(pos)
                     else:
                         self.set_neutral()
+
+                    delta = time.time() - start_time 
+                    print "time", delta
+
+                except KeyError, e:
+                    print "KeyError", e
+                    
+            elif inp[0] == "flick":
+
+                try:
+                    start_time = time.time()
+                    pos = KEYS[inp[1]][inp[2]]
+                    print pos
+
+                    if inp[1] == "left":
+                        self.flick(inp[1],pos)
+                    elif inp[1] == "right":
+                        self.flick(inp[1],pos)
 
                     delta = time.time() - start_time 
                     print "time", delta
