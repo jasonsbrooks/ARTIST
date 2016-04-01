@@ -61,7 +61,12 @@ class Learner(object):
     # send the image corresponding to a given note to the display
     def send_note(self, note):
         path = os.path.join("display/img/", str(note) + ".png")
-        print "Sending", path
+
+        if not os.path.exists(path):
+            print "Not Found:", path
+            return False
+
+        print "Sending:", path
 
         img = cv2.imread(path)
         msg = cv_bridge.CvBridge().cv2_to_imgmsg(img, encoding="bgr8")
@@ -70,6 +75,7 @@ class Learner(object):
 
 NUM_KEYS = 88
 NEUTRAL_KEY = 0
+MIDDLE_C = 40
 
 def main():
     print("Initializing node... ")
@@ -91,8 +97,8 @@ def main():
         left_arm = {}
         right_arm = {}
 
-    left_note = 40
-    right_note = 40
+    left_note = MIDDLE_C
+    right_note = MIDDLE_C
 
     # change the notes and send images to display
     def left_wheel_change(change):
@@ -123,43 +129,48 @@ def main():
             print CONFIG
 
     # save left joint angles
-    def save_left(on=True):
+    def save_left(note,on=True):
         if not on:
             return False
-        elif left_note == NEUTRAL_KEY:
+        elif note == NEUTRAL_KEY:
             save_neutral()
 
         pos = learner.get_joint_angles()[0]
-        arm = "left"
-        left_arm[left_note] = pos
-        print "Recording", arm, left_note, pos 
+        left_arm[note] = pos
+        print "Recording", "left", note, pos 
 
     # save right joint angles
-    def save_right(on=True):
+    def save_right(note,on=True):
         if not on:
             return False
         elif right_note == NEUTRAL_KEY:
             save_neutral()
 
         pos = learner.get_joint_angles()[1]
-        arm = "right"
-        right_arm[right_note] = pos
-        print "Recording", arm, right_note, pos
+        right_arm[note] = pos
+        print "Recording", "right", note, pos
 
     # listen for button presses
-    learner.left_navigator.button0_changed(save_left)
-    learner.right_navigator.button0_changed(save_right)
+    learner.left_navigator.button0_changed(lambda on: save_left(left_note,on))
+    learner.right_navigator.button0_changed(lambda on: save_right(right_note,on))
 
     # torso navigators move to neutral position
     learner.left_torso_navigator.button0_changed(learner.set_neutral)
     learner.right_torso_navigator.button0_changed(learner.set_neutral)
 
+    # send MIDDLE_C
+    learner.send_note(MIDDLE_C)
+
     inp = raw_input("$ ").split(" ")
     while inp[0] != "exit":
         if inp[0] == "left":
-            save_left()
+            note = int(inp[1])
+            save_left(note)
+            learner.send_note(note)
         elif inp[0] == "right":
-            save_right()
+            note = int(inp[1])
+            save_right(int(inp[1]))
+            learner.send_note(note)
         elif inp[0] == "neutral":
             save_neutral()
 
