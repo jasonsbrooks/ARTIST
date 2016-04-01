@@ -72,6 +72,9 @@ class Performer(object):
 
             elif inp[0] == "move":
 
+                self.left_arm.set_joint_position_speed(0.9)
+                self.right_arm.set_joint_position_speed(0.9)
+
                 try:
                     start_time = time.time()
 
