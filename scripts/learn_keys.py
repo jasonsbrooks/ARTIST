@@ -101,7 +101,10 @@ def main():
     rospy.signal_shutdown("Finished learning control")
     print("Done with the learning. A+")
 
-    print os.getcwd()
+    with open("./src/baxter_artist/scripts/keys.json", "w") as f:
+        data = {"left": left_arm, "right": right_arm}
+        json.dump(data, f)
+
     print left_arm, right_arm
 
 
