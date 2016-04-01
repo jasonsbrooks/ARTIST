@@ -1,7 +1,11 @@
 from pprint import pformat
 
+from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func
+from sqlalchemy.orm import relationship, backref
 
-class Track(list):
+from db_reset import Base
+
+class Track(Base):
     """
     A Track represents a line of music in a Song with a single
 
@@ -25,17 +29,36 @@ class Track(list):
         notes: list of Note objects that constitute the track
     """
 
-    def __init__(self, time_sig=(4, 4), key_sig=(0, 0), instr_key=-1, instr_name="",
-                 channel=0, tempo=120, dynamic="mf", start_tick=0, notes=[]):
-        self.time_sig = time_sig
-        self.key_sig = key_sig
-        self.instr_key = instr_key
-        self.instr_name = instr_name
-        self.channel = channel
-        self.tempo = tempo
-        self.dynamic = dynamic
-        self.start_tick = start_tick
-        super(Track, self).__init__(notes)
+    __tablename__ = 'track'
+
+    id = Column(Integer, primary_key=True)
+    time_sig_top = Column(Integer, nullable=False)
+    time_sig_bottom = Column(Integer, nullable=False)
+    key_sig_top = Column(Integer, nullable=False)
+    key_sig_bottom = Column(Integer, nullable=False)
+    instr_key = Column(Integer, nullable=False)
+    instr_name = Column(String, nullable=False)
+    channel = Column(Integer, nullable=False)
+    tempo = Column(Integer, nullable=False)
+    dynamic = Column(String, nullable=False)
+    start_tick = Column(Integer, nullable=False)
+    song_id = Column(Integer, ForeignKey('song.id'))
+    notes = relationship("Note")
+
+
+
+
+    # def __init__(self, time_sig=(4, 4), key_sig=(0, 0), instr_key=-1, instr_name="",
+    #              channel=0, tempo=120, dynamic="mf", start_tick=0, notes=[]):
+    #     self.time_sig = time_sig
+    #     self.key_sig = key_sig
+    #     self.instr_key = instr_key
+    #     self.instr_name = instr_name
+    #     self.channel = channel
+    #     self.tempo = tempo
+    #     self.dynamic = dynamic
+    #     self.start_tick = start_tick
+    #     super(Track, self).__init__(notes)
 
     def __repr__(self):
         return "Track(start_tick=%r, ts= %r, ks=%r, instr_key=%r, instr_name=%r, channel=%r, \\\n  %s)" % \
