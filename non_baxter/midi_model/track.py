@@ -27,6 +27,7 @@ class Track(Base):
         dynamic: (naive) Integer representing dynamic marking (0-127, corresponds to MIDI velocity)
         start_tick: Integer representing start time of track relative to song (i.e. 0 is beginning of song)
         notes: list of Note objects that constitute the track
+            Note: notes are NOT in chronological order by start
     """
 
     __tablename__ = 'track'

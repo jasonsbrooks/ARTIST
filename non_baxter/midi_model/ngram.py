@@ -1,8 +1,6 @@
-#Kevin Jiang
-#LING 227
-#2.28
-#Note that much of the code is reused/based on the code that we
-#went over in class for bigrams and trigrams.
+'''
+preliminary ngram model
+'''
 
 
 import re

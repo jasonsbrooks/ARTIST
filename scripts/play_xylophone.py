@@ -1,11 +1,13 @@
+#!/usr/bin/env python
+
 import baxter_interface
 from baxter_interface import CHECK_VERSION
 import baxter_external_devices
 import rospy
-import pdb
+import pdb, time, json, copy
 
-RIGHT_NEUTRAL = {'right_s0': 0.8943107983154297, 'right_s1': 0.09664078952636719, 'right_w0': -3.048786812438965, 'right_w1': 1.6693545905090332, 'right_w2': -0.0851359336303711, 'right_e0': 0.0851359336303711, 'right_e1': 1.51212155993042}
-LEFT_NEUTRAL = {'left_w0': -0.12655341485595703, 'left_w1': -1.5696458394104005, 'left_w2': -3.0591411827453614, 'left_e0': -0.002300971179199219, 'left_e1': 1.5243934062194826, 'left_s0': -0.966407895263672, 'left_s1': 0.04716990917358399}
+with open("./src/baxter_artist/scripts/conf.json") as f:
+    CONFIG = json.load(f)
 
 class Performer(object):
     def __init__(self):
@@ -21,6 +23,7 @@ class Performer(object):
         print("Enabling robot... ")
         self._rs.enable()
         print("Running. Ctrl-c to quit")
+
         # Get the body running
         self.head = baxter_interface.Head()
         self.right_arm = baxter_interface.Limb('right')
@@ -40,23 +43,78 @@ class Performer(object):
             print("Disabling robot...")
             self._rs.disable()
 
-    def perform(self):
-        self.set_neutral()
-        self.done = True
-
     def set_neutral(self):
-        self.left_arm.move_to_joint_positions(LEFT_NEUTRAL)
-        self.right_arm.move_to_joint_positions(RIGHT_NEUTRAL)
+        self.left_arm.move_to_joint_positions(CONFIG["neutral"]["left"])
+        self.right_arm.move_to_joint_positions(CONFIG["neutral"]["right"])
+
+    def flick(self,arm,current_pos):
+        down_pos = copy.deepcopy(current_pos)
+        down_pos[arm + "_w1"] = current_pos[arm + "_w1"] + 0.07
+
+        arm_obj = (self.left_arm if arm == "left" else self.right_arm)
+
+        arm_obj.set_joint_positions(down_pos)
+        time.sleep(0.15)
+        arm_obj.set_joint_positions(current_pos)
 
     def get_joint_angles(self):
-        print "right", self.right_arm.joint_angles()
-        print "left", self.left_arm.joint_angles()
+        return self.left_arm.joint_angles(), self.right_arm.joint_angles()
 
-    def close_right_gripper(self):
-        print "open close right gripper"
-        self.right_gripper.calibrate()
-        self.right_gripper.open()
-        self.right_gripper.close()
+    def perform(self, KEYS):
+        self.set_neutral()
+
+        inp = raw_input("$ ").split(" ")
+
+        while inp != "exit":
+
+            if inp[0] == "ls":
+                print KEYS[inp[1]]
+
+            elif inp[0] == "move":
+
+                self.left_arm.set_joint_position_speed(0.9)
+                self.right_arm.set_joint_position_speed(0.9)
+
+                try:
+                    start_time = time.time()
+
+                    if inp[1] == "left":
+                        self.left_arm.set_joint_positions(KEYS[inp[1]][inp[2]])
+                    elif inp[1] == "right":
+                        self.right_arm.set_joint_positions(KEYS[inp[1]][inp[2]])
+                    else:
+                        self.set_neutral()
+
+                    delta = time.time() - start_time 
+                    print "time", delta
+
+                except KeyError, e:
+                    print "KeyError", e
+
+            elif inp[0] == "flick":
+
+                try:
+                    start_time = time.time()
+
+                    if inp[1] == "left":
+                        self.flick(inp[1],self.get_joint_angles()[0])
+                    elif inp[1] == "right":
+                        self.flick(inp[1],self.get_joint_angles()[1])
+
+                    delta = time.time() - start_time 
+                    print "time", delta
+
+                except KeyError, e:
+                    print "KeyError", e
+                
+            elif inp[0] == "exit":
+                break
+
+            inp = raw_input("$ ").split(" ")
+
+
+        self.done = True
+
 
 
 def main():
@@ -64,10 +122,13 @@ def main():
     rospy.init_node("play_xylophone")
     performer = Performer()
     rospy.on_shutdown(performer.clean_shutdown)
+
     print("Performing!...")
-    performer.perform()
-    performer.get_joint_angles()
-    performer.close_right_gripper()
+    with open("./src/baxter_artist/scripts/keys.json") as f:
+        KEYS = json.load(f)
+
+    performer.perform(KEYS)
+
     rospy.signal_shutdown("Finished perform control")
     print("Done with the performance. A+")
 
