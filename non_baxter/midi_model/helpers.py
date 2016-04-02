@@ -89,7 +89,7 @@ def midi_to_song(midifilename):
             all_sig_events = temp_time_sig_events + temp_key_sig_events
             all_sig_events.sort(key=lambda x: x['start_tick'])
 
-            track = Track(time_sig=(ts['n'], ts['d']), key_sig=(ks['sf'], ks['mi']),
+            track = Track(time_sig_top=ts['n'], time_sig_bot=ts['d']), key_sig=(ks['sf'], ks['mi']),
                           instr_key=instr_key, instr_name=instr_name, channel=channel,
                           start_tick=0)
 

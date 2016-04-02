@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship, backref
 
 from track import Track
 
+
 class Note(Base):
     """
     A Note represents a line of note in a track with the following properties:
@@ -33,13 +34,12 @@ class Note(Base):
 
     id = Column(Integer, primary_key=True)
     pitch = Column(Integer, nullable=False)
-    dur = Column(Integer, nullable=False) 
+    dur = Column(Integer, nullable=False)
     start = Column(Integer, nullable=False)
-    tick_dur = Column(Integer, nullable=False) 
+    tick_dur = Column(Integer, nullable=False)
     start_tick = Column(Integer, nullable=False)
     measure = Column(Integer, nullable=False)
     track_id = Column(Integer, ForeignKey('track.id'))
-
 
     def __repr__(self):
         return "note(pitch=%r, dur=%r, start=%r, tick_dur=%r, start_tick=%r, measure=%r)" % \

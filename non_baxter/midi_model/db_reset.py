@@ -145,4 +145,3 @@ engine = create_engine('sqlite:////tmp/artist.db')
 session = sessionmaker()
 session.configure(bind=engine)
 Base.metadata.create_all(engine)
-
