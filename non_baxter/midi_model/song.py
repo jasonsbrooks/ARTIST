@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship, backref
 
 from db_reset import Base
 
+
 class Song(Base):
     """
     A Song with the following properties:
