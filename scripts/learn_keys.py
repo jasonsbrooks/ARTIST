@@ -2,7 +2,7 @@
 
 import baxter_interface
 from baxter_interface import CHECK_VERSION
-import rospy, pdb, os, json, time
+import rospy, pdb, os, json, time, threading
 
 import cv2, cv_bridge
 
@@ -60,22 +60,7 @@ class Learner(object):
         self.init_leds()
         self.send_note(NEUTRAL_KEY)
 
-    def shell(self):
-        inp = raw_input("$ ").split(" ")
-        while inp[0] != "exit":
-            if inp[0] == "left":
-                self.left_note = int(inp[1])
-                self.keys.save_left(self.left_note,self.get_joint_angles())
-                self.send_note(self.left_note)
-            elif inp[0] == "right":
-                self.right_note = int(inp[1])
-                self.keys.save_right(self.right_note,self.get_joint_angles())
-                self.send_note(self.right_note)
-            elif inp[0] == "neutral":
-                self.keys.save_neutral("left",self.get_joint_angles())
-                self.keys.save_neutral("right",self.get_joint_angles())
-
-            inp = raw_input("$ ").split(" ")
+        self.shell = Shell()
    
     def init_leds(self):
         rospy.logdebug("init_leds")
@@ -212,6 +197,26 @@ class Keys(object):
             json.dump(data, f)
             rospy.loginfo("[write] %s", data)
 
+class Shell(threading.Thread):
+    def run(self):
+        try:
+            inp = raw_input("$ ").split(" ")
+            while inp[0] != "exit":
+                if inp[0] == "left":
+                    self.left_note = int(inp[1])
+                    self.keys.save_left(self.left_note,self.get_joint_angles())
+                    self.send_note(self.left_note)
+                elif inp[0] == "right":
+                    self.right_note = int(inp[1])
+                    self.keys.save_right(self.right_note,self.get_joint_angles())
+                    self.send_note(self.right_note)
+                elif inp[0] == "neutral":
+                    self.keys.save_neutral("left",self.get_joint_angles())
+                    self.keys.save_neutral("right",self.get_joint_angles())
+
+                inp = raw_input("$ ").split(" ")
+        except EOFError,e:
+            pass
 
 def main():
     rospy.loginfo("Initializing node... ")
@@ -219,7 +224,8 @@ def main():
     learner = Learner()
     rospy.on_shutdown(learner.clean_shutdown)
 
-    learner.shell()
+    learner.shell.start()
+    learner.shell.join()
     
     rospy.signal_shutdown("Finished learning control")
     rospy.loginfo("Done with the learning.")
