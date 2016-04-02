@@ -25,7 +25,7 @@ class Learner(object):
         self._init_state = self._rs.state().enabled
         rospy.loginfo("Enabling robot... ")
         self._rs.enable()
-        rospy.loginfo("Running. Ctrl-c to quit")
+        rospy.loginfo("Running. Ctrl-D to quit")
 
         # Get the body running
         self.head = baxter_interface.Head()
