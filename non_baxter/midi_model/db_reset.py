@@ -8,6 +8,8 @@ from pprint import pformat
 from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func
 from sqlalchemy.orm import relationship, backref
 
+import sys
+
 Base = declarative_base()
 
 class Song(Base):
@@ -32,8 +34,8 @@ class Song(Base):
     #     super(Song, self).__init__(tracks)
 
     def __repr__(self):
-        return "Song(title=%r, ppqn=%r, tracks=\\\n%s)" % \
-            (self.title, self.ppqn, pformat(list(self)))
+        return "Song(title=%r, ppqn=%r, tracks=%r)" % \
+            (self.title, self.ppqn, self.tracks)
 
 
 class Track(Base):
@@ -71,31 +73,17 @@ class Track(Base):
     instr_key = Column(Integer, nullable=False)
     instr_name = Column(String, nullable=False)
     channel = Column(Integer, nullable=False)
-    tempo = Column(Integer, nullable=False)
-    dynamic = Column(String, nullable=False)
+    tempo = Column(Integer, nullable=True, default=0)
+    dynamic = Column(Integer, nullable=True, default=0)
     start_tick = Column(Integer, nullable=False)
     song_id = Column(Integer, ForeignKey('song.id'))
+    song = relationship("Song", back_populates="tracks")
     notes = relationship("Note")
 
-
-
-
-    # def __init__(self, time_sig=(4, 4), key_sig=(0, 0), instr_key=-1, instr_name="",
-    #              channel=0, tempo=120, dynamic="mf", start_tick=0, notes=[]):
-    #     self.time_sig = time_sig
-    #     self.key_sig = key_sig
-    #     self.instr_key = instr_key
-    #     self.instr_name = instr_name
-    #     self.channel = channel
-    #     self.tempo = tempo
-    #     self.dynamic = dynamic
-    #     self.start_tick = start_tick
-    #     super(Track, self).__init__(notes)
-
     def __repr__(self):
-        return "Track(start_tick=%r, ts= %r, ks=%r, instr_key=%r, instr_name=%r, channel=%r, \\\n  %s)" % \
-            (self.start_tick, self.time_sig, self.key_sig, self.instr_key,
-             self.instr_name, self.channel, pformat(list(self)).replace('\n', '\n  '), )
+        return "Track(start_tick=%r, ts= %r/%r, ks=%r/%r, instr_key=%r, instr_name=%r, channel=%r, tempo=%r, dynamic=%r, song=%r, notes=%r)" % \
+            (self.start_tick, self.time_sig_top, self.time_sig_bottom, self.key_sig_top, self.key_sig_bottom, self.instr_key,
+             self.instr_name, self.channel, self.tempo, self.dynamic, self.song, self.notes)
 
 class Note(Base):
     """
@@ -117,13 +105,6 @@ class Note(Base):
     """
 
     __tablename__ = 'note'
-    # def __init__(self, pitch=60, dur=0, start=0, tick_dur=0, start_tick=0, measure=0):
-    #     self.pitch = pitch
-    #     self.dur = dur
-    #     self.start = start
-    #     self.tick_dur = tick_dur
-    #     self.start_tick = start_tick
-    #     self.measure = measure
 
     id = Column(Integer, primary_key=True)
     pitch = Column(Integer, nullable=False)
@@ -133,6 +114,7 @@ class Note(Base):
     start_tick = Column(Integer, nullable=False)
     measure = Column(Integer, nullable=False)
     track_id = Column(Integer, ForeignKey('track.id'))
+    track = relationship("Track", back_populates="notes")
 
 
     def __repr__(self):
@@ -140,8 +122,15 @@ class Note(Base):
             (self.pitch, self.dur, self.start, self.tick_dur, self.start_tick, self.measure)
 
 
+def create():
+	engine = create_engine('sqlite:////tmp/artist.db')
+	session = sessionmaker()
+	session.configure(bind=engine)
+	Base.metadata.drop_all(engine)
+	Base.metadata.create_all(engine)
 
-engine = create_engine('sqlite:////tmp/artist.db')
-session = sessionmaker()
-session.configure(bind=engine)
-Base.metadata.create_all(engine)
+if __name__ == '__main__':
+	if len(sys.argv) > 1 and sys.argv[1] == 'create':
+		print "Creating database!"
+		create()
+	pass
