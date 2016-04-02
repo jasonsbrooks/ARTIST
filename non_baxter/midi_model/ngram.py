@@ -60,7 +60,7 @@ def generate_word_tri(pair):
     rand = random.uniform(0,1)
     # go through each possible second word
     for following in trigram[pair]:
-        # subtract this word's probability from rand 
+        # subtract this word's probability from rand
         rand -= trigram[pair][following]
         # as soon as we 'cross over' zero we have found the word for that bin
         if rand < 0.0: return following

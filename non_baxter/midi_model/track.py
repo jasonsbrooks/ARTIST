@@ -3,7 +3,9 @@ from pprint import pformat
 from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func
 from sqlalchemy.orm import relationship, backref
 
-from db_reset import Base
+from note import Note
+from song import Song
+
 
 class Track(Base):
     """
@@ -34,9 +36,9 @@ class Track(Base):
 
     id = Column(Integer, primary_key=True)
     time_sig_top = Column(Integer, nullable=False)
-    time_sig_bottom = Column(Integer, nullable=False)
+    time_sig_bot = Column(Integer, nullable=False)
     key_sig_top = Column(Integer, nullable=False)
-    key_sig_bottom = Column(Integer, nullable=False)
+    key_sig_bot = Column(Integer, nullable=False)
     instr_key = Column(Integer, nullable=False)
     instr_name = Column(String, nullable=False)
     channel = Column(Integer, nullable=False)
