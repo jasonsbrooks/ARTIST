@@ -167,16 +167,20 @@ class Keys(object):
             self.right_arm = {}
 
     def save_left(self,note,angles):
-        if note == NEUTRAL_KEY:
+        if note <= NEUTRAL_KEY:
             self.save_neutral("left",angles)
+        elif note > NUM_KEYS:
+            note = NUM_KEYS
 
         pos = angles[0]
         self.left_arm[note] = pos
         rospy.loginfo("[save_left] %d %s", note, pos) 
 
     def save_right(self,note,angles):
-        if note == NEUTRAL_KEY:
+        if note <= NEUTRAL_KEY:
             self.save_neutral("right",angles)
+        elif note > NUM_KEYS:
+            note = NUM_KEYS
 
         pos = angles[0]
         self.right_arm[note] = pos
