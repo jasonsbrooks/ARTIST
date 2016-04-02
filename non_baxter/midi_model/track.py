@@ -3,7 +3,8 @@ from pprint import pformat
 from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func
 from sqlalchemy.orm import relationship, backref
 
-from db_reset import Base
+from note import Note
+from song import Song
 
 class Track(Base):
     """

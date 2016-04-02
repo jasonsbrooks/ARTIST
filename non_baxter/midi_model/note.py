@@ -1,7 +1,7 @@
 from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func
 from sqlalchemy.orm import relationship, backref
 
-from db_reset import Base
+from track import Track
 
 class Note(Base):
     """
