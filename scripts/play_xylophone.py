@@ -5,6 +5,12 @@ from baxter_interface import CHECK_VERSION
 import baxter_external_devices
 import rospy
 import pdb, time, json, copy
+import cv2, cv_bridge
+import os
+
+from sensor_msgs.msg import (
+    Image,
+)
 
 with open("./src/baxter_artist/scripts/conf.json") as f:
     CONFIG = json.load(f)
@@ -70,6 +76,20 @@ class Performer(object):
     def get_joint_angles(self):
         return self.left_arm.joint_angles(), self.right_arm.joint_angles()
 
+    def send_note(self, note):
+        path = os.path.join("./src/baxter_artist/scripts/display/img/", str(note) + ".png")
+
+        if not os.path.exists(path):
+            rospy.logerr("Not Found: " + path)
+            return False
+
+        rospy.logdebug("[send_note] %s", path)
+
+        img = cv2.imread(path)
+        msg = cv_bridge.CvBridge().cv2_to_imgmsg(img, encoding="bgr8")
+        pub = rospy.Publisher('/robot/xdisplay', Image, latch=True, queue_size=1)
+        pub.publish(msg)
+
     def perform(self, KEYS):
         self.set_neutral()
 
@@ -124,11 +144,14 @@ class Performer(object):
                 noteNameArray = ["C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "A6", "G6", "F6", "E6", "D6", "G6", "F6", "E6", "D6", "C6", "B5", "C6", "D6", "B5", "D6"]
                 noteValArray = [notes[x] for x in noteNameArray]
                 print noteValArray
+
                 for num in noteValArray:
+                    self.send_note(int(num))
                     self.right_arm.set_joint_positions(KEYS["right"][str(num)], raw=True)
                     time.sleep(0.5)
                     self.flick("right", self.get_joint_angles()[1])
                     time.sleep(0.5)
+                    
 
             inp = raw_input("$ ").split(" ")
 
