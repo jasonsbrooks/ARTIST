@@ -25,11 +25,7 @@ from collections import defaultdict
 
 from sqlalchemy import desc, asc
 
-from song import Song
-from track import Track
-from note import Note
-
-from . import Base, Session
+from . import Base,Session,Song,Track,Note
 
 DURKS_PER_QUARTER_NOTE = 8
 
