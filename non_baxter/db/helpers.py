@@ -19,7 +19,7 @@ Important MIDI Notes:
 2) pattern.resolution contains resolution (ppqn)
 '''
 
-import midi, sys, pdb
+import midi, sys, pdb, os
 
 from collections import defaultdict
 
@@ -46,7 +46,7 @@ def midi_to_song(midifilename):
     print 'Resolution (ppqn): ' + str(resolution)
 
     # create Song object
-    song = Song(title=midifilename, ppqn=resolution)
+    song = Song(title=os.path.basename(midifilename), ppqn=resolution)
     session.add(song)
 
     # create ordered list of all time and key signature events
@@ -234,7 +234,7 @@ def get_notes(note_events, ppqn, track):
         elif on_off == 0:  # NoteOffEvent
             if len(unclosed_notes[pitch]) == 0:
                 measure = note_event[1] / (ppqn * track.time_sig_bottom)
-                print 'Error: <get_notes> NoteOffEvent without corresponding NoteOnEvent %r, measure: %r, instr: %r, pitch: %r ' % (str(note_event), str(measure), track.instr_name, pitch_to_str(pitch))
+                print 'Warning: <get_notes> NoteOffEvent without corresponding NoteOnEvent %r, measure: %r, instr: %r, pitch: %r ' % (str(note_event), str(measure), track.instr_name, pitch_to_str(pitch))
             else:
                 note_on = unclosed_notes[pitch].pop(0)
                 start_tick = note_on[1]
@@ -251,7 +251,7 @@ def get_notes(note_events, ppqn, track):
                                 tick_dur=tick_dur, start_tick=start_tick, measure=measure, track=track)
                 note_objs.append(note_obj)
         else:  # Error checking
-            print 'Error: <get_notes> Note is neither On nor Off event'
+            print 'Warning: <get_notes> Note is neither On nor Off event'
 
     return note_objs
 
