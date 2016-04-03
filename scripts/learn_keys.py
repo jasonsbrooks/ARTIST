@@ -182,7 +182,7 @@ class Keys(object):
         elif note > NUM_KEYS:
             note = NUM_KEYS
 
-        pos = angles[0]
+        pos = angles[1]
         self.right_arm[note] = pos
         rospy.loginfo("[save_right] %d %s", note, pos) 
 

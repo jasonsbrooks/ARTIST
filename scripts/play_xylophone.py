@@ -9,6 +9,16 @@ import pdb, time, json, copy
 with open("./src/baxter_artist/scripts/conf.json") as f:
     CONFIG = json.load(f)
 
+notes = {"B5":"63",
+        "C6":"64",
+        "D6":"66",
+        "E6":"68",
+        "F6":"69",
+        "G6":"71",
+        "A6":"73",
+        "B6":"75",
+        "C7":"76"}
+
 class Performer(object):
     def __init__(self):
         """
@@ -49,7 +59,7 @@ class Performer(object):
 
     def flick(self,arm,current_pos):
         down_pos = copy.deepcopy(current_pos)
-        down_pos[arm + "_w1"] = current_pos[arm + "_w1"] + 0.07
+        down_pos[arm + "_w1"] = current_pos[arm + "_w1"] + 0.08
 
         arm_obj = (self.left_arm if arm == "left" else self.right_arm)
 
@@ -81,7 +91,7 @@ class Performer(object):
                     if inp[1] == "left":
                         self.left_arm.set_joint_positions(KEYS[inp[1]][inp[2]])
                     elif inp[1] == "right":
-                        self.right_arm.set_joint_positions(KEYS[inp[1]][inp[2]])
+                        self.right_arm.set_joint_positions(KEYS[inp[1]][inp[2]], raw=True)
                     else:
                         self.set_neutral()
 
@@ -109,6 +119,16 @@ class Performer(object):
                 
             elif inp[0] == "exit":
                 break
+
+            elif inp[0] == 'jasonspecial':
+                noteNameArray = ["C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "A6", "G6", "F6", "E6", "D6", "G6", "F6", "E6", "D6", "C6", "B5", "C6", "D6", "B5", "D6"]
+                noteValArray = [notes[x] for x in noteNameArray]
+                print noteValArray
+                for num in noteValArray:
+                    self.right_arm.set_joint_positions(KEYS["right"][str(num)], raw=True)
+                    time.sleep(0.5)
+                    self.flick("right", self.get_joint_angles()[1])
+                    time.sleep(0.5)
 
             inp = raw_input("$ ").split(" ")
 
