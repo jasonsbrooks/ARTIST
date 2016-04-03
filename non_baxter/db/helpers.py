@@ -19,24 +19,17 @@ Important MIDI Notes:
 2) pattern.resolution contains resolution (ppqn)
 '''
 
-import midi
-import sys
-
-import pdb
-
-from db_reset import Song, Track, Note
+import midi, sys, pdb, os, re
 
 from collections import defaultdict
 
-from sqlalchemy import create_engine, desc, asc
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import desc, asc
 
-engine = create_engine('sqlite:////tmp/artist.db')
-Session = sessionmaker(bind=engine)
-session = Session()
-
+from . import Base, Session, Song, Track, Note
 
 DURKS_PER_QUARTER_NOTE = 8
+
+session = Session()
 
 
 # takes midi file and returns a representative song object
@@ -44,15 +37,22 @@ DURKS_PER_QUARTER_NOTE = 8
 # a Track is a list of many Notes representing a common
 #   1) key signature, 2) time signature, and 3) instrument key
 def midi_to_song(midifilename):
-    pattern = midi.read_midifile(midifilename)
+
+    try:
+        pattern = midi.read_midifile(midifilename)
+    except Exception as e:
+        print 'Exception ' + e
+        sys.exit(1)
+
     pattern.make_ticks_abs()  # makes ticks absolute instead of relative
     resolution = pattern.resolution  # note pattern.resolution contains resolution (ppqn)
     print 'Resolution (ppqn): ' + str(resolution)
 
+    title = re.sub(r'[^\x00-\x7F]+', ' ', os.path.basename(midifilename))
+
     # create Song object
-    song = Song(title=midifilename, ppqn=resolution)
+    song = Song(title=title, ppqn=resolution)
     session.add(song)
-    session.commit()
 
     # create ordered list of all time and key signature events
     time_sig_events = []
@@ -101,11 +101,12 @@ def midi_to_song(midifilename):
             all_sig_events = temp_time_sig_events + temp_key_sig_events
             all_sig_events.sort(key=lambda x: x['start_tick'])
 
+            instr_name = re.sub(r'[^\x00-\x7F]+', ' ', instr_name)  # converts non-ASCII chars to spaces
+
             track = Track(time_sig_top=ts['n'], time_sig_bottom=ts['d'], key_sig_top=ks['sf'],
                           key_sig_bottom=ks['mi'], instr_key=instr_key, instr_name=instr_name,
                           channel=channel, start_tick=0, song=song)
             session.add(track)
-            session.commit()
 
             # init these next temp vars in case no sig events left
             next_sig_event = None
@@ -126,12 +127,14 @@ def midi_to_song(midifilename):
                         ts = next_sig_event
 
                     insert_rests_into_track(track, resolution)  # insert rests into track
+
+                    instr_name = re.sub(r'[^\x00-\x7F]+', ' ', instr_name)  # converts non-ASCII chars to spaces
+
                     # create new track and update temporary variables
                     track = Track(time_sig_top=ts['n'], time_sig_bottom=ts['d'], key_sig_top=ks['sf'],
                                   key_sig_bottom=ks['mi'], instr_key=instr_key, instr_name=instr_name,
                                   channel=channel, start_tick=next_sig_event['start_tick'], song=song)
                     session.add(track)
-                    session.commit()
 
                     all_sig_events.pop(0)
 
@@ -144,9 +147,9 @@ def midi_to_song(midifilename):
 
                 n.track = track
                 session.add(n)
-                session.commit()
 
             insert_rests_into_track(track, resolution)  # insert rests into track
+    session.commit()
     return song
 
 
@@ -157,9 +160,13 @@ def midi_to_song(midifilename):
 def insert_rests_into_track(track, ppqn):
     # find total number of durks in track
     firstNote = session.query(Note).filter(Note.track == track).order_by(Note.start.asc()).first()
-    lastNote = session.query(Note).filter(Note.track == track).order_by(Note.start.desc()).first()
+    lastNote = session.query(Note).filter(Note.track == track).order_by(Note.end.desc()).first()
 
-    max_durk = lastNote.start + lastNote.dur
+    # if no notes in track, just return
+    if firstNote is None or lastNote is None:
+        return
+
+    max_durk = lastNote.end
     min_durk = firstNote.start
 
     # initialize rest list (each entry represents one durk)
@@ -171,8 +178,10 @@ def insert_rests_into_track(track, ppqn):
         # if idx == len(track.notes) - 1:
         #     pdb.set_trace()
         for durk in range(note.dur):
-            rest_list[note.start + durk] = False  # set rest_list to False for each durk where a note pitch is playing
-        # except:
+            try:
+                rest_list[note.start + durk] = False  # set rest_list to False for each durk where a note pitch is playing
+            except:
+                pdb.set_trace()
     # iterate through completed rest_list and insert appropriate rests into track
     current_durk = min_durk
     while current_durk < max_durk:
@@ -187,10 +196,9 @@ def insert_rests_into_track(track, ppqn):
             rest_dur = current_durk - rest_start
             rest_measure = rest_start / (DURKS_PER_QUARTER_NOTE * track.time_sig_bottom)  # note 8 is number of durks per quarter note
 
-            note = Note(pitch=-1, dur=rest_dur, start=rest_start,
+            note = Note(pitch=-1, dur=rest_dur, start=rest_start, end=rest_dur+rest_start,
                         tick_dur=-1, start_tick=-1, measure=rest_measure, track=track)
             session.add(note)
-            session.commit()
         else:
             current_durk += 1
 
@@ -236,7 +244,7 @@ def get_notes(note_events, ppqn, track):
         elif on_off == 0:  # NoteOffEvent
             if len(unclosed_notes[pitch]) == 0:
                 measure = note_event[1] / (ppqn * track.time_sig_bottom)
-                print 'Error: <get_notes> NoteOffEvent without corresponding NoteOnEvent %r, measure: %r, instr: %r, pitch: %r ' % (str(note_event), str(measure), track.instr_name, pitch_to_str(pitch))
+                print 'Warning: <get_notes> NoteOffEvent without corresponding NoteOnEvent %r, measure: %r, instr: %r, pitch: %r ' % (str(note_event), str(measure), track.instr_name, pitch_to_str(pitch))
             else:
                 note_on = unclosed_notes[pitch].pop(0)
                 start_tick = note_on[1]
@@ -249,11 +257,11 @@ def get_notes(note_events, ppqn, track):
 
                 measure = start_tick / (ppqn * track.time_sig_bottom)
 
-                note_obj = Note(pitch=pitch, dur=dur, start=start,
+                note_obj = Note(pitch=pitch, dur=dur, start=start, end=dur+start,
                                 tick_dur=tick_dur, start_tick=start_tick, measure=measure, track=track)
                 note_objs.append(note_obj)
         else:  # Error checking
-            print 'Error: <get_notes> Note is neither On nor Off event'
+            print 'Warning: <get_notes> Note is neither On nor Off event'
 
     return note_objs
 
@@ -273,6 +281,10 @@ def get_note_events(track):
             notes.append(note)
 
     return notes
+
+'''
+START Deprecated Methods
+'''
 
 
 # takes midi file and constructs dictionary with following structure:
@@ -382,6 +394,10 @@ def dur_to_str(dur):
         return
     return d_to_l_dic[dur]
 
+'''
+END Deprecated Methods
+'''
+
 
 # test helper methods
 def main():
@@ -397,8 +413,10 @@ def main():
     # print transpose_note_list(test_note_list, 40, 51)
     # print transpose_instr_tracks_dic(test_dic, 40, 51)
 
-    song = midi_to_song("MIDI_sample.mid")
+    # song = midi_to_song("MIDI_sample.mid")
     # song = midi_to_song("uzeb_cool_it.mid")
+    print os.getcwd()
+    song = midi_to_song("./data/ajsmidi/i_gotta_right_hh.mid")
     print song
     # pass
 

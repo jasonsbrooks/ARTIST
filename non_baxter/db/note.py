@@ -1,8 +1,6 @@
-from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func
-from sqlalchemy.orm import relationship, backref
-
-from track import Track
-
+from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy.orm import relationship
+from . import Base
 
 class Note(Base):
     """
@@ -24,22 +22,17 @@ class Note(Base):
     """
 
     __tablename__ = 'note'
-    # def __init__(self, pitch=60, dur=0, start=0, tick_dur=0, start_tick=0, measure=0):
-    #     self.pitch = pitch
-    #     self.dur = dur
-    #     self.start = start
-    #     self.tick_dur = tick_dur
-    #     self.start_tick = start_tick
-    #     self.measure = measure
 
     id = Column(Integer, primary_key=True)
     pitch = Column(Integer, nullable=False)
-    dur = Column(Integer, nullable=False)
+    dur = Column(Integer, nullable=False) 
     start = Column(Integer, nullable=False)
-    tick_dur = Column(Integer, nullable=False)
+    end = Column(Integer, nullable=False)
+    tick_dur = Column(Integer, nullable=False) 
     start_tick = Column(Integer, nullable=False)
     measure = Column(Integer, nullable=False)
     track_id = Column(Integer, ForeignKey('track.id'))
+    track = relationship("Track", back_populates="notes")
 
     def __repr__(self):
         return "note(pitch=%r, dur=%r, start=%r, tick_dur=%r, start_tick=%r, measure=%r)" % \
