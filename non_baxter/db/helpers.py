@@ -19,17 +19,17 @@ Important MIDI Notes:
 2) pattern.resolution contains resolution (ppqn)
 '''
 
-import midi, sys, pdb, os
+import midi, sys, pdb, os, re
 
 from collections import defaultdict
 
 from sqlalchemy import desc, asc
 
 from song import Song
-from track import Track 
+from track import Track
 from note import Note
 
-from . import Base,Session
+from . import Base, Session
 
 DURKS_PER_QUARTER_NOTE = 8
 
@@ -45,8 +45,10 @@ def midi_to_song(midifilename):
     resolution = pattern.resolution  # note pattern.resolution contains resolution (ppqn)
     print 'Resolution (ppqn): ' + str(resolution)
 
+    title = re.sub(r'[^\x00-\x7F]+', ' ', os.path.basename(midifilename))
+
     # create Song object
-    song = Song(title=os.path.basename(midifilename), ppqn=resolution)
+    song = Song(title=title, ppqn=resolution)
     session.add(song)
 
     # create ordered list of all time and key signature events
@@ -96,6 +98,8 @@ def midi_to_song(midifilename):
             all_sig_events = temp_time_sig_events + temp_key_sig_events
             all_sig_events.sort(key=lambda x: x['start_tick'])
 
+            instr_name = re.sub(r'[^\x00-\x7F]+', ' ', instr_name)  # converts non-ASCII chars to spaces
+
             track = Track(time_sig_top=ts['n'], time_sig_bottom=ts['d'], key_sig_top=ks['sf'],
                           key_sig_bottom=ks['mi'], instr_key=instr_key, instr_name=instr_name,
                           channel=channel, start_tick=0, song=song)
@@ -120,6 +124,9 @@ def midi_to_song(midifilename):
                         ts = next_sig_event
 
                     insert_rests_into_track(track, resolution)  # insert rests into track
+
+                    instr_name = re.sub(r'[^\x00-\x7F]+', ' ', instr_name)  # converts non-ASCII chars to spaces
+
                     # create new track and update temporary variables
                     track = Track(time_sig_top=ts['n'], time_sig_bottom=ts['d'], key_sig_top=ks['sf'],
                                   key_sig_bottom=ks['mi'], instr_key=instr_key, instr_name=instr_name,
@@ -397,7 +404,8 @@ def main():
 
     # song = midi_to_song("MIDI_sample.mid")
     # song = midi_to_song("uzeb_cool_it.mid")
-    song = midi_to_song("../scrapers/ajsmidi/affairgs.mid")
+    print os.getcwd()
+    song = midi_to_song("./data/ajsmidi/fire_and_smoke_dw.mid")
     print song
     # pass
 

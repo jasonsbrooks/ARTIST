@@ -26,7 +26,6 @@ def main():
             print str(count) + ". Analyzing " + midiPath.split('/')[-1]
             midi_to_song(midiPath)
             print "FINISHED...moving on"
-            print os.path.basename(midiPath)
             count += 1
     print "DONE"
     print "Total Songs Analyzed: " + count

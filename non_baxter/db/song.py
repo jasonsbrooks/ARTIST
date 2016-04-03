@@ -17,7 +17,7 @@ class Song(Base):
     title = Column(String, nullable=False)
     ppqn = Column(Integer, nullable=False)
     tracks = relationship("Track")
-    
+
     def __repr__(self):
         return "Song(title=%r, ppqn=%r, tracks=%r)" % \
             (self.title, self.ppqn, self.tracks)
