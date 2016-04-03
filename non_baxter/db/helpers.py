@@ -19,24 +19,21 @@ Important MIDI Notes:
 2) pattern.resolution contains resolution (ppqn)
 '''
 
-import midi
-import sys
-
-import pdb
-
-from db_reset import Song, Track, Note
+import midi, sys, pdb
 
 from collections import defaultdict
 
-from sqlalchemy import create_engine, desc, asc
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import desc, asc
 
-engine = create_engine('sqlite:////tmp/artist.db')
-Session = sessionmaker(bind=engine)
-session = Session()
+from song import Song
+from track import Track 
+from note import Note
+
+from . import Base,Session
 
 DURKS_PER_QUARTER_NOTE = 8
 
+session = Session()
 
 # takes midi file and returns a representative song object
 # a Song is a list of many Tracks

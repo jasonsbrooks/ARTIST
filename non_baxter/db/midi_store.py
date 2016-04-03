@@ -15,7 +15,7 @@ from helpers import midi_to_song
 
 
 def main():
-    midiDirectory = '../scrapers/'
+    midiDirectory = 'data/'
     if len(sys.argv) >= 2:
         midiDirectory = sys.argv[1]
 
