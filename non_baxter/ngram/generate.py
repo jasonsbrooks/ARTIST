@@ -10,43 +10,54 @@ from collections import deque
 import sys,random,pdb
 from ngram_helper import pitch_to_str
 
-def generate(counts):
+class NgramGenerator():
+    def __init__(self, first_two, num_notes):
+        self.num_generated = 0
+        self.num_notes = num_notes
 
-	last_two = deque([60,67])
+        self.last_two = deque(first_two)
 
-	generated_notes = []
+    def __iter__(self):
+        return self
 
-	for note in xrange(int(sys.argv[2])):
-		row = counts[tuple(last_two)]
+    def next(self):
 
-		total = np.sum(row)
+        if self.num_generated < self.num_notes:
 
-		rand = (random.randint(0,total-1) if total > 0 else 0)
+            row = counts[tuple(self.last_two)]
+            total = np.sum(row)
 
-		i = 0
-		rand -= row[i]
+            rand = (random.randint(0,total-1) if total > 0 else 0)
 
-		while rand > 0:
-			i += 1
-			rand -= row[i]
+            i = 0
+            rand -= row[i]
 
-		if i > 127:
-			pdb.set_trace()
+            while rand > 0:
+                i += 1
+                rand -= row[i]
 
-		last_two.append(i)
-		last_two.popleft()
+            self.last_two.append(i)
+            self.last_two.popleft()
 
-		generated_notes.append(i)
+            self.num_generated += 1
 
-	return generated_notes
+            return i
+        else:
+            raise StopIteration()
+
+def generate(counts, num_notes):
+
+    first_two = [60,67]
+
+    return [note for note in NgramGenerator(first_two,num_notes)]
 
 
 if __name__ == '__main__':
-	
-	if len(sys.argv) < 3:
-		print(__doc__)
-		sys.exit(1)
-	with open(sys.argv[1]) as f:
-		counts = np.load(f)
+    
+    if len(sys.argv) < 3:
+        print(__doc__)
+        sys.exit(1)
+    with open(sys.argv[1]) as f:
+        counts = np.load(f)
 
-	print map(pitch_to_str,generate(counts))
+    print map(pitch_to_str,generate(counts, int(sys.argv[2])))
