@@ -4,13 +4,13 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 from pprint import pformat
-
 from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func
 from sqlalchemy.orm import relationship, backref
 
 import sys
 
 Base = declarative_base()
+
 
 class Song(Base):
     """
@@ -85,6 +85,7 @@ class Track(Base):
             (self.start_tick, self.time_sig_top, self.time_sig_bottom, self.key_sig_top, self.key_sig_bottom, self.instr_key,
              self.instr_name, self.channel, self.tempo, self.dynamic, self.song, self.notes)
 
+
 class Note(Base):
     """
     A Note represents a line of note in a track with the following properties:
@@ -108,10 +109,10 @@ class Note(Base):
 
     id = Column(Integer, primary_key=True)
     pitch = Column(Integer, nullable=False)
-    dur = Column(Integer, nullable=False) 
+    dur = Column(Integer, nullable=False)
     start = Column(Integer, nullable=False)
     end = Column(Integer, nullable=False)
-    tick_dur = Column(Integer, nullable=False) 
+    tick_dur = Column(Integer, nullable=False)
     start_tick = Column(Integer, nullable=False)
     measure = Column(Integer, nullable=False)
     track_id = Column(Integer, ForeignKey('track.id'))
@@ -123,14 +124,15 @@ class Note(Base):
 
 
 def create():
-	engine = create_engine('sqlite:////tmp/artist.db')
-	session = sessionmaker()
-	session.configure(bind=engine)
-	Base.metadata.drop_all(engine)
-	Base.metadata.create_all(engine)
+    engine = create_engine('sqlite:////tmp/artist.db')
+    session = sessionmaker()
+    session.configure(bind=engine)
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(engine)
+
 
 if __name__ == '__main__':
-	if len(sys.argv) > 1 and sys.argv[1] == 'create':
-		print "Creating database!"
-		create()
-	pass
+    if len(sys.argv) > 1 and sys.argv[1] == 'create':
+        print "Creating database!"
+        create()
+    pass
