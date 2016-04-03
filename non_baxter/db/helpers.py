@@ -25,7 +25,7 @@ from collections import defaultdict
 
 from sqlalchemy import desc, asc
 
-from . import Base, Session, Song, Track, Note
+from . import Base,Session,Song,Track,Note
 
 DURKS_PER_QUARTER_NOTE = 8
 
@@ -41,8 +41,8 @@ def midi_to_song(midifilename):
     try:
         pattern = midi.read_midifile(midifilename)
     except Exception as e:
-        print 'Exception ' + e
-        sys.exit(1)
+        print 'Exception: ' + str(e)
+        return
 
     pattern.make_ticks_abs()  # makes ticks absolute instead of relative
     resolution = pattern.resolution  # note pattern.resolution contains resolution (ppqn)
