@@ -18,14 +18,10 @@ counts = np.zeros(matrix_size,dtype=np.int16)
 
 from collections import deque
 
-### DB STUFF
-from db_reset import Song, Track, Note
+from sqlalchemy import desc, asc
 
-from sqlalchemy import create_engine, desc, asc
-from sqlalchemy.orm import sessionmaker
+from db import Session, Song, Track, Note
 
-engine = create_engine('sqlite:////tmp/artist.db')
-Session = sessionmaker(bind=engine)
 session = Session()
 
 # iterate through all the tracks
@@ -36,6 +32,7 @@ for trk in session.query(Track.query.join(Song)):
 	for note in session.query(trk):
 		triple.popleft()
 		triple.append(note.pitch)
+		print note.pitch
 
 		# update our counts matrix
 		if len(triple) == 3:
