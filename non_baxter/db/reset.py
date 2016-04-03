@@ -5,13 +5,11 @@ from pprint import pformat
 from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func
 from sqlalchemy.orm import relationship, backref
 
+from . import engine,Base
+
 import sys
 
-
 def create():
-	engine = create_engine('sqlite:////tmp/artist.db')
-	session = sessionmaker()
-	session.configure(bind=engine)
 	Base.metadata.drop_all(engine)
 	Base.metadata.create_all(engine)
 
