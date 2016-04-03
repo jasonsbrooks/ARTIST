@@ -110,12 +110,12 @@ class Note(Base):
     pitch = Column(Integer, nullable=False)
     dur = Column(Integer, nullable=False) 
     start = Column(Integer, nullable=False)
+    end = Column(Integer, nullable=False)
     tick_dur = Column(Integer, nullable=False) 
     start_tick = Column(Integer, nullable=False)
     measure = Column(Integer, nullable=False)
     track_id = Column(Integer, ForeignKey('track.id'))
     track = relationship("Track", back_populates="notes")
-
 
     def __repr__(self):
         return "note(pitch=%r, dur=%r, start=%r, tick_dur=%r, start_tick=%r, measure=%r)" % \

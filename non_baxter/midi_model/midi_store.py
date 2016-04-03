@@ -9,21 +9,26 @@ if no folder specified, midi_store.py will store all midi files in current direc
 '''
 
 import sys
+import fnmatch
 import os
-import glob
 from helpers import midi_to_song
-
-path = ''
 
 
 def main():
+    midiDirectory = '../scrapers/'
     if len(sys.argv) >= 2:
-        path = sys.argv[1]
-    for filename in glob.glob(os.path.join(path, '*.txt')):
-        song_obj = midi_to_song(filename)
-        #  store song_obj to db
+        midiDirectory = sys.argv[1]
+
+    listPoo = []
+    for root, dirnames, filenames in os.walk(midiDirectory):
+        for filename in fnmatch.filter(filenames, '*.mid'):
+            midiPath = os.path.abspath(os.path.join(root, filename))
+            print "Analyzing " + midiPath.split('/')[-1]
+            song_obj = midi_to_song(midiPath)
+            print "FINISHED...moving on"
+    print "DONE"
+
 
 
 if __name__ == "__main__":
     main()
-    pass
