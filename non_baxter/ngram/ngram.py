@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 Train an ngram model
 USAGE: ./ngram.py OUTFILE
