@@ -8,10 +8,11 @@ USAGE: ./ngram.py MODELFILE NUM_NOTES
 import numpy as np 
 from collections import deque
 import sys,random,pdb
-
-last_two = deque([60,67])
+from ngram_helper import pitch_to_str
 
 def generate(counts):
+
+	last_two = deque([60,67])
 
 	generated_notes = []
 
@@ -20,7 +21,7 @@ def generate(counts):
 
 		total = np.sum(row)
 
-		rand = random.randint(0,total-1)
+		rand = (random.randint(0,total-1) if total > 0 else 0)
 
 		i = 0
 		rand -= row[i]
@@ -48,4 +49,4 @@ if __name__ == '__main__':
 	with open(sys.argv[1]) as f:
 		counts = np.load(f)
 
-	print generate(counts)
+	print map(pitch_to_str,generate(counts))
