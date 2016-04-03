@@ -25,18 +25,25 @@ from collections import defaultdict
 
 from sqlalchemy import desc, asc
 
-from . import Base,Session,Song,Track,Note
+from . import Base, Session, Song, Track, Note
 
 DURKS_PER_QUARTER_NOTE = 8
 
 session = Session()
+
 
 # takes midi file and returns a representative song object
 # a Song is a list of many Tracks
 # a Track is a list of many Notes representing a common
 #   1) key signature, 2) time signature, and 3) instrument key
 def midi_to_song(midifilename):
-    pattern = midi.read_midifile(midifilename)
+
+    try:
+        pattern = midi.read_midifile(midifilename)
+    except Exception as e:
+        print 'Exception ' + e
+        sys.exit(1)
+
     pattern.make_ticks_abs()  # makes ticks absolute instead of relative
     resolution = pattern.resolution  # note pattern.resolution contains resolution (ppqn)
     print 'Resolution (ppqn): ' + str(resolution)
@@ -275,6 +282,10 @@ def get_note_events(track):
 
     return notes
 
+'''
+START Deprecated Methods
+'''
+
 
 # takes midi file and constructs dictionary with following structure:
 # {instr_key: [track1, track2, ...], ...} where track1, track2...are list of tuples returned by get_note_events
@@ -383,6 +394,10 @@ def dur_to_str(dur):
         return
     return d_to_l_dic[dur]
 
+'''
+END Deprecated Methods
+'''
+
 
 # test helper methods
 def main():
@@ -401,7 +416,7 @@ def main():
     # song = midi_to_song("MIDI_sample.mid")
     # song = midi_to_song("uzeb_cool_it.mid")
     print os.getcwd()
-    song = midi_to_song("./data/ajsmidi/fire_and_smoke_dw.mid")
+    song = midi_to_song("./data/ajsmidi/i_gotta_right_hh.mid")
     print song
     # pass
 

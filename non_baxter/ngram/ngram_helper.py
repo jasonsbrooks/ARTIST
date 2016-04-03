@@ -18,6 +18,8 @@ def transpose_pitch(pitch, lo, hi):
     return pitch
 
 
+# given a pitch (MIDI integer from 0-127)
+# returns correpsonding string representation of note
 def pitch_to_str(pitch):
     p_to_l_dic = {0: 'C',
                   1: 'C#',
