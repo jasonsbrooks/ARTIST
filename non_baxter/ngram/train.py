@@ -2,7 +2,7 @@
 
 """
 Train an ngram model
-USAGE: ./ngram.py OUTFILE
+USAGE: ./ngram.py THREAD_POOL_SIZE OUTFILE_NAME
 """
 
 '''
@@ -18,11 +18,12 @@ Complete:
 import numpy as np
 import sys, os, threading, re
 
-if len(sys.argv) < 2:
+if len(sys.argv) < 3:
     print(__doc__)
     sys.exit(1)
 
-THREAD_POOL_SIZE = 6
+THREAD_POOL_SIZE = int(sys.argv[1])
+OUTFILE_NAME = sys.argv[2]
 
 NUM_NOTES = 128
 matrix_size = (NUM_NOTES, NUM_NOTES, NUM_NOTES)
@@ -93,5 +94,5 @@ for i in xrange(THREAD_POOL_SIZE):
 
 q.join()
 
-with open(sys.argv[1], 'w') as outfile:
+with open(OUTFILE_NAME, 'w') as outfile:
     np.save(outfile, counts)
