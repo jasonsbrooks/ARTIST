@@ -38,19 +38,20 @@ session = Session()
 
 # iterate through all the tracks
 test_counter = 0
+MAX_TRACKS = 1000
 
 for trk in session.query(Track).all():
     print os.path.basename(trk.song.title), ":", trk.instr_name
 
     # skip percurssion tracks
-    regexp = re.compile(r'drum|cymbal')
-    if trk.channel == 9 or regexp.search(trk.instr_name, re.IGNORECASE) is not None:
+    regexp = re.compile(r'drum|cymbal', re.IGNORECASE)
+    if trk.channel == 9 or regexp.search(trk.instr_name) is not None:
         print 'skipped percussion track'
         continue
 
     # skip bass tracks
-    regexp = re.compile(r'bass')
-    if (trk.channel >= 32 and trk.channel <= 39) or regexp.search(trk.instr_name, re.IGNORECASE) is not None:
+    regexp = re.compile(r'bass', re.IGNORECASE)
+    if (trk.channel >= 32 and trk.channel <= 39) or regexp.search(trk.instr_name) is not None:
         print 'skipped bass track'
         continue
 
@@ -69,7 +70,7 @@ for trk in session.query(Track).all():
             np.add.at(counts, tuple(triple), 1)
 
     test_counter += 1
-    if (test_counter > 100):
+    if (test_counter > MAX_TRACKS):
         break
 
 with open(sys.argv[1], 'w') as outfile:
