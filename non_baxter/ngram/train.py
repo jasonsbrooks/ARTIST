@@ -16,12 +16,7 @@ Complete:
 
 '''
 import numpy as np
-<<<<<<< HEAD
-import sys, os, threading
-=======
-import sys, os
-import re
->>>>>>> e6c7429b64e5a7d7e12ebb3f1acf8c05a3120f78
+import sys, os, threading, re
 
 if len(sys.argv) < 2:
     print(__doc__)
