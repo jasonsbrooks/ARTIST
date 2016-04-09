@@ -4,19 +4,35 @@
 Train an ngram model
 USAGE: ./ngram.py OUTFILE
 """
+
+'''
+Todo:
+1) key transposition (multiple ngram models or transpose into one?)
+2) skip bass/rhythm/strings/piano?
+
+
+Complete:
+1) Skip all drums
+
+'''
 import numpy as np
+<<<<<<< HEAD
 import sys, os, threading
+=======
+import sys, os
+import re
+>>>>>>> e6c7429b64e5a7d7e12ebb3f1acf8c05a3120f78
 
 if len(sys.argv) < 2:
-	print(__doc__)
-	sys.exit(1)
+    print(__doc__)
+    sys.exit(1)
 
 THREAD_POOL_SIZE = 12
 
 NUM_NOTES = 128
-matrix_size = (NUM_NOTES,NUM_NOTES,NUM_NOTES)
+matrix_size = (NUM_NOTES, NUM_NOTES, NUM_NOTES)
 
-counts = np.zeros(matrix_size,dtype=np.int16)
+counts = np.zeros(matrix_size, dtype=np.int16)
 
 from collections import deque
 from Queue import Queue
@@ -42,19 +58,31 @@ class TrackTrainer(threading.Thread):
 		trk = self.session.query(Track).get(trk_id)
 		print os.path.basename(trk.song.title), ":", trk.instr_name
 
-		triple = deque()
+	    # skip percurssion tracks
+	    regexp = re.compile(r'drum|cymbal', re.IGNORECASE)
+	    if trk.channel == 9 or regexp.search(trk.instr_name) is not None:
+	        print 'skipped percussion track'
+	        continue
 
-		# and through all the notes in a track
-		for note in trk.notes:
-			if note.pitch < 0 or note.pitch >= NUM_NOTES:
-				pass
+	    # skip bass tracks
+	    regexp = re.compile(r'bass', re.IGNORECASE)
+	    if (trk.channel >= 32 and trk.channel <= 39) or regexp.search(trk.instr_name) is not None:
+	        print 'skipped bass track'
+	        continue
 
-			triple.append(note.pitch)
+	    triple = deque()
 
-			# update our counts matrix
-			if len(triple) > 3:
-				triple.popleft()
-				np.add.at(self.counts,tuple(triple),1)
+	    # and through all the notes in a track
+	    for note in trk.notes:
+	        if note.pitch < 0 or note.pitch >= NUM_NOTES:
+	            pass
+
+	        triple.append(note.pitch)
+
+	        # update our counts matrix
+	        if len(triple) > 3:
+	            triple.popleft()
+	            np.add.at(counts, tuple(triple), 1)
 
 session = Session()
 q = Queue()
@@ -68,5 +96,5 @@ for i in xrange(THREAD_POOL_SIZE):
 	thrd.daemon = True
 	thrd.start()
 
-with open(sys.argv[1],'w') as outfile:
-	np.save(outfile,counts)
+with open(sys.argv[1], 'w') as outfile:
+    np.save(outfile, counts)
