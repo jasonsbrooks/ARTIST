@@ -1,8 +1,8 @@
 *.o
 
-mftext
-meter
-harmony
-key
-grouper
-streamer
+mftext/mftext
+meter/meter
+harmony/harmony
+key/key
+grouper/grouper
+streamer/streamer
