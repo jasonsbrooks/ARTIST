@@ -2,6 +2,7 @@
 
 import baxter_interface
 from baxter_interface import CHECK_VERSION
+from baxter_dataflow import wait_for
 import baxter_external_devices
 import rospy
 import pdb, time, json, copy
@@ -69,9 +70,9 @@ class Performer(object):
 
         arm_obj = (self.left_arm if arm == "left" else self.right_arm)
 
-        arm_obj.set_joint_positions(down_pos)
-        time.sleep(0.15)
-        arm_obj.set_joint_positions(current_pos)
+        wait_for(self.constructJointChecker(down_pos), rate=4, timeout=2.0, body=arm_obj.set_joint_positions(down_pos))
+        wait_for(self.constructJointChecker(current_pos), rate=4, timeout=2.0, body=arm_obj.set_joint_positions(current_pos))
+
 
     def get_joint_angles(self):
         return self.left_arm.joint_angles(), self.right_arm.joint_angles()
@@ -140,25 +141,44 @@ class Performer(object):
             elif inp[0] == "exit":
                 break
 
-            elif inp[0] == 'jasonspecial':
+            elif inp[0] == 'special':
+                noteDuration = 1.5
                 noteNameArray = ["C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "A6", "G6", "F6", "E6", "D6", "G6", "F6", "E6", "D6", "C6", "B5", "C6", "D6", "B5", "D6"]
+                # noteNameArray = ["C7", "B5", "C7","B5", "C7","B5", "C7","B5", "C7"]
+                # noteNameArray = ["C7", "E6"]
                 noteValArray = [notes[x] for x in noteNameArray]
                 print noteValArray
-
                 for num in noteValArray:
+                    start_time = time.time()
                     self.send_note(int(num))
-                    self.right_arm.set_joint_positions(KEYS["right"][str(num)], raw=True)
-                    time.sleep(0.5)
-                    self.flick("right", self.get_joint_angles()[1])
-                    time.sleep(0.5)
-                    
+                    wait_for(self.constructJointChecker(KEYS["right"][str(num)]), rate=4, raise_on_error=False, timeout=2.0, body=self.right_arm.set_joint_positions(KEYS["right"][str(num)], raw=True))
+                    wait_for(self.constructJointChecker(KEYS["right"][str(num)]), rate=4, raise_on_error=False, timeout=2.0, body=self.flick("right", KEYS["right"][str(num)]))
+                    delta = time.time() - start_time
+                    if noteDuration - delta > 0:
+                        time.sleep(noteDuration-delta)
+                    print time.time() - start_time
+                print "FINSIHED"
+
 
             inp = raw_input("$ ").split(" ")
 
-
         self.done = True
 
+    def checkRightJointPositions(self, target_pos):
+        # print "CHECKING"
+        current_joint_positions = self.right_arm.joint_angles()
+        for key in target_pos:
+            difference = abs(target_pos[key] - current_joint_positions[key])
+            # print "checked %s with difference %f" %(key, difference)
+            if difference > 0.01:
+                # print "%s IS TOO FAR OFF!" %(key)
+                # print "returning false"
+                return False
+        # print "returning true"
+        return True
 
+    def constructJointChecker(self, target_pos):
+        return (lambda: self.checkRightJointPositions(target_pos))
 
 def main():
     print("Initializing node... ")
