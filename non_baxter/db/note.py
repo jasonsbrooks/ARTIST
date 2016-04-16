@@ -19,21 +19,25 @@ class Note(Base):
             Note: will be -1 for rest (no meaning)
         measure: Integer representing measure of Song note is contained within
             Note: 0 is the first measure of a Song
+        root: root of chord that this note start being played within
+            Note: ...-2 -1  0  1  2  3  4  5  6  7  8  9 10 11 12 ...
+                  ... Ab Eb Bb F  C  G  D  A  E  B  F# C# G# D# A#...
     """
 
     __tablename__ = 'note'
 
     id = Column(Integer, primary_key=True)
     pitch = Column(Integer, nullable=False)
-    dur = Column(Integer, nullable=False) 
+    dur = Column(Integer, nullable=False)
     start = Column(Integer, nullable=False)
     end = Column(Integer, nullable=False)
-    tick_dur = Column(Integer, nullable=False) 
+    tick_dur = Column(Integer, nullable=False)
     start_tick = Column(Integer, nullable=False)
     measure = Column(Integer, nullable=False)
     track_id = Column(Integer, ForeignKey('track.id'))
     track = relationship("Track", back_populates="notes")
+    root = Column(Integer, nullable=True)
 
     def __repr__(self):
-        return "note(pitch=%r, dur=%r, start=%r, tick_dur=%r, start_tick=%r, measure=%r)" % \
-            (self.pitch, self.dur, self.start, self.tick_dur, self.start_tick, self.measure)
+        return "note(pitch=%r, dur=%r, start=%r, tick_dur=%r, start_tick=%r, measure=%r, root=%r)" % \
+            (self.pitch, self.dur, self.start, self.tick_dur, self.start_tick, self.measure, self.root)

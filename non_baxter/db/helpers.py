@@ -50,6 +50,10 @@ def midi_to_song(midifilename):
 
     title = re.sub(r'[^\x00-\x7F]+', ' ', os.path.basename(midifilename))
 
+    # get chord list
+    p_file_name = os.path.splitext(midifilename)[0]+'.k'
+    chord_list = chord_extraction(p_file_name)
+
     # create Song object
     song = Song(title=title, ppqn=resolution)
     session.add(song)
@@ -116,7 +120,7 @@ def midi_to_song(midifilename):
                 next_sig_event = all_sig_events[0]
                 next_track_tick = next_sig_event['start_tick']  # holds max tick of current track
 
-            notes = get_notes(get_note_events(midi_track), resolution, track)
+            notes = get_notes(get_note_events(midi_track), resolution, track, chord_list)
 
             for n in notes:
                 if not n.start_tick < next_track_tick:  # still on current track
@@ -196,8 +200,9 @@ def insert_rests_into_track(track, ppqn):
             rest_dur = current_durk - rest_start
             rest_measure = rest_start / (DURKS_PER_QUARTER_NOTE * track.time_sig_bottom)  # note 8 is number of durks per quarter note
 
+
             note = Note(pitch=-1, dur=rest_dur, start=rest_start, end=rest_dur+rest_start,
-                        tick_dur=-1, start_tick=-1, measure=rest_measure, track=track)
+                        tick_dur=-1, start_tick=-1, measure=rest_measure, track=track, root=None)
             session.add(note)
         else:
             current_durk += 1
@@ -231,7 +236,7 @@ def is_instr_track(track):
 #   and ppqn (pulses per quarter note)
 # returns list of note objects with appropriate durations and other properties
 # this method calculates appropriate durations based on ppqn of track
-def get_notes(note_events, ppqn, track):
+def get_notes(note_events, ppqn, track, chord_list):
     note_objs = []
     unclosed_notes = defaultdict(lambda: [])  # holds running hash of notes that haven't seen an off event yet
                                               # key is note pitch (integer from 0-127), value is a QUEUE of note_event tuples
@@ -257,8 +262,19 @@ def get_notes(note_events, ppqn, track):
 
                 measure = start_tick / (ppqn * track.time_sig_bottom)
 
+                chord_root = -99
+                for chord in chord_list:  # assumes chord_list in order by ascending start_ticks
+                    if start_tick >= chord['start_tick']:
+                        chord_root = chord['root']
+
+                print 'This is the root: ' + str(chord_root)
+                if chord_root is None:
+                    print 'wtf'
+                    return
+
                 note_obj = Note(pitch=pitch, dur=dur, start=start, end=dur+start,
-                                tick_dur=tick_dur, start_tick=start_tick, measure=measure, track=track)
+                                tick_dur=tick_dur, start_tick=start_tick, measure=measure, track=track, root=chord_root)
+                print note_obj
                 note_objs.append(note_obj)
         else:  # Error checking
             print 'Warning: <get_notes> Note is neither On nor Off event'
@@ -281,6 +297,26 @@ def get_note_events(track):
             notes.append(note)
 
     return notes
+
+
+# given a .p chord file from melisma
+# returns list of chord dictionaries [{root:  , start_tick:  , end_tick:  } ... ]
+# sorts in ascending order of start_tick
+def chord_extraction(filename):
+    chord_list = []
+
+    with open(filename) as f:
+        content = f.readlines()
+
+    for line in content:
+        line_tokens = line.split()
+        if len(line_tokens) > 0 and line_tokens[0] == "Chord":
+            chord_obj = {"root": int(line_tokens[3]), "start_tick": int(line_tokens[1]), "end_tick": int(line_tokens[2])}
+            chord_list.append(chord_obj)
+
+    chord_list.sort(key=lambda x: x['start_tick'])  # sort in ascending order by start_tick
+    return chord_list
+
 
 '''
 START Deprecated Methods
