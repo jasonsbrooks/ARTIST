@@ -58,7 +58,7 @@ class Learner(BaxterController):
 
     # send the image corresponding to a given note to the display
     def send_note(self, note):
-        path = os.path.join(IMAGE_PATH, str(note) + ".png")
+        path = os.path.join(IMAGE_PATH, "notes/", str(note) + ".png")
 
         if not os.path.exists(path):
             rospy.logerr("Not Found: " + path)
