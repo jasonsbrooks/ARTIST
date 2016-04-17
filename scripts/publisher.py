@@ -9,15 +9,17 @@ from sensor_msgs.msg import (
     Image,
 )
 
+QUEUE_SIZE = 100
+
 class NotePublisher(object):
     def __init__(self):
-        self.publisher = rospy.Publisher('baxter_artist_notes', baxter_artist.msg.Note, queue_size=10)
+        self.publisher = rospy.Publisher('baxter_artist_notes', baxter_artist.msg.Note, queue_size=QUEUE_SIZE)
     
     def pub_note(self,note):
                 
         # construct the note message
         msg = baxter_artist.msg.Note()
-        msg.starttime = rospy.Time.now()
+        msg.starttime = rospy.Time.now() + rospy.Duration.from_sec(5)
         msg.pitch = note 
 
         rospy.loginfo("publish - pitch: " + str(msg.pitch))
@@ -55,7 +57,7 @@ def main():
     publisher = NotePublisher()
     for note in noteValArray:
         publisher.pub_note(note)
-        rospy.sleep(1)
+        rospy.sleep(2)
 
 
 if __name__ == '__main__':

@@ -1,4 +1,5 @@
-import copy, os, rospy, cv2, cv_bridge, json, time
+import copy, os, rospy, cv2, cv_bridge, json, time, threading
+from Queue import Queue
 
 from baxter_dataflow import wait_for
 
@@ -19,12 +20,30 @@ notes = {"B5":"63",
         "B6":"75",
         "C7":"76"}
 
+class NoteSubscriber(threading.Thread):
+    def __init__(self,q):
+        threading.Thread.__init__(self)
+        self.q = q
+
+    def on_receive_note(self,data):
+        rospy.loginfo("receive - pitch: " + str(data.pitch))
+        self.q.put(data)
+
+    def run(self):
+        rospy.Subscriber("baxter_artist_notes", baxter_artist.msg.Note, self.on_receive_note)
+        rospy.spin()
+
 class Performer(BaxterController):
     def __init__(self):
         """
         Performs the instrument like a boss
         """
         BaxterController.__init__(self)
+        self.set_neutral()
+        self.q = Queue()
+
+        with open(KEYS_FILENAME) as f:
+            self.keys = json.load(f)
 
     def flick(self,arm,current_pos):
         down_pos = copy.deepcopy(current_pos)
@@ -32,8 +51,8 @@ class Performer(BaxterController):
 
         arm_obj = (self.left_arm if arm == "left" else self.right_arm)
 
-        wait_for(self.constructJointChecker(down_pos), rate=4, timeout=2.0, body=arm_obj.set_joint_positions(down_pos))
-        wait_for(self.constructJointChecker(current_pos), rate=4, timeout=2.0, body=arm_obj.set_joint_positions(current_pos))
+        wait_for(lambda: self.checkRightJointPositions(down_pos), rate=4, timeout=2.0, body=arm_obj.set_joint_positions(down_pos))
+        wait_for(lambda: self.checkRightJointPositions(current_pos), rate=4, timeout=2.0, body=arm_obj.set_joint_positions(current_pos))
 
 
     def get_joint_angles(self):
@@ -54,22 +73,35 @@ class Performer(BaxterController):
         pub.publish(msg)
 
     def play_note_now(self,note):
-        noteDuration = 1.5
-        start_time = time.time()
-        self.send_note(int(num))
-        wait_for(self.constructJointChecker(KEYS["right"][str(num)]), rate=4, raise_on_error=False, timeout=2.0, body=self.right_arm.set_joint_positions(KEYS["right"][str(num)], raw=True))
-        wait_for(self.constructJointChecker(KEYS["right"][str(num)]), rate=4, raise_on_error=False, timeout=2.0, body=self.flick("right", KEYS["right"][str(num)]))
-        delta = time.time() - start_time
-        if noteDuration - delta > 0:
-            time.sleep(noteDuration-delta)
-        print time.time() - start_time
+        self.send_note(int(note))
+        wait_for(lambda: self.checkRightJointPositions(self.keys["right"][str(note)]), rate=4, raise_on_error=False, timeout=2.0, body=self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True))
+        wait_for(lambda: self.checkRightJointPositions(self.keys["right"][str(note)]), rate=4, raise_on_error=False, timeout=2.0, body=self.flick("right", self.keys["right"][str(note)]))
 
-    def on_receive_note(self,data):
-        rospy.loginfo("receive - pitch:" + str(data.pitch))
+    def play_note(self,note):
+        sleep_time = note.starttime - rospy.Time.now()
+
+        # we've missed the opportunity to play this note
+        if sleep_time.to_nsec() < 0:
+            return
+
+        # sleep until we can play it
+        rospy.sleep(sleep_time)
+
+        rospy.loginfo("playing: " + str(note.pitch))
+        self.play_note_now(note.pitch)
 
     def subscribe(self):
-        rospy.Subscriber("baxter_artist_notes", baxter_artist.msg.Note, self.on_receive_note)
-        rospy.spin()
+        subscriber = NoteSubscriber(self.q)
+        subscriber.daemon = True
+        subscriber.start()
+
+        while True:
+            note = self.q.get()
+            rospy.loginfo("dequeue: " + str(note.pitch))
+            self.play_note(note)
+            self.q.task_done()
+
+        subscriber.join()
 
     def checkRightJointPositions(self, target_pos):
         # print "CHECKING"
@@ -83,6 +115,3 @@ class Performer(BaxterController):
                 return False
         # print "returning true"
         return True
-
-    def constructJointChecker(self, target_pos):
-        return (lambda: self.checkRightJointPositions(target_pos))
