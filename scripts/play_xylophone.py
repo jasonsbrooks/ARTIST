@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import json, copy, rospy, time
+import json, copy, rospy
 
 from baxter_artist import Performer
 import baxter_artist.msg
@@ -52,7 +52,7 @@ def main():
     publisher = NotePublisher()
     for note in noteValArray:
         publisher.pub_note(note)
-        time.sleep(1)
+        rospy.sleep(1)
 
 
 if __name__ == '__main__':
