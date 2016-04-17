@@ -4,7 +4,7 @@ import baxter_interface
 from baxter_interface import CHECK_VERSION
 import rospy, pdb, os, json, time, threading
 
-from controller import BaxterController
+from baxter_artist import BaxterController
 
 import cv2, cv_bridge
 

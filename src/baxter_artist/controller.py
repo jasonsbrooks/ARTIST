@@ -58,15 +58,3 @@ class BaxterController(object):
         self.right_arm.move_to_joint_positions(CONFIG["neutral"]["right"])
 
         rospy.loginfo("[set_neutral] Both arms in neutral position.")
-
-def main():
-    rospy.loginfo("Initializing node... ")
-    rospy.init_node("play_xylophone")
-    controller = BaxterController()
-
-    controller.set_neutral()
-
-    rospy.signal_shutdown("Finished control")
-
-if __name__ == '__main__':
-    main()
