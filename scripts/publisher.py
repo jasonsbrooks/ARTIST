@@ -14,13 +14,14 @@ class NotePublisher(object):
         self.publisher = rospy.Publisher('baxter_artist_notes', baxter_artist.msg.Note, queue_size=10)
     
     def pub_note(self,note):
-        rospy.loginfo("publish - pitch: " + str(msg.pitch))
                 
         # construct the note message
         msg = baxter_artist.msg.Note()
         msg.starttime = rospy.Time.now()
         msg.pitch = note 
 
+        rospy.loginfo("publish - pitch: " + str(msg.pitch))
+        
         # publish the message
         self.publisher.publish(msg)
 

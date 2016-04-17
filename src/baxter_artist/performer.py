@@ -6,6 +6,7 @@ from sensor_msgs.msg import (
     Image,
 )
 
+import baxter_artist.msg
 from . import BaxterController, KEYS_FILENAME, IMAGE_PATH
 
 notes = {"B5":"63",
@@ -52,79 +53,23 @@ class Performer(BaxterController):
         pub = rospy.Publisher('/robot/xdisplay', Image, latch=True, queue_size=1)
         pub.publish(msg)
 
-    def perform(self):
-        with open(KEYS_FILENAME) as f:
-            KEYS = json.load(f)
+    def play_note_now(self,note):
+        noteDuration = 1.5
+        start_time = time.time()
+        self.send_note(int(num))
+        wait_for(self.constructJointChecker(KEYS["right"][str(num)]), rate=4, raise_on_error=False, timeout=2.0, body=self.right_arm.set_joint_positions(KEYS["right"][str(num)], raw=True))
+        wait_for(self.constructJointChecker(KEYS["right"][str(num)]), rate=4, raise_on_error=False, timeout=2.0, body=self.flick("right", KEYS["right"][str(num)]))
+        delta = time.time() - start_time
+        if noteDuration - delta > 0:
+            time.sleep(noteDuration-delta)
+        print time.time() - start_time
 
-        self.set_neutral()
+    def on_receive_note(self,data):
+        rospy.loginfo("receive - pitch:" + str(data.pitch))
 
-        inp = raw_input("$ ").split(" ")
-
-        while inp != "exit":
-
-            if inp[0] == "ls":
-                print KEYS[inp[1]]
-
-            elif inp[0] == "move":
-
-                self.left_arm.set_joint_position_speed(0.9)
-                self.right_arm.set_joint_position_speed(0.9)
-
-                try:
-                    start_time = time.time()
-
-                    if inp[1] == "left":
-                        self.left_arm.set_joint_positions(KEYS[inp[1]][inp[2]])
-                    elif inp[1] == "right":
-                        self.right_arm.set_joint_positions(KEYS[inp[1]][inp[2]], raw=True)
-                    else:
-                        self.set_neutral()
-
-                    delta = time.time() - start_time 
-                    print "time", delta
-
-                except KeyError, e:
-                    print "KeyError", e
-
-            elif inp[0] == "flick":
-
-                try:
-                    start_time = time.time()
-
-                    if inp[1] == "left":
-                        self.flick(inp[1],self.get_joint_angles()[0])
-                    elif inp[1] == "right":
-                        self.flick(inp[1],self.get_joint_angles()[1])
-
-                    delta = time.time() - start_time 
-                    print "time", delta
-
-                except KeyError, e:
-                    print "KeyError", e
-                
-            elif inp[0] == "exit":
-                break
-
-            elif inp[0] == 'special':
-                noteDuration = 1.5
-                noteNameArray = ["C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "A6", "G6", "F6", "E6", "D6", "G6", "F6", "E6", "D6", "C6", "B5", "C6", "D6", "B5", "D6"]
-                # noteNameArray = ["C7", "B5", "C7","B5", "C7","B5", "C7","B5", "C7"]
-                # noteNameArray = ["C7", "E6"]
-                noteValArray = [notes[x] for x in noteNameArray]
-                print noteValArray
-                for num in noteValArray:
-                    start_time = time.time()
-                    self.send_note(int(num))
-                    wait_for(self.constructJointChecker(KEYS["right"][str(num)]), rate=4, raise_on_error=False, timeout=2.0, body=self.right_arm.set_joint_positions(KEYS["right"][str(num)], raw=True))
-                    wait_for(self.constructJointChecker(KEYS["right"][str(num)]), rate=4, raise_on_error=False, timeout=2.0, body=self.flick("right", KEYS["right"][str(num)]))
-                    delta = time.time() - start_time
-                    if noteDuration - delta > 0:
-                        time.sleep(noteDuration-delta)
-                    print time.time() - start_time
-                print "FINSIHED"
-
-
-            inp = raw_input("$ ").split(" ")
+    def subscribe(self):
+        rospy.Subscriber("baxter_artist_notes", baxter_artist.msg.Note, self.on_receive_note)
+        rospy.spin()
 
     def checkRightJointPositions(self, target_pos):
         # print "CHECKING"
