@@ -2,6 +2,7 @@
 
 import rospy, baxter_interface, json
 from baxter_interface import CHECK_VERSION
+from . import CONFIG_FILENAME
 
 class BaxterController(object):
     def __init__(self):
@@ -48,7 +49,7 @@ class BaxterController(object):
         rospy.loginfo("[set_neutral] Moving arms to neutral position.")
 
         # load the config file
-    	with open("./src/baxter_artist/scripts/conf.json") as f:
+    	with open(CONFIG_FILENAME) as f:
 		    CONFIG = json.load(f)
 
         rospy.loginfo("[set_neutral] CONFIG: %s",CONFIG)

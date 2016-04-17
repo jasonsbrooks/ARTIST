@@ -8,6 +8,7 @@ from sensor_msgs.msg import (
     Image,
 )
 
+from . import CONFIG_FILENAME,KEYS_FILENAME,IMAGE_PATH
 NUM_KEYS = 88
 NEUTRAL_KEY = 0
 
@@ -57,7 +58,7 @@ class Learner(BaxterController):
 
     # send the image corresponding to a given note to the display
     def send_note(self, note):
-        path = os.path.join("./src/baxter_artist/scripts/display/img/", str(note) + ".png")
+        path = os.path.join(IMAGE_PATH, str(note) + ".png")
 
         if not os.path.exists(path):
             rospy.logerr("Not Found: " + path)
@@ -114,8 +115,8 @@ class Learner(BaxterController):
 
 class Keys(object):
     def __init__(self):
-        if os.path.exists("./src/baxter_artist/scripts/keys.json"):
-            with open("./src/baxter_artist/scripts/keys.json") as f:
+        if os.path.exists(KEYS_FILENAME):
+            with open(KEYS_FILENAME) as f:
                 data = json.load(f)
 
                 self.left_arm = data["left"]
@@ -148,18 +149,18 @@ class Keys(object):
 
     # save a new neutral position
     def save_neutral(self,arm,angles):
-        with open("./src/baxter_artist/scripts/conf.json") as f:
+        with open(CONFIG_FILENAME) as f:
             CONFIG = json.load(f)
 
         CONFIG["neutral"][arm] = angles[(0 if arm == "left" else 1)]
 
-        with open("./src/baxter_artist/scripts/conf.json", "w") as f:
+        with open(CONFIG_FILENAME, "w") as f:
             json.dump(CONFIG,f)
             rospy.loginfo("[save_neutral] %s", CONFIG)
 
     def write(self):
         # write keys to file
-        with open("./src/baxter_artist/scripts/keys.json", "w") as f:
+        with open(KEYS_FILENAME, "w") as f:
             data = {"left": self.left_arm, "right": self.right_arm}
             json.dump(data, f)
             rospy.loginfo("[write] %s", data)

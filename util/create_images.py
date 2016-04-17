@@ -19,7 +19,6 @@ IMAGE_SIZE = (1024,600)
 
 white = (255,255,255)
 
-print sys.argv[3]
 fnt = ImageFont.truetype(sys.argv[3], 400)
 
 # filepath prefix
