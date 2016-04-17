@@ -11,7 +11,7 @@ FONT: location of the font file
 from PIL import Image,ImageDraw,ImageFont
 import sys,csv,os
 
-if len(sys.argv) <= 4:
+if len(sys.argv) < 4:
     print(__doc__)
     sys.exit(1)
 
@@ -19,6 +19,7 @@ IMAGE_SIZE = (1024,600)
 
 white = (255,255,255)
 
+print sys.argv[3]
 fnt = ImageFont.truetype(sys.argv[3], 400)
 
 # filepath prefix
