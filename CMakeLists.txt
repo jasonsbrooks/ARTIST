@@ -14,6 +14,7 @@ find_package(catkin
   baxter_core_msgs
   baxter_interface
   message_generation
+  roslaunch
 )
 
 catkin_python_setup()
@@ -27,6 +28,8 @@ generate_messages(
    DEPENDENCIES
    std_msgs
 )
+
+roslaunch_add_file_check(launch)
 
 catkin_package(
   CATKIN_DEPENDS

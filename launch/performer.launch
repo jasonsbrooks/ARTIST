@@ -1,0 +1,3 @@
+<launch>
+  <node name="play_xylophone" pkg="baxter_artist" type="play_xylophone.py" output="screen" />
+</launch>
