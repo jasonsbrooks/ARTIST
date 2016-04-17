@@ -9,12 +9,11 @@ import pdb, time, json, copy
 import cv2, cv_bridge
 import os
 
+from controller import BaxterController
+
 from sensor_msgs.msg import (
     Image,
 )
-
-with open("./src/baxter_artist/scripts/conf.json") as f:
-    CONFIG = json.load(f)
 
 notes = {"B5":"63",
         "C6":"64",
@@ -26,43 +25,12 @@ notes = {"B5":"63",
         "B6":"75",
         "C7":"76"}
 
-class Performer(object):
+class Performer(BaxterController):
     def __init__(self):
         """
         Performs the instrument like a boss
         """
-        self.done = False
-
-        # verify robot is enabled
-        print("Getting robot state... ")
-        self._rs = baxter_interface.RobotEnable(CHECK_VERSION)
-        self._init_state = self._rs.state().enabled
-        print("Enabling robot... ")
-        self._rs.enable()
-        print("Running. Ctrl-c to quit")
-
-        # Get the body running
-        self.head = baxter_interface.Head()
-        self.right_arm = baxter_interface.Limb('right')
-        self.left_arm = baxter_interface.Limb('left')
-        self.left_gripper = baxter_interface.Gripper('left', CHECK_VERSION)
-        self.right_gripper = baxter_interface.Gripper('right', CHECK_VERSION)
-
-    def clean_shutdown(self):
-        """
-        Exits example cleanly by moving head to neutral position and
-        maintaining start state
-        """
-        print("\nExiting example...")
-        if self.done:
-            self.set_neutral()
-        if not self._init_state and self._rs.state().enabled:
-            print("Disabling robot...")
-            self._rs.disable()
-
-    def set_neutral(self):
-        self.left_arm.move_to_joint_positions(CONFIG["neutral"]["left"])
-        self.right_arm.move_to_joint_positions(CONFIG["neutral"]["right"])
+        BaxterController.__init__(self)
 
     def flick(self,arm,current_pos):
         down_pos = copy.deepcopy(current_pos)
@@ -162,8 +130,6 @@ class Performer(object):
 
             inp = raw_input("$ ").split(" ")
 
-        self.done = True
-
     def checkRightJointPositions(self, target_pos):
         # print "CHECKING"
         current_joint_positions = self.right_arm.joint_angles()
@@ -184,7 +150,6 @@ def main():
     print("Initializing node... ")
     rospy.init_node("play_xylophone")
     performer = Performer()
-    rospy.on_shutdown(performer.clean_shutdown)
 
     print("Performing!...")
     with open("./src/baxter_artist/scripts/keys.json") as f:

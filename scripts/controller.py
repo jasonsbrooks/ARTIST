@@ -64,7 +64,6 @@ def main():
     rospy.init_node("play_xylophone")
     controller = BaxterController()
 
-    rospy.on_shutdown(controller.clean_shutdown)
     controller.set_neutral()
 
     rospy.signal_shutdown("Finished control")
