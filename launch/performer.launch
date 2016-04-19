@@ -1,0 +1,5 @@
+<launch>
+  <node name="performer" pkg="baxter_artist" type="performer.py" output="screen" />
+  <node name="publisher" pkg="baxter_artist" type="publisher.py" output="screen" />
+
+</launch>

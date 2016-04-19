@@ -13,9 +13,23 @@ find_package(catkin
   dynamic_reconfigure
   baxter_core_msgs
   baxter_interface
+  message_generation
+  roslaunch
 )
 
 catkin_python_setup()
+
+add_message_files(
+  FILES
+  Note.msg
+)
+
+generate_messages(
+   DEPENDENCIES
+   std_msgs
+)
+
+roslaunch_add_file_check(launch)
 
 catkin_package(
   CATKIN_DEPENDS
@@ -28,6 +42,7 @@ catkin_package(
   dynamic_reconfigure
   baxter_core_msgs
   baxter_interface
+  message_runtime
 )
 
 install(
