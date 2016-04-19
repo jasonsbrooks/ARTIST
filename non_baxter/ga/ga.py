@@ -98,18 +98,66 @@ def initialize_chromosomes(n, d):
     return chromosomes
 
 
+# returns weighted choice in choices
+def weighted_choice(choices):
+   total = sum(w for c, w in choices)
+   r = random.uniform(0, total)
+   upto = 0
+   for c, w in choices:
+      if upto + w >= r:
+         return c
+      upto += w
+   assert False, "Shouldn't get here"
+
+
+# specify size and probabilty best individual in pool wins
+# deterministic selection of best individual when p =1
+# 1-way tournament (tourn_size = 1) equivalent to random selection
+def tournament_selection(chromosomes, tourn_size, prob):
+    # first randomly select tourn_size individuals from chromosomes
+    competitors = []
+    while len(competitors) < tourn_size:
+        to_append = chromosomes[random.randint(0, len(chromosomes) - 1)]
+        if to_append not in competitors:
+            competitors.append(to_append)
+
+    competitors.sort(key=lambda x: x[0])  # sort by increasing fitness
+    weighted_probs = []
+    for i in range(0, tourn_size):
+        weighted_probs.append(prob * ((1 - prob) ** i))
+
+    return weighted_choice(zip(competitors, weighted_probs))
+
+
 # runs ga on
 # population of size n
-def ga(n, chord_progression):
+def ga(n, chord_progression, num_iter):
     d = sum([d for (_, d) in chord_progression])  # d is total duration of song
     chromosome_list = initialize_chromosomes(n, d)  # list of (fitness, genotype)
-    
+
+    for _ in range(0, num_iter):
+        # Elitism? 
+        
+        # Crossover (decide how many times)
+        # decide on hill-climbing (don't replace parent if it was not at
+        # least as fit!)
+        parent1 = tournament_selection(chromosome_list, 4, .8)
+        parent2 = tournament_selection(chromosome_list, 4, .8)
+
+        # Mutate (decide how many times)
+        # decide on hill-climbing (don't replace parent if it was not at
+        # least as fit!)
+
+        # OPERATE (mate)
+
+
+        
 
 
 
 def main():
     chord_progression = [(-1,32) for _ in range(0, 24)] # list of (chord, duration)
-    ga(100, chord_progression)
+    ga(40, chord_progression, 200)
     pass
 
 
