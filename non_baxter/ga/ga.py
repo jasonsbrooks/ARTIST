@@ -1,3 +1,10 @@
+'''
+to do
+0) find easy way to categorize notes in chord vs notes not in chord to...
+1) finish all fitness function parameters
+
+'''
+
 import random
 
 # duration in durk units: 1 === a 32nd note....32  === a whole note
@@ -19,11 +26,50 @@ def large_intervals(genotype, max_interval, weight):
                 total += weight
     return total
 
+# different from paper for now!
+# ignore overlapped patterns
+# for now, only absolute pitch intervals
+# pattern must be 5 notes in length
+def pattern_matching(genotype, weight):
+    pattern_len = 5
+    total = 0
+    intervals = []
+    for i, _ in enumerate(genotype):
+        if i != 0:
+            intervals.append(genotype[i][0] - genotype[i-1][0])
+
+    # check for repeats of intervals
+    for i, _ in enumerate(intervals):
+        if i >= pattern_len:
+            curr_pattern = [intervals[i] for i in range(i-5, i)]
+            pattern_good = 0
+            first_time_pattern_seen = True
+            for j, _ in enumerate(intervals):
+                if j <= len(intervals) - pattern_len:
+                    if intervals[j] == curr_pattern[pattern_good]:
+                        pattern_good += 1
+                    else:
+                        pattern_good = 0
+
+                    if pattern_good == 5:
+                        if (first_time_pattern_seen):
+                            first_time_pattern_seen = False
+                        else:
+                            total += weight
+                        pattern_good = 0
+
+    return total
+
+
 
 # given a genotype (list of (extended_degree, duration))
 # returns fitness value for that genotype
-def fitness(genotype):
+def calc_fitness(genotype):
     total = 0
+    total += large_intervals(genotype, 9, -20)
+    total += pattern_matching(genotype, 20)
+    return total
+
 
 
 # returns list of (fitness, genotype)
@@ -47,7 +93,8 @@ def initialize_chromosomes(n, d):
             genotype.append((extended_degree, duration))
             total_duration += duration
 
-        chromosomes.append(fitness, genotype)
+        fitness = calc_fitness(genotype)
+        chromosomes.append((fitness, genotype))
     return chromosomes
 
 
@@ -56,10 +103,12 @@ def initialize_chromosomes(n, d):
 def ga(n, chord_progression):
     d = sum([d for (_, d) in chord_progression])  # d is total duration of song
     chromosome_list = initialize_chromosomes(n, d)  # list of (fitness, genotype)
+    
+
 
 
 def main():
-    chord_progression = [] # list of (chord, duration)
+    chord_progression = [(-1,32) for _ in range(0, 24)] # list of (chord, duration)
     ga(100, chord_progression)
     pass
 
