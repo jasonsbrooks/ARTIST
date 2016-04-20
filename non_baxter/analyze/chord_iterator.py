@@ -27,8 +27,8 @@ class Chord(object):
     def end_time(self):
         return self.start + self.dur
 
-    def on_at_time(self,time,window):
-        return (self.start <= time) and (time <= self.end_time() + window)
+    def on_at_time(self,time):
+        return (self.start <= time) and (time <= self.end_time())
 
 class ChordIterator(object):
     def __init__(self,song):

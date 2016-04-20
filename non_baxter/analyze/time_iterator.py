@@ -37,27 +37,35 @@ class TimeIterator(object):
         else:
             chords = []
 
+            # consider previous chords that might still be playing
             if self.current_ts:
-                self.chords_to_consider += self.current_ts.chords
+                for chord in self.current_ts.chords:
+                    if chord.on_at_time(self.time):
+                        chords.append(chord)
 
+            # grab next chords that need consideration
             next_chord = self.chord_iterator.next()
             self.chords_to_consider.append(next_chord)
-            while next_chord.start <= self.time + self.durk_step:
+            while next_chord.start <= self.time:
                 next_chord = self.chord_iterator.next()
                 self.chords_to_consider.append(next_chord)
 
+            # consider these chords (as well as chords previously added to self.chords_to_consider)
             for chord in self.chords_to_consider:
-                if chord.on_at_time(self.time,self.durk_step):
+                if chord.on_at_time(self.time):
                     chords.append(chord)
-                    self.chords_to_consider.remove(chord)
 
             self.current_ts = TimeInstance(self.time,chords)
             self.time += self.durk_step
 
+            self.chords_to_consider = filter(lambda chord: self.time <= chord.end_time(),self.chords_to_consider)
+
             return self.current_ts
 
-session = Session()
+if __name__ == '__main__':
+    session = Session()
 
-song = session.query(Song).first()
-for ts in TimeIterator(song,4):
-    print ts.chords
+    song = session.query(Song).first()
+    durk_step = 4
+    for ts in TimeIterator(song,durk_step):
+        print len(ts.chords), ":", ts.chords
