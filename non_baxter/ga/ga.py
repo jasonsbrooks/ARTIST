@@ -129,6 +129,68 @@ def tournament_selection(chromosomes, tourn_size, prob):
     return weighted_choice(zip(competitors, weighted_probs))
 
 
+# one point crossover
+# returns child chromosome
+def crossover(parent1, parent2, d):
+    genotype1 = parent1[1]
+    genotype2 = parent2[1]
+
+    new_genotype1 = []
+    new_genotype2_first = []
+    new_genotype2_last = []
+
+    # pick random number between 0 and d
+    split = random.randint(0, d)
+
+    total_dur = 0
+    add_to_genotype1 = True
+    for i, (ed, dur) in enumerate(genotype1):
+        total_dur += dur
+        if not add_to_genotype1:
+            new_genotype2_last.append((ed, dur))
+        elif total_dur == split:
+            new_genotype1.append((ed, dur))
+            add_to_genotype1 = False
+        elif total_dur > split:
+            new_genotype1.append((ed, (split - (total_dur - dur))))
+            new_genotype2_last.append((ed, (total_dur - (split - (total_dur - dur)))))
+            add_to_genotype1 = False
+        else:
+            new_genotype1.append((ed, dur))
+
+    total_dur = 0
+    add_to_genotype2 = True
+    for i, (ed, dur) in enumerate(genotype2):
+        total_dur += dur
+        if not add_to_genotype2:
+            new_genotype2_first.append((ed, dur))
+        elif total_dur == split:
+            new_genotype2_first.append((ed, dur))
+            add_to_genotype2 = False
+        elif total_dur > split:
+            new_genotype2_first.append((ed, (split - (total_dur - dur))))
+            new_genotype1.append((ed, (total_dur - (split - (total_dur - dur)))))
+            add_to_genotype2 = False
+        else:
+            new_genotype2_first.append((ed, dur))
+
+    new_genotype2 = new_genotype2_first + new_genotype2_last
+
+    # check to see if crossover worked
+    if sum([a for (_, a) in new_genotype1]) == sum([a for (_, a) in new_genotype2]):
+        print "Worked!"
+    else:
+        print "shoot..."
+
+    if sum([a for (_, a) in genotype1]) == sum([a for (_, a) in genotype2]):
+        print "Peace"
+    else:
+        print "poop"
+
+    return (new_genotype1, new_genotype2)
+
+
+
 # runs ga on
 # population of size n
 def ga(n, chord_progression, num_iter):
@@ -136,23 +198,27 @@ def ga(n, chord_progression, num_iter):
     chromosome_list = initialize_chromosomes(n, d)  # list of (fitness, genotype)
 
     for _ in range(0, num_iter):
-        # Elitism? 
-        
-        # Crossover (decide how many times)
-        # decide on hill-climbing (don't replace parent if it was not at
-        # least as fit!)
-        parent1 = tournament_selection(chromosome_list, 4, .8)
-        parent2 = tournament_selection(chromosome_list, 4, .8)
+        new_chromosome_list = []
+        # Elitism?
+        # keep the highest fitness chromosome
+        chromosome_list.sort(key=lambda x: x[0])  # sort by increasing fitness
+        new_chromosome_list.append(chromosome_list[-1])
 
-        # Mutate (decide how many times)
+        # Crossover n times
+        for i in range(n):
+            parent1 = tournament_selection(chromosome_list, 4, .8)
+            parent2 = tournament_selection(chromosome_list, 4, .8)
+            (child1, child2) = crossover(parent1, parent2, d)
+
+            # calculate fitness of both children, and add higher to chromosomes
+            new_chromosome_list.append((-99, child1))
+
+
+        # Mutate based on certain probabilities
         # decide on hill-climbing (don't replace parent if it was not at
         # least as fit!)
 
         # OPERATE (mate)
-
-
-        
-
 
 
 def main():
