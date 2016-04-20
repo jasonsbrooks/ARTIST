@@ -4,6 +4,21 @@ session = Session()
 
 import music21
 
+class ChordSpan(object):
+    def __init__(self,start,end,chords):
+        self.start = start
+        self.end = end
+        self.chords = chords
+
+    def label_as(self,root,iso_root):
+        # iterate through all chords
+        for chord in self.chords:
+            # all notes in the chord
+            for note in chord:
+                note.root = root
+                note.iso_root = iso_root
+
+
 # in choosing roots for chord-spans, prefer certain TPC-root relationships over others, in the following order:
 # 1, 5, 3, b3, b7, b5, b9, ornamental
 # see https://en.wikipedia.org/wiki/Interval_(music) for interval defn
