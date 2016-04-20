@@ -2,6 +2,7 @@
 to do
 0) find easy way to categorize notes in chord vs notes not in chord to...
 1) finish all fitness function parameters
+2) try the following duration probabilities: 70 quarter, 20 eighth, 10 sixteenth
 
 '''
 
@@ -273,7 +274,7 @@ def mut6(genotype, start_index):
 
 # mutates in one of many ways locally
 # returns new mutated genotype
-def local_mutation(chromosome, d, prob_local=.1):
+def local_mutation(chromosome, d, prob_local=.5):
     genotype = chromosome[1]
     len_genotype = len(genotype)
     end_index = random.randint(0, len_genotype-1)
@@ -306,7 +307,7 @@ def local_mutation(chromosome, d, prob_local=.1):
 
 
 # returns mutated chromosome
-def mutate(chromosome, d, prob_local=.1):
+def mutate(chromosome, d, prob_local=.5):
     chromosome = local_mutation(chromosome, d, prob_local)
     return chromosome
 
@@ -314,7 +315,7 @@ def mutate(chromosome, d, prob_local=.1):
 # runs ga on
 # population of size n
 # returns list of chromosomes in descending order by fitness (highest fitness first)
-def ga(n, chord_progression, num_iter):
+def ga(n, chord_progression, num_iter, prob_local=.5):
     d = sum([d for (_, d) in chord_progression])  # d is total duration of song
     chromosome_list = initialize_chromosomes(n, d)  # list of (fitness, genotype)
 
@@ -348,7 +349,7 @@ def ga(n, chord_progression, num_iter):
         for i, chrom in enumerate(new_chromosome_list):
             if i == 0:  # maintain elitism
                 continue
-            new_genotype = mutate(chrom, d, prob_local=.5)  # 1
+            new_genotype = mutate(chrom, d, prob_local=prob_local)  # 1
             new_fitness = calc_fitness(new_genotype)
             new_chromosome_list[i] = (new_fitness, new_genotype)
 
@@ -358,8 +359,9 @@ def ga(n, chord_progression, num_iter):
     return chromosome_list
 
 def main():
-    chord_progression = [(-1, 32) for _ in range(0, 24)]  # list of (chord, duration)
-    chromosomes = ga(40, chord_progression, 0)
+    chord_progression = [(-1, 32) for _ in range(0, 12)]  # list of (chord, duration)
+    chromosomes = ga(40, chord_progression, 40, prob_local=.1)
+    print "Final Fitness: " + str(chromosomes[0][0])
     create_midi_file(chromosomes[0])
     pass
 
