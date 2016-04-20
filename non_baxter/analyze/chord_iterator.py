@@ -1,4 +1,5 @@
 from db import Session,Song,Track,Note
+from song_iterator import SongIterator
 
 class Chord(object):
     """
@@ -23,25 +24,22 @@ class Chord(object):
         else:
             return False
 
-class Chords(object):
-    def __init__(self,session,song):
-        self.session = session
+    def end_time(self):
+        return self.start + self.dur
+
+    def on_at_time(self,time,window):
+        return (self.start <= time) and (time <= self.end_time() + window)
+
+class ChordIterator(object):
+    def __init__(self,song):
         self.indx = 0
-
-        # get all the notes in the piece
-        all_notes = []
-        for trk in song.tracks:
-            for note in trk.notes:
-                all_notes.append(note)
-
-        all_notes.sort(key=lambda n: (n.start,n.dur))
 
         # construct the array of chords
         chord = Chord()
         self.chords = [chord]
 
         # iterate through all the ntoes
-        for note in all_notes:
+        for note in SongIterator(song):
             if not chord.add(note):
 
                 # construct next chord
@@ -61,11 +59,11 @@ class Chords(object):
         chord = self.chords[self.indx]
         self.indx += 1
 
-        return chord.notes
+        return chord
 
 if __name__ == '__main__':
     session = Session()
 
     song = session.query(Song).first()
-    for chord in Chords(session,song):
-        print chord
+    for chord in ChordIterator(song):
+        print chord.notes
