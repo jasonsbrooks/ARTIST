@@ -38,7 +38,8 @@ class Note(Base):
     track_id = Column(Integer, ForeignKey('track.id'))
     track = relationship("Track", back_populates="notes")
     root = Column(Integer, nullable=True)
+    iso_root = Column(String, nullable=True)
 
     def __repr__(self):
-        return "note(pitch=%r, iso_pitch=%r, dur=%r, start=%r, tick_dur=%r, start_tick=%r, measure=%r, root=%r)" % \
-            (self.pitch, self.iso_pitch, self.dur, self.start, self.tick_dur, self.start_tick, self.measure, self.root)
+        return "note(pitch=%r, iso_pitch=%r, dur=%r, start=%r, tick_dur=%r, start_tick=%r, measure=%r, root=%r, iso_root=%r)" % \
+            (self.pitch, self.iso_pitch, self.dur, self.start, self.tick_dur, self.start_tick, self.measure, self.root,self.iso_root)

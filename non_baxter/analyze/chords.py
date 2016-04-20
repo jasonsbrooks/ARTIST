@@ -39,7 +39,7 @@ def lof_difference(m_prev,m_note):
 def best_next_root(m_prev,m_note):
 
     # start with C, weight of 0
-    best_root,best_weight = music21.note.Note('C'),0
+    best_root,best_weight = music21.note.Note('C'),-len(line_of_fifths)
 
     # try all possible roots
     for m_root in music21.scale.ChromaticScale('C').pitches:
@@ -50,7 +50,7 @@ def best_next_root(m_prev,m_note):
         # difference from previous chord root on line of fifths
         lof = (lof_difference(m_prev,m_note) if m_prev else 0)
 
-        val = comp + lof
+        val = comp - lof
 
         if val > best_weight:
             best_root,best_weight = m_root,val
@@ -64,12 +64,13 @@ for trk in session.query(Track).all():
     m_prev = None
 
     # transition threshold
-    threshold = 0
+    threshold = -len(line_of_fifths)
 
     for note in trk.notes:
         m_note = music21.note.Note(note.iso_pitch)
 
         note.root = (m_prev.midi if m_prev else 0)
+        note.iso_root = (m_prev.name if m_prev else "")
 
         # when starts on quarter note
         if beat_strength(note) > 0:
@@ -78,10 +79,13 @@ for trk in session.query(Track).all():
             if best_weight > threshold:
                 # use this as the new root!
                 print best_root
+
                 note.root = best_root.midi
+                note.iso_root = best_root.name
+
                 m_prev = best_root
             else:
-                threshold *= 0.5
+                threshold *= 0.9
 
     session.commit()
 
