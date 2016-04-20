@@ -3,18 +3,55 @@ to do
 0) find easy way to categorize notes in chord vs notes not in chord to...
 1) finish all fitness function parameters
 2) try the following duration probabilities: 70 quarter, 20 eighth, 10 sixteenth
-
+3) mut3 is a bit overpowering right now...
 '''
 
 import random
 from ga_midi import create_midi_file
+
+
+#defaults to 1, 4, 5 chords of classic 12 bar blues
+def create_chord_progression():
+    chord_progression = []
+
+    for _ in range(4):
+        chord_progression.append((1, 32))
+    for _ in range(2):
+        chord_progression.append((4, 32))
+    for _ in range(2):
+        chord_progression.append((1, 32))
+    for _ in range(1):
+        chord_progression.append((5, 32))
+    for _ in range(1):
+        chord_progression.append((4, 32))
+    for _ in range(2):
+        chord_progression.append((1, 32))
+
+    return chord_progression
+
+# given chord (1-7), return list of valid scale notes between 1 and 21
+def get_chord_notes(chord):
+    valid_notes = []
+    root = chord
+    third = ((chord + 1) % 7) + 1
+    fifth = ((chord + 3) % 7) + 1
+
+    multiplier = 0
+    for _ in range(3):
+        valid_notes.append(root + multiplier*7)
+        valid_notes.append(third + multiplier*7)
+        valid_notes.append(fifth + multiplier*7)
+
+        multiplier += 1
+
+    return valid_notes
+
 
 # duration in durk units: 1 === a 32nd note....32  === a whole note
 # return duration that corresponds to one of following notes:
 #   32nd: 1 16th: 2, 8th: 4, quarter: 8, half: 16 AND
 #   dotted 16th: 3, dotted 8th: 6, dotted quarter: 12
 # in all, 1, 2, 3, 4, 6, 8, 12, 16
-
 def choose_duration():
     possible_durations = [1, 2, 3, 4, 6, 8, 12, 16]
     return possible_durations[random.randint(0, len(possible_durations) - 1)]
@@ -315,7 +352,7 @@ def mutate(chromosome, d, prob_local=.5):
 # runs ga on
 # population of size n
 # returns list of chromosomes in descending order by fitness (highest fitness first)
-def ga(n, chord_progression, num_iter, prob_local=.5):
+def ga(chord_progression, n=40, num_iter=200, prob_local=.5):
     d = sum([d for (_, d) in chord_progression])  # d is total duration of song
     chromosome_list = initialize_chromosomes(n, d)  # list of (fitness, genotype)
 
@@ -358,11 +395,14 @@ def ga(n, chord_progression, num_iter, prob_local=.5):
     chromosome_list.sort(reverse=True, key=lambda x: x[0])  # sort by decreasing fitness
     return chromosome_list
 
+
 def main():
-    chord_progression = [(-1, 32) for _ in range(0, 12)]  # list of (chord, duration)
-    chromosomes = ga(40, chord_progression, 40, prob_local=.1)
-    print "Final Fitness: " + str(chromosomes[0][0])
+    chord_progression = create_chord_progression()  # list of (chord, duration)
+    chromosomes = ga(chord_progression, n=40, num_iter=2, prob_local=.1)
+
     create_midi_file(chromosomes[0])
+    print "Final Fitness: " + str(chromosomes[0][0])
+    print "Num durks: " + str(sum([d for (_, d) in chromosomes[1][1]]))
     pass
 
 
