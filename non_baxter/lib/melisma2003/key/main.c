@@ -18,7 +18,7 @@ bad_param(char * line) {
   printf("Warning: cannot interpret \"%s\" in parameters file -- skipping it.\n", line);
 }
 
-void read_parameter_file(char *filename, int file_specified) {
+read_parameter_file(char *filename, int file_specified) {
   char line[100];
   char part[14][100];
   int i, p;

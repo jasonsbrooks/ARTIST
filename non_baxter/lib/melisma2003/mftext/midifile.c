@@ -281,7 +281,7 @@ int readtrack()		 /* read a track chunk */
 			}
 			break;
 		default:
-			// badbyte(c);
+			badbyte(c);
 			break;
 		}
 	}
