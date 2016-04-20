@@ -6,12 +6,14 @@ to do
 '''
 
 import random
+from ga_midi import create_midi_file
 
 # duration in durk units: 1 === a 32nd note....32  === a whole note
 # return duration that corresponds to one of following notes:
 #   32nd: 1 16th: 2, 8th: 4, quarter: 8, half: 16 AND
 #   dotted 16th: 3, dotted 8th: 6, dotted quarter: 12
 # in all, 1, 2, 3, 4, 6, 8, 12, 16
+
 def choose_duration():
     possible_durations = [1, 2, 3, 4, 6, 8, 12, 16]
     return possible_durations[random.randint(0, len(possible_durations) - 1)]
@@ -307,8 +309,11 @@ def local_mutation(chromosome, d, prob_local=.1):
 def mutate(chromosome, d, prob_local=.1):
     chromosome = local_mutation(chromosome, d, prob_local)
     return chromosome
+
+
 # runs ga on
 # population of size n
+# returns list of chromosomes in descending order by fitness (highest fitness first)
 def ga(n, chord_progression, num_iter):
     d = sum([d for (_, d) in chord_progression])  # d is total duration of song
     chromosome_list = initialize_chromosomes(n, d)  # list of (fitness, genotype)
@@ -343,16 +348,19 @@ def ga(n, chord_progression, num_iter):
         for i, chrom in enumerate(new_chromosome_list):
             if i == 0:  # maintain elitism
                 continue
-            new_genotype = mutate(chrom, d, prob_local=1)
+            new_genotype = mutate(chrom, d, prob_local=.5)  # 1
             new_fitness = calc_fitness(new_genotype)
             new_chromosome_list[i] = (new_fitness, new_genotype)
 
         chromosome_list = new_chromosome_list
 
+    chromosome_list.sort(reverse=True, key=lambda x: x[0])  # sort by decreasing fitness
+    return chromosome_list
 
 def main():
-    chord_progression = [(-1,32) for _ in range(0, 24)] # list of (chord, duration)
-    ga(40, chord_progression, 200)
+    chord_progression = [(-1, 32) for _ in range(0, 24)]  # list of (chord, duration)
+    chromosomes = ga(40, chord_progression, 0)
+    create_midi_file(chromosomes[0])
     pass
 
 
