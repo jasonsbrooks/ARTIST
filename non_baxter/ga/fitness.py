@@ -1,3 +1,6 @@
+from chords import get_chord_notes
+
+
 # returns total penalty for large intervals
 # max_interval = 9, weight = -20
 def large_intervals(genotype, max_interval, weight):
@@ -7,6 +10,7 @@ def large_intervals(genotype, max_interval, weight):
             if abs(genotype[i-1][0] - genotype[i][0]) > max_interval:
                 total += weight
     return total
+
 
 # different from paper for now!
 # ignore overlapped patterns
@@ -43,6 +47,28 @@ def pattern_matching(genotype, weight):
     return total
 
 
+# checks what happens to the n-1 chord changes
+# Weighting: consonant suspension (+10), dissonant suspension (-20),
+# no suspension (+5), a rest (+5)
+def suspensions(genotype, weight=20):
+    total = 0
+    dur = 0
+    measure_dur = 0
+    for i, (ed, dur) in enumerate(genotype):
+        measure_dur += dur
+        if measure_dur > 32:
+            pass
+
+        elif measure_dur == 32:  # no suspension
+            total += weight * (.25)
+        else:
+            continue
+
+
+
+    return total
+
+
 
 # given a genotype (list of (extended_degree, duration))
 # returns fitness value for that genotype
@@ -50,4 +76,5 @@ def calc_fitness(genotype):
     total = 0
     total += large_intervals(genotype, 9, -20)
     total += pattern_matching(genotype, 20)
+    total += suspensions(genotype)
     return total

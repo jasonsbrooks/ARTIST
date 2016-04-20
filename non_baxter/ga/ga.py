@@ -1,4 +1,7 @@
 '''
+Notes:
+1) rest encoded by -1
+
 to do
 0) find easy way to categorize notes in chord vs notes not in chord to...
 1) finish all fitness function parameters
