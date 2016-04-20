@@ -18,8 +18,15 @@ def compatibility(m_root,m_note):
         return 0
 
 # a note is a strong beat if it starts the measure
-def strong_beat(note):
-    return (note.start % 32 == 0)
+def beat_strength(note):
+    if note.start % 32 == 0:
+        return 3
+    elif note.start % 16 == 0:
+        return 2
+    elif note.start % 8 == 0:
+        return 1
+    else:
+        return 0
 
 line_of_fifths = ["B#","E#","A#","D#","G#","C#","F#","B","E","A","D","G","C","F","B-","E-","A-","D-","G-","C-","F-"]
 
@@ -29,28 +36,52 @@ def lof_difference(m_prev,m_note):
 
     return abs(note_pos - prev_pos)
 
-w1 = 1
-w2 = 1
-w3 = 1
+def best_next_root(m_prev,m_note):
+
+    # start with C, weight of 0
+    best_root,best_weight = music21.note.Note('C'),0
+
+    # try all possible roots
+    for m_root in music21.scale.ChromaticScale('C').pitches:
+
+        # compatibility score
+        comp = compatibility(m_root,m_note)
+
+        # difference from previous chord root on line of fifths
+        lof = (lof_difference(m_prev,m_note) if m_prev else 0)
+
+        val = comp + lof
+
+        if val > best_weight:
+            best_root,best_weight = m_root,val
+
+    return best_root,best_weight
+
 
 for trk in session.query(Track).all():
-    m_prev,lof = None,1
+
+    # previous note
+    m_prev = None
+
+    # transition threshold
+    threshold = 0
+
     for note in trk.notes:
+        m_note = music21.note.Note(note.iso_pitch)
 
-        best_root,best_weight = music21.note.Note('C'),0
+        note.root = (m_prev.midi if m_prev else 0)
 
-        for m_root in music21.scale.ChromaticScale('C').pitches:
-            m_note = music21.note.Note(note.iso_pitch)
+        # when starts on quarter note
+        if beat_strength(note) > 0:
+            (best_root,best_weight) = best_next_root(m_prev,m_note)
 
-            comp = compatibility(m_root,m_note)
-            stren = strong_beat(note)
-            if m_prev:
-                lof = lof_difference(m_prev,m_note)
+            if best_weight > threshold:
+                # use this as the new root!
+                print best_root
+                note.root = best_root.midi
+                m_prev = best_root
+            else:
+                threshold *= 0.5
 
-            val = w1 * comp + w2 * stren + w3 * lof
+    session.commit()
 
-            if val > best_weight:
-                best_root,best_weight = m_root,val
-
-
-        m_prev = best_root
