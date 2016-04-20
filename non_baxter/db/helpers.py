@@ -23,7 +23,7 @@ import midi, sys, pdb, os, re
 
 from collections import defaultdict
 
-from sqlalchemy import desc, asc
+from audiolazy import midi2str
 
 from . import Base,Session,Song,Track,Note
 
@@ -255,7 +255,8 @@ def get_notes(note_events, ppqn, track):
                 measure = start_tick / (ppqn * track.time_sig_bottom)
 
                 note_obj = Note(pitch=pitch, dur=dur, start=start, end=dur+start,
-                                tick_dur=tick_dur, start_tick=start_tick, measure=measure, track=track)
+                                tick_dur=tick_dur, start_tick=start_tick, measure=measure, track=track,
+                                iso_pitch=midi2str(pitch))
                 note_objs.append(note_obj)
 
         else:  # Error checking
