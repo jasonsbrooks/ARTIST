@@ -50,21 +50,24 @@ def pattern_matching(genotype, weight):
 # checks what happens to the n-1 chord changes
 # Weighting: consonant suspension (+10), dissonant suspension (-20),
 # no suspension (+5), a rest (+5)
-def suspensions(genotype, weight=20):
+def suspensions(genotype, chord_progression, weight=20):
     total = 0
     dur = 0
     measure_dur = 0
     for i, (ed, dur) in enumerate(genotype):
         measure_dur += dur
         if measure_dur > 32:
-            pass
+            if ed in get_chord_notes(ed):
+                total += weight * .5
+            else:
+                total += weight * -1
+            measure_dur = measure_dur % 32
 
         elif measure_dur == 32:  # no suspension
             total += weight * (.25)
+            measure_dur = 0
         else:
-            continue
-
-
+            pass
 
     return total
 
@@ -72,9 +75,9 @@ def suspensions(genotype, weight=20):
 
 # given a genotype (list of (extended_degree, duration))
 # returns fitness value for that genotype
-def calc_fitness(genotype):
+def calc_fitness(genotype, chord_progression):
     total = 0
     total += large_intervals(genotype, 9, -20)
     total += pattern_matching(genotype, 20)
-    total += suspensions(genotype)
+    total += suspensions(genotype, chord_progression)
     return total
