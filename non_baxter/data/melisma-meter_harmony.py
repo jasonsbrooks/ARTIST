@@ -15,6 +15,14 @@ from subprocess import Popen,PIPE
 
 MELISMA_ROOT = "../lib/melisma2003/"
 
+def cat_err(filename):
+	with open(filename) as f:
+
+		# print out the last five lines
+		for line in f.readlines()[-5:]:
+			sys.stderr.write(line)
+		sys.stderr.write("\n")
+
 def run(filename):
 	fp,ext = os.path.splitext(filename)
 	kfilepath = fp + '.k'
@@ -28,10 +36,15 @@ def run(filename):
 	harmony = Popen([MELISMA_ROOT + 'harmony/harmony'],stdin=meter.stdout,stdout=kfile,stderr=kerr)
 	harmony.wait()
 
+	# a VERY rough measure of success / error
+	if kfile.tell() > 0:
+		sys.stdout.write("success " + kfilepath + "\n")
+	else:
+		sys.stderr.write("error " + kfilepath + "\n")
+		cat_err(kfileerr)
+	
 	kfile.close()
 	kerr.close()
-	
-	print "finishing", kfilepath
 
 def main():
 	if len(sys.argv) >= 3:
