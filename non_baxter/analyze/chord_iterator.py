@@ -12,7 +12,12 @@ class Chord(object):
         self.dur = -1
 
     def add(self,note):
-        if len(self.notes) == 0 or (self.dur == note.dur and self.start == note.start):
+        if len(self.notes) == 0:
+            self.dur = note.dur
+            self.start = note.start
+            self.notes.append(note)
+            return note
+        elif self.dur == note.dur and self.start == note.start:
             self.notes.append(note)
             return note
         else:
@@ -21,6 +26,7 @@ class Chord(object):
 class Chords(object):
     def __init__(self,session,song):
         self.session = session
+        self.indx = 0
 
         # get all the notes in the piece
         all_notes = []
@@ -43,10 +49,23 @@ class Chords(object):
                 self.chords.append(chord)
                 chord.add(note)
 
-        print self.chords
+    def __iter__(self):
+        return self
 
+    def next(self):
+        # stop iteration!
+        if self.indx >= len(self.chords):
+            raise StopIteration()
 
-session = Session()
+        # grab the chord and increment index
+        chord = self.chords[self.indx]
+        self.indx += 1
 
-song = session.query(Song).first()
-ch = Chords(session,song)
+        return chord.notes
+
+if __name__ == '__main__':
+    session = Session()
+
+    song = session.query(Song).first()
+    for chord in Chords(session,song):
+        print chord
