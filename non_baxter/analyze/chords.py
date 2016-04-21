@@ -5,59 +5,30 @@ session = Session()
 import music21
 
 class ChordSpan(object):
-    def __init__(self,start,end,chords):
-        self.start = start
-        self.end = end
-        self.chords = chords
+    def __init__(self,tss,root,prev_cs):
+        self.start = min(tss,key=lambda ts: ts.time)
+        self.end = max(tss,key=lambda ts: ts.time)
+        self.tss = tss
+        self.root = root
 
-    def label_as(self,root,iso_root):
+        # a back-pointer to the previous best chord-span
+        self.prev_cs = prev_cs
+        # TODO: how to calculate next value?
+        self.val = self.prev_cs.val +
+
+    def notes(self):
+        res = []
         # iterate through all chords
-        for chord in self.chords:
-            # all notes in the chord
-            for note in chord:
-                note.root = root
-                note.iso_root = iso_root
+        for ts in self.tss:
+            # all notes in this time instance
+            for note in ts.notes():
+                res.append(note)
+        return res
 
-
-# in choosing roots for chord-spans, prefer certain TPC-root relationships over others, in the following order:
-# 1, 5, 3, b3, b7, b5, b9, ornamental
-# see https://en.wikipedia.org/wiki/Interval_(music) for interval defn
-prefs = ['P1','P5','P3','m3','m7','m5','m9']
-
-# implementing Temperley's HPR 1
-def compatibility(m_root,m_note):
-    interval = music21.interval.notesToInterval(m_root,m_note).simpleName
-    try:
-        return len(prefs) - prefs.index(interval)
-    except ValueError,e:
-        return 0
-
-# the strength of the note corresponds to where it lies relative to 1,1/2,1/4 notes...
-def beat_strength(note):
-    if note.start % 32 == 0:
-        return 3
-    elif note.start % 16 == 0:
-        return 2
-    elif note.start % 8 == 0:
-        return 1
-    else:
-        return 0
-
-line_of_fifths = ["B#","E#","A#","D#","G#","C#","F#","B","E","A","D","G","C","F","B-","E-","A-","D-","G-","C-","F-"]
-
-# return the difference between two notes on the line of fifths.
-def lof_difference(m_prev,m_note):
-    prev_pos = line_of_fifths.index(m_prev.name)
-    note_pos = line_of_fifths.index(m_note.name)
-
-    return abs(note_pos - prev_pos)
-
-# PARAMETERS TO THE MODEL:
-COMPATIBILITY_MULTIPLIER = 1
-LOF_MULTIPLIER = -1
-STRENGTH_MULTIPLIER = 1
-
-THRESHOLD_MULTIPLIER = 0.9
+    def label(self):
+        for note in self.notes():
+            note.root = self.root
+            note.iso_root = music21.note.Note(self.root).midi
 
 def best_next_root(m_prev,chord):
 
