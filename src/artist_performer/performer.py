@@ -31,6 +31,8 @@ class Performer(BaxterController):
         BaxterController.__init__(self)
         self.set_neutral()
         self.q = Queue()
+        self.prev_left_note = 63
+        self.prev_right_note = -1
 
         with open(KEYS_FILENAME) as f:
             self.keys = json.load(f)
@@ -59,9 +61,6 @@ class Performer(BaxterController):
 
         arm_obj.set_joint_positions(inter_pos)
 
-
-
-
     def get_joint_angles(self):
         return self.left_arm.joint_angles(), self.right_arm.joint_angles()
 
@@ -81,16 +80,21 @@ class Performer(BaxterController):
 
     def play_right_note_now(self,note):
         self.send_note(int(note))
-        # if int(note) in [74, 72, 70, 67, 65, 62, 60, 58]:
-        #     self.avoid_black_key("right", self.right_arm.joint_angles())
-        #     time.sleep(0.5)
+        if int(note) in [74, 72, 70, 67, 65, 62, 60, 58] and self.prev_right_note not in [74, 72, 70, 67, 65, 62, 60, 58]:
+            self.avoid_black_key("right", self.right_arm.joint_angles())
+            time.sleep(0.5)
+
+
         self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True)
-        time.sleep(1)
-        self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True)
-        time.sleep(1)
-        self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True)
+        if abs(int(note) - int(self.prev_right_note)) > 5:
+            rospy.loginfo("Making two motions since notes are too far apart")
+            time.sleep(0.5)
+            self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True)
+        # time.sleep(1)
+        # self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True)
         time.sleep(1.5)
         self.flick("right", self.keys["right"][str(note)])
+        self.prev_right_note = int(note)
         # time.sleep(2)
         # wait_for(lambda: self.checkJointPositions(self.keys["right"][str(note)], "right"), rate=4, raise_on_error=False, timeout=2.0, body=self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True))
         # wait_for(lambda: self.checkJointPositions(self.keys["right"][str(note)], "right"), rate=4, raise_on_error=False, timeout=2.0, body=self.flick("right", self.keys["right"][str(note)]))
