@@ -1,3 +1,7 @@
+'''
+really need to add countour fitness check
+'''
+
 from chords import get_chord_notes
 
 
@@ -45,7 +49,7 @@ def pattern_matching(genotype, weight=20):
                 pattern_to_add.append(genotype[i+j][0])
             if pattern_to_add in patterns:
                 if pattern_to_add.count(pattern_to_add[0]) == len(pattern_to_add):  # checks if pattern is all repeated notes!
-                    total += weight * -1
+                    total += weight * -10
                 else:  # a legit pattern matching!
                     total += weight
             else:
@@ -142,6 +146,15 @@ def longnote(genotype, chord_progression, weight=20, long_note=8):
     return total
 
 
+# penalize all 16th notes and shorter
+def penalize_short(genotype, weight=20):
+    total = 0
+    for i, (ed, dur) in enumerate(genotype):
+        if dur <= 4:
+            total += weight * -1
+    return total
+
+
 # given a genotype (list of (extended_degree, duration))
 # returns fitness value for that genotype
 # Detailed: prints (total, Dic containing detailed breakdown)
@@ -152,9 +165,10 @@ def calc_fitness(genotype, chord_progression, detailed=False):
     db = downbeat(genotype, chord_progression)
     hb = halfbar(genotype, chord_progression)
     ln = longnote(genotype, chord_progression)
+    ps = penalize_short(genotype)
 
     total = li + pm + su + db + hb + ln
     if detailed:
-        return (total, {"li": li, "pm": pm, "su": su, "db": db, "hb": hb, "ln": ln})
+        return (total, {"li": li, "pm": pm, "su": su, "db": db, "hb": hb, "ln": ln, "ps": ps})
     else:
         return total

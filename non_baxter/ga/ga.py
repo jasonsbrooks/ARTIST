@@ -15,13 +15,19 @@ from mutation import mutate
 from fitness import calc_fitness
 from chords import create_chord_progression
 
+
 # duration in durk units: 1 === a 32nd note....32  === a whole note
 # return duration that corresponds to one of following notes:
 #   32nd: 1 16th: 2, 8th: 4, quarter: 8, half: 16 AND
 #   dotted 16th: 3, dotted 8th: 6, dotted quarter: 12
 # in all, 1, 2, 3, 4, 6, 8, 12, 16
-def choose_duration():
-    possible_durations = [1, 2, 3, 4, 6, 8, 12, 16]
+def choose_duration(simple=False):
+    possible_durations = []
+    if simple:
+        possible_durations = [8]
+    else:
+        possible_durations = [1, 2, 3, 4, 6, 8, 12, 16]
+
     return possible_durations[random.randint(0, len(possible_durations) - 1)]
 
 
@@ -39,7 +45,7 @@ def initialize_chromosomes(n, d, chord_progression):
             if random.randint(1, 8) == 8:
                 extended_degree = -1
 
-            duration = choose_duration()
+            duration = choose_duration(simple=True)  # DANGER this is really important!
             while (duration + total_duration > d):
                 duration = choose_duration()  # ensures duration of chromosomes equal to d
 
@@ -181,7 +187,7 @@ def ga(chord_progression, n=40, num_iter=200, prob_local=.5):
 def main():
     # hard coded chord progression for 12 bar blues
     chord_progression = create_chord_progression()  # list of (chord, duration)
-    chromosomes = ga(chord_progression, n=40, num_iter=200, prob_local=.15)
+    chromosomes = ga(chord_progression, n=40, num_iter=100, prob_local=.5)
 
     create_midi_file(chromosomes[0])
     print "Final Fitness: " + str(chromosomes[0][0])
