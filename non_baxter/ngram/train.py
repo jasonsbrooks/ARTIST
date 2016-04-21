@@ -17,18 +17,7 @@ Complete:
 '''
 import numpy as np
 import sys, os, threading, re
-
-if len(sys.argv) < 3:
-    print(__doc__)
-    sys.exit(1)
-
-THREAD_POOL_SIZE = int(sys.argv[1])
-OUTFILE_NAME = sys.argv[2]
-
-NUM_NOTES = 128
-matrix_size = (NUM_NOTES, NUM_NOTES, NUM_NOTES)
-
-counts = np.zeros(matrix_size, dtype=np.int16)
+from optparse import OptionParser
 
 from collections import deque
 from Queue import Queue
@@ -37,12 +26,32 @@ from sqlalchemy import desc, asc
 
 from db import Session, Song, Track, Note
 
+NUM_NOTES = 128
+
+class RomanTrainer(object):
+    def __init__(self,name,counts,options):
+        self.name = name
+        self.counts = counts
+        self.triple = deque()
+        self.options = options
+
+    def train(self,note):
+        self.triple.append(note.pitch)
+
+        if len(self.triple) > 3:
+            self.triple.popleft()
+            np.add.at(self.counts, tuple(self.triple), 1)
+
+    def write(self):
+        with open(os.path.join(self.options.outdir,str(self.name) + ".npy"), 'w') as outfile:
+            np.save(outfile, self.counts)
+
 class TrackTrainer(threading.Thread):
-    def __init__(self,q,counts):
+    def __init__(self,q,rts):
         threading.Thread.__init__(self)
         self.session = Session()
         self.q = q
-        self.counts = counts
+        self.rts = rts
 
     def run(self):
         while True:
@@ -66,33 +75,51 @@ class TrackTrainer(threading.Thread):
             # print 'skipped bass track'
             return
 
-        triple = deque()
-
         # and through all the notes in a track
         for note in trk.notes:
             if note.pitch < 0 or note.pitch >= NUM_NOTES:
                 pass
 
-            triple.append(note.pitch)
+            # train using the appropriate rt
+            if note.roman:
+                self.rts[note.roman-1].train(note)
 
-            # update our counts matrix
-            if len(triple) > 3:
-                triple.popleft()
-                np.add.at(counts, tuple(triple), 1)
+def main():
+    parser = OptionParser()
 
-session = Session()
-q = Queue()
+    parser.add_option("-o", "--outdir", dest="outdir")
+    parser.add_option("-t", "--poolsize", dest="thread_pool_size", default=8, type="int")
 
-# iterate through all the tracks
-for trk in session.query(Track).all():
-    q.put(trk.id)
+    (options, args) = parser.parse_args()
 
-for i in xrange(THREAD_POOL_SIZE):
-    thrd = TrackTrainer(q,counts)
-    thrd.daemon = True
-    thrd.start()
+    print "outdir", options.outdir
+    print "thread_pool_size", options.thread_pool_size
 
-q.join()
+    matrix_size = (NUM_NOTES, NUM_NOTES, NUM_NOTES)
 
-with open(OUTFILE_NAME, 'w') as outfile:
-    np.save(outfile, counts)
+    session = Session()
+    q = Queue()
+
+    rts = []
+    # construct the roman trainers
+    for i in xrange(7):
+        rt = RomanTrainer(i + 1,np.zeros(matrix_size, dtype=np.int16),options)
+        rts.append(rt)
+
+    # iterate through all the tracks
+    for trk in session.query(Track).all():
+        q.put(trk.id)
+
+    # construct and start the threads
+    for i in xrange(options.thread_pool_size):
+        thrd = TrackTrainer(q,rts)
+        thrd.daemon = True
+        thrd.start()
+
+    q.join()
+
+    for rt in rts:
+        rt.write()
+
+if __name__ == '__main__':
+    main()
