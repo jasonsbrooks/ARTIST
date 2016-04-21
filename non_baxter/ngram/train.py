@@ -16,7 +16,7 @@ Complete:
 
 '''
 import numpy as np
-import sys, os, threading, re
+import sys, os, threading, re, music21
 from optparse import OptionParser
 
 from collections import deque
@@ -25,6 +25,7 @@ from Queue import Queue
 from sqlalchemy import desc, asc
 
 from db import Session, Song, Track, Note
+from ngram_helper import key_transpose_pitch
 
 NUM_NOTES = 128
 
@@ -35,12 +36,23 @@ class RomanTrainer(object):
         self.triple = deque()
         self.options = options
 
+        # assume the user has specified a major key
+        self.dest_key = (music21.key.Key(options.key).sharps,0)
+
+    def transposed_triple(self):
+        res = []
+        notes = list(self.triple)
+        for note in notes:
+            src_key = (note.track.key_sig_top,note.track.key_sig_bottom)
+            res.append(key_transpose_pitch(note.pitch,src_key,self.dest_key))
+        return res
+
     def train(self,note):
-        self.triple.append(note.pitch)
+        self.triple.append(note)
 
         if len(self.triple) > 3:
             self.triple.popleft()
-            np.add.at(self.counts, tuple(self.triple), 1)
+            np.add.at(self.counts, tuple(self.transposed_triple()), 1)
 
     def write(self):
         with open(os.path.join(self.options.outdir,str(self.name) + ".npy"), 'w') as outfile:
@@ -89,6 +101,7 @@ def main():
 
     parser.add_option("-o", "--outdir", dest="outdir")
     parser.add_option("-t", "--poolsize", dest="thread_pool_size", default=8, type="int")
+    parser.add_option("-k", "--key", dest="key", default="C")
 
     (options, args) = parser.parse_args()
 
