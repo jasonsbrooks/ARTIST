@@ -16,19 +16,8 @@ Complete:
 
 '''
 import numpy as np
-import sys, os, threading, re
-
-if len(sys.argv) < 3:
-    print(__doc__)
-    sys.exit(1)
-
-THREAD_POOL_SIZE = int(sys.argv[1])
-OUTFILE_NAME = sys.argv[2]
-
-NUM_NOTES = 128
-matrix_size = (NUM_NOTES, NUM_NOTES, NUM_NOTES)
-
-counts = np.zeros(matrix_size, dtype=np.int16)
+import sys, os, threading, re, music21
+from optparse import OptionParser
 
 from collections import deque
 from Queue import Queue
@@ -36,13 +25,45 @@ from Queue import Queue
 from sqlalchemy import desc, asc
 
 from db import Session, Song, Track, Note
+from ngram_helper import key_transpose_pitch
+
+NUM_NOTES = 128
+
+class RomanTrainer(object):
+    def __init__(self,name,counts,options):
+        self.name = name
+        self.counts = counts
+        self.triple = deque()
+        self.options = options
+
+        # assume the user has specified a major key
+        self.dest_key = (music21.key.Key(options.key).sharps,0)
+
+    def transposed_triple(self):
+        res = []
+        notes = list(self.triple)
+        for note in notes:
+            src_key = (note.track.key_sig_top,note.track.key_sig_bottom)
+            res.append(key_transpose_pitch(note.pitch,src_key,self.dest_key))
+        return res
+
+    def train(self,note):
+        self.triple.append(note)
+
+        if len(self.triple) > 3:
+            self.triple.popleft()
+            np.add.at(self.counts, tuple(self.transposed_triple()), 1)
+
+    def write(self):
+        with open(os.path.join(self.options.outdir,str(self.name) + ".npy"), 'w') as outfile:
+            np.save(outfile, self.counts)
 
 class TrackTrainer(threading.Thread):
-    def __init__(self,q,counts):
+    def __init__(self,q,rts):
         threading.Thread.__init__(self)
         self.session = Session()
         self.q = q
-        self.counts = counts
+        self.rts = rts
 
     def run(self):
         while True:
@@ -66,33 +87,49 @@ class TrackTrainer(threading.Thread):
             # print 'skipped bass track'
             return
 
-        triple = deque()
-
         # and through all the notes in a track
         for note in trk.notes:
             if note.pitch < 0 or note.pitch >= NUM_NOTES:
                 pass
 
-            triple.append(note.pitch)
+            # train using the appropriate rt
+            if note.roman:
+                self.rts[note.roman-1].train(note)
 
-            # update our counts matrix
-            if len(triple) > 3:
-                triple.popleft()
-                np.add.at(counts, tuple(triple), 1)
+def main():
+    parser = OptionParser()
 
-session = Session()
-q = Queue()
+    parser.add_option("-o", "--outdir", dest="outdir")
+    parser.add_option("-t", "--poolsize", dest="thread_pool_size", default=8, type="int")
+    parser.add_option("-k", "--key", dest="key", default="C")
 
-# iterate through all the tracks
-for trk in session.query(Track).all():
-    q.put(trk.id)
+    (options, args) = parser.parse_args()
 
-for i in xrange(THREAD_POOL_SIZE):
-    thrd = TrackTrainer(q,counts)
-    thrd.daemon = True
-    thrd.start()
+    matrix_size = (NUM_NOTES, NUM_NOTES, NUM_NOTES)
 
-q.join()
+    session = Session()
+    q = Queue()
 
-with open(OUTFILE_NAME, 'w') as outfile:
-    np.save(outfile, counts)
+    rts = []
+    # construct the roman trainers
+    for i in xrange(7):
+        rt = RomanTrainer(i + 1,np.zeros(matrix_size, dtype=np.int16),options)
+        rts.append(rt)
+
+    # iterate through all the tracks
+    for trk in session.query(Track).all():
+        q.put(trk.id)
+
+    # construct and start the threads
+    for i in xrange(options.thread_pool_size):
+        thrd = TrackTrainer(q,rts)
+        thrd.daemon = True
+        thrd.start()
+
+    q.join()
+
+    for rt in rts:
+        rt.write()
+
+if __name__ == '__main__':
+    main()
