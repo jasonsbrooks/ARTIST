@@ -12,7 +12,6 @@ def create():
 def drop():
     if database_exists(engine.url):
         drop_database(engine.url)
-        Base.metadata.drop_all(engine)
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'create':
