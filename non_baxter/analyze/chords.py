@@ -141,7 +141,7 @@ class HarmonicAnalyzer(threading.Thread):
 def main():
     parser = OptionParser()
 
-    parser.add_option("-d", "--durk-step", dest="durk_step", default=8, type="int")
+    parser.add_option("-d", "--durk-step", dest="durk_step", default=4, type="int")
     parser.add_option("-t", "--pool-size", dest="thread_pool_size", default=8, type="int")
 
     (options, args) = parser.parse_args()
