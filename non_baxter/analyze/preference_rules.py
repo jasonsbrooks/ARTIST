@@ -16,7 +16,7 @@ def _dual_compatibility(m_root,m_note):
 def compatibility(notes,m_root):
     if not notes:
         return 0
-    
+
     comp = []
     for note in notes:
         m_note = music21.note.Note(note.iso_pitch)

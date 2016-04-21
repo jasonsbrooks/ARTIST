@@ -1,6 +1,7 @@
 from db import Session,Song,Track,Note
+from iter import TimeIterator
+
 from preference_rules import *
-from time_iterator import TimeIterator
 
 session = Session()
 
