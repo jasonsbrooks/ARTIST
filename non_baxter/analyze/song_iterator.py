@@ -24,7 +24,11 @@ class SongIterator(object):
         note = self.notes[self.indx]
         self.indx += 1
 
-        return note
+        # ignore rests
+        if note.pitch == -1:
+            return self.next()
+        else:
+            return note
 
 if __name__ == '__main__':
     session = Session()

@@ -9,7 +9,7 @@ class TimeInstance(object):
         self.chords = chords
 
     def __repr__(self):
-        return "<TimeInstance len(chords)=%r, time=%r>" % (self.time, len(self.chords))
+        return "<TimeInstance len(chords)=%r, time=%r>" % (len(self.chords), self.time)
 
     def notes(self):
         res = []
@@ -72,4 +72,4 @@ if __name__ == '__main__':
     song = session.query(Song).first()
     durk_step = 4
     for ts in TimeIterator(song,durk_step):
-        print len(ts.chords), ":", ts.chords
+        print ts
