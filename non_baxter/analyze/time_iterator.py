@@ -10,7 +10,7 @@ class TimeInstance(object):
     def notes(self):
         res = []
         for chord in self.chords:
-            res.append(chord.notes)
+            res += chord.notes
         return res
 
 class TimeIterator(object):
