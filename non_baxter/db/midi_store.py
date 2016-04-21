@@ -8,28 +8,31 @@ Stores midi files in a directory into DB
 if no folder specified, midi_store.py will store all midi files in current directory
 '''
 
-import sys
-import fnmatch
-import os
-from helpers import midi_to_song
-
+import os,fnmatch
+from helpers import Runner
+from Queue import Queue
+from optparse import OptionParser
 
 def main():
-    midiDirectory = 'data/'
-    count = 0
-    if len(sys.argv) >= 2:
-        midiDirectory = sys.argv[1]
+    parser = OptionParser()
 
-    for root, dirnames, filenames in os.walk(midiDirectory):
+    parser.add_option("-d", "--data-directory", dest="data_directory", default="data/")
+    parser.add_option("-t", "--pool-size", dest="thread_pool_size", default=8, type="int")
+
+    (options, args) = parser.parse_args()
+
+    q = Queue()
+    for root, dirnames, filenames in os.walk(options.data_directory):
         for filename in fnmatch.filter(filenames, '*.mid'):
             midiPath = os.path.abspath(os.path.join(root, filename))
-            print str(count) + ". Analyzing " + midiPath.split('/')[-1]
-            midi_to_song(midiPath)
-            print "FINISHED...moving on"
-            count += 1
-    print "DONE"
-    print "Total Songs Analyzed: " + count
+            q.put(midiPath)
 
+    for i in xrange(options.thread_pool_size):
+        thrd = Runner(q)
+        thrd.daemon = True
+        thrd.start()
+
+    q.join()
 
 if __name__ == "__main__":
     main()
