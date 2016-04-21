@@ -23,8 +23,9 @@ import midi, sys, pdb, os, re,threading
 
 from collections import defaultdict
 from audiolazy import midi2str
+from sqlalchemy.orm import sessionmaker
 
-from . import Base,Session,Song,Track,Note
+from . import Song,Track,Note
 
 DURKS_PER_QUARTER_NOTE = 8
 
@@ -33,9 +34,10 @@ class Runner(threading.Thread):
     done_counter = 0
     counter_lock = threading.Lock()
 
-    def __init__(self,q):
+    def __init__(self,q,engine):
         threading.Thread.__init__(self)
         self.q = q
+        Session = sessionmaker(bind=engine)
         self.session = Session()
 
     def run(self):

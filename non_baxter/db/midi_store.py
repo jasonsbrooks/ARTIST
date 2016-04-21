@@ -12,12 +12,15 @@ import os,fnmatch
 from helpers import Runner
 from Queue import Queue
 from optparse import OptionParser
+import reset
 
 def main():
     parser = OptionParser()
 
     parser.add_option("-d", "--data-directory", dest="data_directory", default="data/")
     parser.add_option("-t", "--pool-size", dest="thread_pool_size", default=8, type="int")
+    parser.add_option("-u", "--pool-size", dest="db_username", default="postgres")
+    parser.add_option("-p", "--pool-size", dest="db_password", default="postgres")
 
     (options, args) = parser.parse_args()
 
@@ -27,8 +30,10 @@ def main():
             midiPath = os.path.abspath(os.path.join(root, filename))
             q.put(midiPath)
 
+    engines = reset.get_engines(options.thread_pool_size,options.db_username,options.db_password)
+
     for i in xrange(options.thread_pool_size):
-        thrd = Runner(q)
+        thrd = Runner(q,engines[i])
         thrd.daemon = True
         thrd.start()
 
