@@ -2,7 +2,6 @@ audiolazy==0.5
 BeautifulSoup==3.2.1
 cycler==0.10.0
 lxml==3.5.0
-midi==0.2.3
 music21==2.2.1
 numpy==1.10.4
 pdb==0.1
