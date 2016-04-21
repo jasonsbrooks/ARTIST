@@ -1,3 +1,7 @@
+'''
+really need to add countour fitness check
+'''
+
 from chords import get_chord_notes
 
 
@@ -34,6 +38,7 @@ def large_intervals(genotype, max_interval=9, weight=20):
 # absolute pitch intervals
 # pattern must be 5 notes in length
 def pattern_matching(genotype, weight=20):
+    # pattern_len = 3
     pattern_len = 5
     genotype_len = len(genotype)
     total = 0
@@ -41,18 +46,17 @@ def pattern_matching(genotype, weight=20):
     for i in range(genotype_len):
         if i <= genotype_len - pattern_len:
             pattern_to_add = []
-            for j in range(5):
+            for j in range(pattern_len):
                 pattern_to_add.append(genotype[i+j][0])
             if pattern_to_add in patterns:
                 if pattern_to_add.count(pattern_to_add[0]) == len(pattern_to_add):  # checks if pattern is all repeated notes!
-                    total += weight * -1
+                    total += weight * -10
                 else:  # a legit pattern matching!
                     total += weight
             else:
                 patterns.append(pattern_to_add)
 
     return total
-
 
 
 # checks what happens to the n-1 chord changes
@@ -69,7 +73,7 @@ def suspensions(genotype, chord_progression, weight=20):
         elif suspension_pitch == -1:
             total += weight * .25  # rest
         elif i < len(chord_progression) - 1:
-            if suspension_pitch in get_chord_notes(chord_root) and suspension_pitch in get_chord_notes(chord_progression[i+1][0]): # note member of both chords
+            if suspension_pitch in get_chord_notes(chord_root) and suspension_pitch in get_chord_notes(chord_progression[i+1][0]):  # note member of both chords
                 total += weight * .5
             else:
                 total += weight * -1
@@ -142,19 +146,57 @@ def longnote(genotype, chord_progression, weight=20, long_note=8):
     return total
 
 
+# penalize all shorter than 8th note
+def penalize_short(genotype, weight=20):
+    total = 0
+    for i, (ed, dur) in enumerate(genotype):
+        if dur < 4:
+            total += weight * -1
+    return total
+
+
+# pulse is the "eighth note" pulse
+# assume that's every "4"
+# DANGER: this is terrible
+# also reward off beat pulse
+def penalize_off_pulse(genotype, weight=20):
+    total = 0
+    total_dur = 0
+    for i, (ed, dur) in enumerate(genotype):
+        total_dur += dur
+        if not total_dur % 4 == 0:
+            total += weight * -.25
+        if total_dur % 4 == 0 and total_dur % 8 != 0:  # means off beat!
+            total += weight * .25
+    return total
+
+
+# reward last note if it is root
+def end_on_root(genotype, weight=20):
+    total = 0
+    if genotype[-1][0] == 1 or genotype[-1][0] == 8 or genotype[-1][0] == 15:
+        total += weight * 1
+    else:
+        total += weight * -1
+    return total
+
 # given a genotype (list of (extended_degree, duration))
 # returns fitness value for that genotype
 # Detailed: prints (total, Dic containing detailed breakdown)
 def calc_fitness(genotype, chord_progression, detailed=False):
     li = large_intervals(genotype)
-    pm = pattern_matching(genotype)
+    pm = pattern_matching(genotype, weight=20)
     su = suspensions(genotype, chord_progression)
     db = downbeat(genotype, chord_progression)
     hb = halfbar(genotype, chord_progression)
     ln = longnote(genotype, chord_progression)
+    er = end_on_root(genotype)
+    ps = penalize_short(genotype, weight=40)
+    pop = penalize_off_pulse(genotype, weight=20)
 
-    total = li + pm + su + db + hb + ln
+    total = li + pm + su + db + hb + ln + er + ps + pop
+    # total = pm
     if detailed:
-        return (total, {"li": li, "pm": pm, "su": su, "db": db, "hb": hb, "ln": ln})
+        return (total, {"li": li, "pm": pm, "su": su, "db": db, "hb": hb, "ln": ln, "ps": ps, "pop": pop, "er": er})
     else:
         return total
