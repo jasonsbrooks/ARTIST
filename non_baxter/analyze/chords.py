@@ -36,12 +36,30 @@ class ChordSpan(object):
                 res.append(note)
         return res
 
+    def roman_numeral(self,track):
+
+        pitch = music21.key.sharpsToPitch(track.key_sig_top)
+        key = music21.key.Key(pitch)
+
+        if track.key_sig_bottom == 0:
+            scale = music21.scale.MajorScale(self.root.name)
+        else:
+            scale = music21.scale.MelodicMinorScale(self.root.name)
+
+        chord = music21.chord.Chord([scale.chord.root(),scale.chord.third,scale.chord.fifth])
+
+        return music21.roman.romanNumeralFromChord(chord,key).scaleDegree
+
     def label(self):
+        rn = None
         # label all the notes in this chord span
         for note in self.notes():
             if self.root:
-                note.root = self.root.name
-                note.iso_root = self.root.midi
+                note.root = self.root.midi
+                note.iso_root = self.root.name
+                if not rn:
+                    rn = self.roman_numeral(note.track)
+                note.roman = rn
 
         # label the previous chord span
         if self.prev_cs:
@@ -105,8 +123,8 @@ class HarmonicAnalyzer(threading.Thread):
 
         for ts in TimeIterator(song,self.durk_step):
             cs = self.consider_ts(cs,ts)
-            idx += 1
             print idx, ts, "--", cs.score, ":", cs
+            idx += 1
 
         cs.label()
         self.session.commit()
