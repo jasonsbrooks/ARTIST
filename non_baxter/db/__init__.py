@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('sqlite:////tmp/artist.db')
+engine = create_engine("postgresql://charlierproctor@localhost:5432/artist")
 Session = sessionmaker(bind=engine)
 
 from sqlalchemy.ext.declarative import declarative_base
