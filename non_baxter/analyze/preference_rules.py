@@ -6,12 +6,19 @@ import music21
 comp_prefs = ['P1','P5','P3','m3','m7','m5','m9']
 
 # implementing Temperley's HPR 1
-def compatibility(m_root,m_note):
+def _dual_compatibility(m_root,m_note):
     interval = music21.interval.notesToInterval(m_root,m_note).simpleName
     try:
         return len(comp_prefs) - comp_prefs.index(interval)
     except ValueError,e:
         return 0
+
+def compatibility(notes,m_root):
+    comp = []
+    for note in notes:
+        m_note = music21.note.Note(note.iso_pitch)
+        comp.append(_dual_compatibility(m_root,m_note))
+    return sum(comp) / float(len(notes))
 
 # the strength of the note corresponds to where it lies relative to 1,1/2,1/4 notes...
 def beat_strength(notes):

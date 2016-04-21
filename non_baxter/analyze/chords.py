@@ -53,11 +53,7 @@ class ChordSpan(object):
         stren = beat_strength(ts_notes)
 
         # compatibility scores
-        comp = []
-        for note in ts_notes:
-            m_note = music21.note.Note(note.iso_pitch)
-            comp.append(compatibility(m_root,m_note))
-        comp_score = sum(comp) / float(len(ts_notes))
+        comp_score = compatibility(ts_notes,m_root)
 
         # difference from previous chord root on line of fifths
         lof = (lof_difference(self.prev_cs.root,m_root) if self.prev_cs else 0)
@@ -114,16 +110,18 @@ DURK_STEP = 4
 def main():
     session = Session()
 
-    cs,idx = None,0
-
     for song in session.query(Song).all():
+        cs,idx = None,0
+        print "#"*80, "\n", song ,"\n", "#"*80, "\n"
+
         for ts in TimeIterator(song,DURK_STEP):
             cs = consider_ts(cs,ts)
             idx += 1
             print idx, cs.score, ":", cs
 
-    cs.label()
-    session.commit()
+        cs.label()
+        session.commit()
+
 
 if __name__ == '__main__':
     main()
