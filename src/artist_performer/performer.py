@@ -40,12 +40,26 @@ class Performer(BaxterController):
 
     def flick(self,arm,current_pos):
         down_pos = copy.deepcopy(current_pos)
-        down_pos[arm + "_w1"] = current_pos[arm + "_w1"] + 0.08
+        down_pos[arm + "_w1"] = current_pos[arm + "_w1"] + 0.8
 
         arm_obj = (self.left_arm if arm == "left" else self.right_arm)
 
-        wait_for(lambda: self.checkJointPositions(down_pos, arm), rate=4, timeout=2.0, raise_on_error=False, body=arm_obj.set_joint_positions(down_pos))
-        wait_for(lambda: self.checkJointPositions(current_pos, arm), rate=4, timeout=2.0, raise_on_error=False, body=arm_obj.set_joint_positions(current_pos))
+        arm_obj.set_joint_positions(down_pos)
+        time.sleep(0.15)
+        arm_obj.set_joint_positions(current_pos)
+
+        # wait_for(lambda: self.checkJointPositions(down_pos, arm), rate=4, timeout=2.0, raise_on_error=False, body=arm_obj.set_joint_positions(down_pos))
+        # wait_for(lambda: self.checkJointPositions(current_pos, arm), rate=4, timeout=2.0, raise_on_error=False, body=arm_obj.set_joint_positions(current_pos))
+
+    def avoid_black_key(self, arm, current_pos):
+        inter_pos = copy.deepcopy(current_pos)
+        inter_pos[arm + "_s1"] = current_pos[arm + "_s1"] - 1
+
+        arm_obj = (self.left_arm if arm == "left" else self.right_arm)
+
+        arm_obj.set_joint_positions(inter_pos)
+
+
 
 
     def get_joint_angles(self):
@@ -67,8 +81,19 @@ class Performer(BaxterController):
 
     def play_right_note_now(self,note):
         self.send_note(int(note))
-        wait_for(lambda: self.checkJointPositions(self.keys["right"][str(note)], "right"), rate=4, raise_on_error=False, timeout=2.0, body=self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True))
-        wait_for(lambda: self.checkJointPositions(self.keys["right"][str(note)], "right"), rate=4, raise_on_error=False, timeout=2.0, body=self.flick("right", self.keys["right"][str(note)]))
+        # if int(note) in [74, 72, 70, 67, 65, 62, 60, 58]:
+        #     self.avoid_black_key("right", self.right_arm.joint_angles())
+        #     time.sleep(0.5)
+        self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True)
+        time.sleep(1)
+        self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True)
+        time.sleep(1)
+        self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True)
+        time.sleep(1.5)
+        self.flick("right", self.keys["right"][str(note)])
+        # time.sleep(2)
+        # wait_for(lambda: self.checkJointPositions(self.keys["right"][str(note)], "right"), rate=4, raise_on_error=False, timeout=2.0, body=self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True))
+        # wait_for(lambda: self.checkJointPositions(self.keys["right"][str(note)], "right"), rate=4, raise_on_error=False, timeout=2.0, body=self.flick("right", self.keys["right"][str(note)]))
 
     def play_left_note_now(self, note):
         self.send_note(int(note))
@@ -79,14 +104,15 @@ class Performer(BaxterController):
     def play_note(self,note):
         sleep_time = note.starttime - rospy.Time.now()
 
-        # we've missed the opportunity to play this note
-        if sleep_time.to_nsec() < 0:
-            return
+        # # we've missed the opportunity to play this note
+        # if sleep_time.to_nsec() < 0:
+        #     rospy.loginfo("PASSED A NOTE")
+        #     return
 
-        # sleep until we can play it
-        rospy.sleep(sleep_time)
+        # # sleep until we can play it
+        # rospy.sleep(sleep_time)
 
-        rospy.loginfo("playing: " + str(note.pitch))
+        # rospy.loginfo("playing: " + str(note.pitch))
         if note.pitch in self.right_notes:
             self.play_right_note_now(note.pitch)
         elif note.pitch in self.left_notes:
