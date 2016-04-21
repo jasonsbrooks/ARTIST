@@ -19,8 +19,8 @@ def main():
 
     parser.add_option("-d", "--data-directory", dest="data_directory", default="data/")
     parser.add_option("-t", "--pool-size", dest="thread_pool_size", default=8, type="int")
-    parser.add_option("-u", "--pool-size", dest="db_username", default="postgres")
-    parser.add_option("-p", "--pool-size", dest="db_password", default="postgres")
+    parser.add_option("-u", "--username", dest="db_username", default="postgres")
+    parser.add_option("-p", "--password", dest="db_password", default="postgres")
 
     (options, args) = parser.parse_args()
 
