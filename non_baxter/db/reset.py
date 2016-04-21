@@ -1,20 +1,24 @@
-from sqlalchemy import create_engine
-
-from pprint import pformat
-
-from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy_utils import database_exists, create_database, drop_database
 
 from . import engine,Base
 
 import sys
 
 def create():
-	Base.metadata.drop_all(engine)
-	Base.metadata.create_all(engine)
+    if not database_exists(engine.url):
+        create_database(engine.url)
+        Base.metadata.create_all(engine)
+
+def drop():
+    if database_exists(engine.url):
+        drop_database(engine.url)
+        Base.metadata.drop_all(engine)
 
 if __name__ == '__main__':
-	if len(sys.argv) > 1 and sys.argv[1] == 'create':
-		print "Creating database!"
-		create()
-	pass
+    if len(sys.argv) > 1 and sys.argv[1] == 'create':
+        print "Creating database!"
+        create()
+    elif len(sys.argv) > 1 and sys.argv[1] == 'drop':
+        print "Dropping database!"
+        drop()
+    pass
