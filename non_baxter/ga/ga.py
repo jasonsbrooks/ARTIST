@@ -27,7 +27,7 @@ def choose_duration():
 
 # returns list of (fitness, genotype)
 # fitness holds junk value (-99)-- fitness function used to evaluate it
-def initialize_chromosomes(n, d):
+def initialize_chromosomes(n, d, chord_progression):
     chromosomes = []
     for _ in range(n):  # makes n chromosomes
         fitness = -99
@@ -46,7 +46,7 @@ def initialize_chromosomes(n, d):
             genotype.append((extended_degree, duration))
             total_duration += duration
 
-        fitness = calc_fitness(genotype)
+        fitness = calc_fitness(genotype, chord_progression)
         chromosomes.append((fitness, genotype))
     return chromosomes
 
@@ -137,7 +137,7 @@ def crossover(parent1, parent2, d):
 # returns list of chromosomes in descending order by fitness (highest fitness first)
 def ga(chord_progression, n=40, num_iter=200, prob_local=.5):
     d = sum([d for (_, d) in chord_progression])  # d is total duration of song
-    chromosome_list = initialize_chromosomes(n, d)  # list of (fitness, genotype)
+    chromosome_list = initialize_chromosomes(n, d, chord_progression)  # list of (fitness, genotype)
 
     for _ in range(0, num_iter):
         new_chromosome_list = []
@@ -169,7 +169,7 @@ def ga(chord_progression, n=40, num_iter=200, prob_local=.5):
             if i == 0:  # maintain elitism
                 continue
             new_genotype = mutate(chrom, d, prob_local=prob_local)  # 1
-            new_fitness = calc_fitness(new_genotype)
+            new_fitness = calc_fitness(new_genotype, chord_progression)
             new_chromosome_list[i] = (new_fitness, new_genotype)
 
         chromosome_list = new_chromosome_list
@@ -179,12 +179,15 @@ def ga(chord_progression, n=40, num_iter=200, prob_local=.5):
 
 
 def main():
+    # hard coded chord progression for 12 bar blues
     chord_progression = create_chord_progression()  # list of (chord, duration)
-    chromosomes = ga(chord_progression, n=40, num_iter=2, prob_local=.1)
+    chromosomes = ga(chord_progression, n=40, num_iter=200, prob_local=.15)
 
     create_midi_file(chromosomes[0])
     print "Final Fitness: " + str(chromosomes[0][0])
-    print "Num durks: " + str(sum([d for (_, d) in chromosomes[1][1]]))
+    # print "Num durks: " + str(sum([d for (_, d) in chromosomes[1][1]]))
+    print "Best Genotype: \n" + str(chromosomes[0][1])
+    print "Detailed Fitness: " + str(calc_fitness(chromosomes[0][1], chord_progression, detailed=True))
     pass
 
 

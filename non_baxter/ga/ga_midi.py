@@ -112,7 +112,7 @@ def create_midi_file((fitness, genotype)):
     eot = midi.EndOfTrackEvent(tick=1)
     track.append(eot)
     # Print out the pattern
-    print pattern
+    # print pattern
 
     # make 1-4-5 12 bar blues chord track
     track = midi.Track()
