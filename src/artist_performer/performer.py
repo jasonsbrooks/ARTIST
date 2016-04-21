@@ -45,8 +45,8 @@ class Performer(BaxterController):
         with open(KEYS_FILENAME) as f:
             self.keys = json.load(f)
 
-        self.right_notes = [int(x) for x in keys['right'].keys()]
-        self.left_notes = [int(x) for x in keys['left'].keys()]
+        self.right_notes = [int(x) for x in self.keys['right'].keys()]
+        self.left_notes = [int(x) for x in self.keys['left'].keys()]
 
     def flick(self,arm,current_pos):
         down_pos = copy.deepcopy(current_pos)
