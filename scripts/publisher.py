@@ -50,11 +50,11 @@ def main():
         "C7":76}
     # pdb.set_trace()
 
-    # noteNameArray = ["C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "A6", "G6", "F6", "E6", "D6", "G6", "F6", "E6", "D6", "C6", "B5", "C6", "D6", "B5", "D6"]
-    # noteNameArray = ["C6", "D6", "E6", "F6", "G6", "A6", "B6", "C7"]
+    noteNameArray = ["C6", "C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "A6", "G6", "F6", "E6", "D6", "G6", "F6", "E6", "D6", "C6", "B5", "C6", "D6", "B5", "D6"]
+    # noteNameArray = ["C6", "C6", "D6", "E6", "F6", "G6", "A6", "B6", "C7", "B6", "A6", "G6", "F6", "E6", "D6", "C6"]
     # noteNameArray = ["B5", "C6", "D6", "C6", "B5", "C6", "D6", "C6", "B5", "C6", "D6", "C6"]
     # noteNameArray = ["B5", "C7", "B5", "C7", "B5", "C7", "B5", "C7", "B5", "C7"]
-    noteNameArray = ["C7", "B5", "C7","B5", "C7","B5", "C7","B5", "C7"]
+    # noteNameArray = ["C7", "B5", "C7","B5", "C7","B5", "C7","B5", "C7"]
     # noteNameArray = ["C7", "E6"]
     noteValArray = [notes[x] for x in noteNameArray]
 
