@@ -40,49 +40,82 @@ ed_to_midi_dic_c_maj = {
 
 # given chord number, returns track object with one measure of that chord in quarter notes
 # currently only gives notes for C major scale
-def create_chord_measure(chord):
+def create_chord_measure(chord, a_train=False):
     track = midi.Track()
     midi_velocity = 80
 
-    # default at 1 chord
-    root = midi.C_3
-    third = midi.E_3
-    fifth = midi.G_3
+    if not a_train:
+        # default at 1 chord
+        root = midi.C_3
+        third = midi.E_3
+        fifth = midi.G_3
 
-    if chord == 4:
-        root = midi.F_3
-        third = midi.A_3
-        fifth = midi.C_4
-    elif chord == 5:
-        root = midi.G_3
-        third = midi.B_3
-        fifth = midi.D_4
+        if chord == 4:
+            root = midi.F_3
+            third = midi.A_3
+            fifth = midi.C_4
+        elif chord == 5:
+            root = midi.G_3
+            third = midi.B_3
+            fifth = midi.D_4
 
-    for i in range(4):
-        on1 = midi.NoteOnEvent(tick=0, velocity=midi_velocity, pitch=root)
-        on2 = midi.NoteOnEvent(tick=0, velocity=midi_velocity, pitch=third)
-        on3 = midi.NoteOnEvent(tick=0, velocity=midi_velocity, pitch=fifth)
-        track.append(on1)
-        track.append(on2)
-        track.append(on3)
+        for i in range(4):
+            on1 = midi.NoteOnEvent(tick=0, velocity=midi_velocity, pitch=root)
+            on2 = midi.NoteOnEvent(tick=0, velocity=midi_velocity, pitch=third)
+            on3 = midi.NoteOnEvent(tick=0, velocity=midi_velocity, pitch=fifth)
+            track.append(on1)
+            track.append(on2)
+            track.append(on3)
 
-        midi_tick_dur = 133
-        if i % 3 == 0:
-            midi_tick_dur = 134
+            midi_tick_dur = 133
+            if i % 3 == 0:
+                midi_tick_dur = 134
 
-        off1 = midi.NoteOffEvent(tick=midi_tick_dur, pitch=root)
-        off2 = midi.NoteOffEvent(tick=midi_tick_dur, pitch=third)
-        off3 = midi.NoteOffEvent(tick=midi_tick_dur, pitch=fifth)
-        track.append(off1)
-        track.append(off2)
-        track.append(off3)
+            off1 = midi.NoteOffEvent(tick=midi_tick_dur, pitch=root)
+            off2 = midi.NoteOffEvent(tick=midi_tick_dur, pitch=third)
+            off3 = midi.NoteOffEvent(tick=midi_tick_dur, pitch=fifth)
+            track.append(off1)
+            track.append(off2)
+            track.append(off3)
+    else:
+
+        notes = []
+
+        if chord == 1:  # C
+            # default at 1 chord
+            notes = [midi.C_3, midi.E_3, midi.G_3]
+        elif chord == 2:  # D7b5
+            notes = [midi.D_3, midi.Fs_3, midi.Gs_3]  #, midi.C_3]
+        elif chord == 3:  # D_7
+            notes = [midi.F_3, midi.Gs_3, midi.B_3]  #, midi.D_3]
+        elif chord == 4:  # D7
+            notes = [midi.D_3, midi.Fs_3, midi.A_3]  #, midi.C_3]
+        elif chord == 5:  # F
+            notes = [midi.F_3, midi.A_3, midi.C_3]
+        elif chord == 6:  # G7
+            notes = [midi.G_3, midi.B_3, midi.D_3]  #, midi.F_7]
+
+        # for i in range(4):
+        for note in notes:
+            on1 = midi.NoteOnEvent(tick=0, velocity=midi_velocity, pitch=note)
+            track.append(on1)
+
+        # midi_tick_dur = 133
+        # if i % 3 == 0:
+        #     midi_tick_dur = 134
+
+        midi_tick_dur = 533
+
+        for note in notes:
+            off1 = midi.NoteOffEvent(tick=midi_tick_dur, pitch=note)
+            track.append(off1)
 
     return track
 
 
 # given chromosome = (fitness, genotype)
 # creates midi file titled the fitness level
-def create_midi_file((fitness, genotype)):
+def create_midi_file((fitness, genotype), chord_progression):
     # Instantiate a MIDI Pattern (contains a list of tracks)
     pattern = midi.Pattern()
     pattern.resolution = 400
@@ -121,24 +154,28 @@ def create_midi_file((fitness, genotype)):
     # Append the track to the pattern
     pattern.append(track)
 
-    for _ in range(4):
-        temp_track = create_chord_measure(1)
+    for (root, dur) in chord_progression:  # Assumes chords all last 1 measure (32 durks duration)
+        temp_track = create_chord_measure(root, a_train=True)
         track += temp_track
-    for _ in range(2):
-        temp_track = create_chord_measure(4)
-        track += temp_track
-    for _ in range(2):
-        temp_track = create_chord_measure(1)
-        track += temp_track
-    for _ in range(1):
-        temp_track = create_chord_measure(5)
-        track += temp_track
-    for _ in range(1):
-        temp_track = create_chord_measure(4)
-        track += temp_track
-    for _ in range(2):
-        temp_track = create_chord_measure(1)
-        track += temp_track
+
+    # for _ in range(4):
+    #     temp_track = create_chord_measure(1)
+    #     track += temp_track
+    # for _ in range(2):
+    #     temp_track = create_chord_measure(4)
+    #     track += temp_track
+    # for _ in range(2):
+    #     temp_track = create_chord_measure(1)
+    #     track += temp_track
+    # for _ in range(1):
+    #     temp_track = create_chord_measure(5)
+    #     track += temp_track
+    # for _ in range(1):
+    #     temp_track = create_chord_measure(4)
+    #     track += temp_track
+    # for _ in range(2):
+    #     temp_track = create_chord_measure(1)
+    #     track += temp_track
 
     # Add the end of track event, append it to the track
     eot = midi.EndOfTrackEvent(tick=1)
