@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from baxter_artist import Performer
+from artist_performer import Performer
 
 def main():
     rospy.init_node("performer")

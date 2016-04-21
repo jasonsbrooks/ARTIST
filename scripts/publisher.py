@@ -2,7 +2,7 @@
 
 import json, copy, rospy
 
-from baxter_artist import Performer
+from artist_performer import Performer
 import baxter_artist.msg
 
 from sensor_msgs.msg import (

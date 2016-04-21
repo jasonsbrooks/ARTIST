@@ -4,7 +4,7 @@ import baxter_interface
 from baxter_interface import CHECK_VERSION
 import rospy, pdb, os, json, time, threading
 
-from baxter_artist import Learner
+from artist_performer import Learner
 
 class Shell(threading.Thread):
     def __init__(self,learner):

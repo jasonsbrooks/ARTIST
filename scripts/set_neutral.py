@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from baxter_artist import BaxterController
+from artist_performer import BaxterController
 
 def main():
     rospy.loginfo("Initializing node... ")
