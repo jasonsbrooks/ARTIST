@@ -3,9 +3,9 @@ from iter import TimeIterator
 
 from preference_rules import *
 
-session = Session()
-
-import music21
+import music21,threading
+from Queue import Queue
+from optparse import OptionParser
 
 class ChordSpan(object):
     def __init__(self,initial_ts,prev_cs):
@@ -81,49 +81,86 @@ class ChordSpan(object):
         prev_cs_score = (self.prev_cs.score if self.prev_cs else 0)
         return prev_cs_score + best_weight
 
-def consider_ts(cs,ts):
-    if not cs:
-        res = ChordSpan(ts,None)
-        score = res.calc_best_root()
-    else:
-        # option 1: start a new chord-span
-        opt1_cs = ChordSpan(ts,cs)
-        opt1_score = cs.calc_best_root()
+class HarmonicAnalyzer(threading.Thread):
+    def __init__(self,q,durk_step):
+        threading.Thread.__init__(self)
+        self.q = q
+        self.durk_step = durk_step
+        self.session = Session()
 
-        # option 2: add to prior segment
-        cs.add(ts)
-        opt2_score = cs.calc_best_root()
+    def run(self):
+        while True:
+            song_id = self.q.get()
 
-        if opt1_score > opt2_score:
-            cs.remove(ts)
-            res = opt1_cs
-            score = opt1_score
-        else:
-            res = cs
-            score = opt2_score
+            # grab and analyze the song
+            song = self.session.query(Song).get(song_id)
+            self.analyze(song)
 
-    # set the score on this cs
-    res.score = score
+            # this task is complete
+            self.q.task_done()
 
-    return res
-
-DURK_STEP = 4
-
-def main():
-    session = Session()
-
-    for song in session.query(Song).all():
+    def analyze(self,song):
         cs,idx = None,0
         print "#"*80, "\n", song ,"\n", "#"*80, "\n"
 
-        for ts in TimeIterator(song,DURK_STEP):
-            cs = consider_ts(cs,ts)
+        for ts in TimeIterator(song,self.durk_step):
+            cs = self.consider_ts(cs,ts)
             idx += 1
             print idx, ts, "--", cs.score, ":", cs
 
         cs.label()
-        session.commit()
+        self.session.commit()
 
+
+    def consider_ts(self,cs,ts):
+        if not cs:
+            res = ChordSpan(ts,None)
+            score = res.calc_best_root()
+        else:
+            # option 1: start a new chord-span
+            opt1_cs = ChordSpan(ts,cs)
+            opt1_score = cs.calc_best_root()
+
+            # option 2: add to prior segment
+            cs.add(ts)
+            opt2_score = cs.calc_best_root()
+
+            if opt1_score > opt2_score:
+                cs.remove(ts)
+                res = opt1_cs
+                score = opt1_score
+            else:
+                res = cs
+                score = opt2_score
+
+        # set the score on this cs
+        res.score = score
+
+        return res
+
+def main():
+    parser = OptionParser()
+
+    parser.add_option("-d", "--durk-step", dest="durk_step", default=8, type="int")
+    parser.add_option("-t", "--pool-size", dest="thread_pool_size", default=8, type="int")
+
+    (options, args) = parser.parse_args()
+
+    print "thread_pool_size", options.thread_pool_size
+    print "durk_step", options.durk_step
+
+    session = Session()
+    q = Queue()
+
+    for song in session.query(Song).all():
+        q.put(song.id)
+
+    for i in xrange(options.thread_pool_size):
+        thrd = HarmonicAnalyzer(q,options.durk_step)
+        thrd.daemon = True
+        thrd.start()
+
+    q.join()
 
 if __name__ == '__main__':
     main()
