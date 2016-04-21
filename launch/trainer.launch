@@ -1,0 +1,3 @@
+<launch>
+  <node name="learn_keys" pkg="baxter_artist" type="learn_keys.py" output="screen" />
+</launch> 
