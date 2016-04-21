@@ -7,6 +7,10 @@ class TimeInstance(object):
     def __init__(self,time,chords):
         self.time = time
         self.chords = chords
+
+    def __repr__(self):
+        return "<TimeInstance len(chords)=%r, time=%r>" % (self.time, len(self.chords))
+
     def notes(self):
         res = []
         for chord in self.chords:

@@ -118,7 +118,7 @@ def main():
         for ts in TimeIterator(song,DURK_STEP):
             cs = consider_ts(cs,ts)
             idx += 1
-            print idx, cs.score, ":", cs
+            print idx, ts, "--", cs.score, ":", cs
 
         cs.label()
         session.commit()
