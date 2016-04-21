@@ -42,7 +42,7 @@ ed_to_midi_dic_c_maj = {
 # currently only gives notes for C major scale
 def create_chord_measure(chord):
     track = midi.Track()
-    midi_velocity = 50
+    midi_velocity = 80
 
     # default at 1 chord
     root = midi.C_3
@@ -92,10 +92,12 @@ def create_midi_file((fitness, genotype)):
     # Append the track to the pattern
     pattern.append(track)
 
+    # track.append(midi.TrackNameEvent(tick=0, name="boosbosjadioasjd"))
+
     for i, (ed, dur) in enumerate(genotype):
         # Instantiate a MIDI note on event, append it to the track
         midi_pitch = midi.B_6
-        midi_velocity = 50
+        midi_velocity = 100
         if (ed == -1):  # i.e. a rest
             midi_velocity = 0
         else:
@@ -145,4 +147,4 @@ def create_midi_file((fitness, genotype)):
     # Save the pattern to disk
     ts = time.time()
     st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-    midi.write_midifile(str(fitness) + "_" + st + ".mid", pattern)
+    midi.write_midifile(str(fitness) + "_" + st + ".mid", pattern)  # + str(detailed_fitness) + "_"

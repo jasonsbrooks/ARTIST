@@ -114,47 +114,27 @@ def mut7(genotype, start_index, end_index):
     return new_genotype
 
 
-# copies randomly chosen fragment to a different position
+# inserts randomly chosen fragment to a different position
+# trims end to make dur consistent
 def mut8(genotype, start_index, end_index):
-    len_genotype = len(genotype)
-    genotype_dur = sum([d for (_, d) in genotype])
-    if end_index - start_index > (len_genotype/2):
-        end_index -= len_genotype/2 - (end_index - start_index)
-
+    old_genotype_dur = sum([d for (_, d) in genotype])
     fragment = genotype[start_index:end_index]
-    fragment_dur = sum([d for (_, d) in fragment])
-
     new_genotype = []
+    for elem in reversed(fragment):
+        genotype.insert(start_index, elem)
 
-    # pick random spot to insert fragment
-    insert_index = random.randint(0, (len_genotype-1) - (end_index - start_index))
-
-    skip_notes_flag = False
+    # trim end of genotype
+    total_dur = 0
     for i, (ed, dur) in enumerate(genotype):
-        if skip_notes_flag:
-            fragment_dur -= dur
-            if fragment_dur < 0:
-                new_genotype.append((ed, fragment_dur * -1))
-                skip_notes_flag = False
-            elif fragment_dur == 0:
-                skip_notes_flag = False
-        elif i == insert_index:
-            new_genotype += fragment
-            skip_notes_flag = True
+        total_dur += dur
+        if total_dur >= old_genotype_dur:
+            new_genotype.append((ed, dur - (total_dur - old_genotype_dur)))
+            break
         else:
             new_genotype.append((ed, dur))
 
-    # if new_genotype too long, trim end
-    total_dur = 0
-    print new_genotype
-    for i, (ed, dur) in enumerate(new_genotype):
-        total_dur += dur
-        if total_dur >= genotype_dur:
-            new_genotype[i] = (ed, dur - (total_dur - genotype_dur))
-            new_genotype = new_genotype[0:i+1]
-
-    if sum([d for (_, d) in genotype]) != sum([d for (_, d) in new_genotype]):
-        return "unequal lengths mut8"
+    if sum([d for (_, d) in new_genotype]) != old_genotype_dur:
+        print 'mut8 duration error'
 
     return new_genotype
 
@@ -204,9 +184,9 @@ def local_mutation(chromosome, d, prob_local=.5):
         (start_index, end_index) = get_random_start_end(len_genotype)
         genotype = mut7(genotype, start_index, end_index)
 
-    # if random.random() < prob_local:
-    #     (start_index, end_index) = get_random_start_end(len_genotype)
-    #     genotype = mut8(genotype, start_index, end_index)
+    if random.random() < prob_local:
+        (start_index, end_index) = get_random_start_end(len_genotype)
+        genotype = mut8(genotype, start_index, end_index)
 
     return genotype
 
