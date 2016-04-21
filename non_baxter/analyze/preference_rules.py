@@ -38,6 +38,19 @@ COMPATIBILITY_MULTIPLIER = 1
 LOF_MULTIPLIER = -1
 STRENGTH_MULTIPLIER = 1
 
-THRESHOLD_MULTIPLIER = 0.9
+def pr_score(cs,m_root):
 
-def score()
+    # calculate the beat strength
+    stren = beat_strength(chord[0])
+
+    # compatibility scores
+    comp = []
+    for note in chord:
+        m_note = music21.note.Note(note.iso_pitch)
+        comp.append(compatibility(m_root,m_note))
+    comp_score = sum(comp) / float(len(chord))
+
+    # difference from previous chord root on line of fifths
+    lof = (lof_difference(m_prev,m_root) if m_prev else 0)
+
+    return STRENGTH_MULTIPLIER * stren + COMPATIBILITY_MULTIPLIER * comp_score + LOF_MULTIPLIER * lof

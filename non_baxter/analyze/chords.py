@@ -1,20 +1,31 @@
 from db import Session,Song,Track,Note
+from preference_rules import pr_score,line_of_fifths
+from time_iterator import TimeIterator
 
 session = Session()
 
 import music21
 
 class ChordSpan(object):
-    def __init__(self,tss,root,prev_cs):
-        self.start = min(tss,key=lambda ts: ts.time)
-        self.end = max(tss,key=lambda ts: ts.time)
+    def __init__(self,tss,prev_cs):
         self.tss = tss
-        self.root = root
 
         # a back-pointer to the previous best chord-span
         self.prev_cs = prev_cs
         # TODO: how to calculate next value?
         self.val = self.prev_cs.val +
+
+    def calc_min_max(self):
+        self.start = min(self.tss,key=lambda ts: ts.time)
+        self.end = max(self.tss,key=lambda ts: ts.time)
+
+    def add(self,ts):
+        self.tss.append(ts)
+        self.calc_min_max()
+
+    def remove(self,ts):
+        self.tss.remove(ts)
+        self.calc_min_max()
 
     def notes(self):
         res = []
@@ -26,76 +37,52 @@ class ChordSpan(object):
         return res
 
     def label(self):
+        # label all the notes in this chord span
         for note in self.notes():
             note.root = self.root
             note.iso_root = music21.note.Note(self.root).midi
 
-def best_next_root(m_prev,chord):
+        # label the previous chord span
+        if self.prev_cs:
+            self.prev_cs.label()
 
-    # calculate the beat strength
-    stren = beat_strength(chord[0])
+    def calc_best_root(self):
 
-    # start with C, weight of 0
-    best_root,best_weight = music21.note.Note('C'),-len(line_of_fifths)
+        # start with C, weight of 0
+        best_root,best_weight = music21.note.Note('C'),-len(line_of_fifths)
 
-    # try all possible roots
-    for m_root in music21.scale.ChromaticScale('C').pitches:
+        # try all possible roots
+        for m_root in music21.scale.ChromaticScale('C').pitches:
 
-        # compatibility scores
-        comp = []
-        for note in chord:
-            m_note = music21.note.Note(note.iso_pitch)
-            comp.append(compatibility(m_root,m_note))
-        comp_score = sum(comp) / float(len(chord))
+            val = pr_score(self,m_root)
 
-        # difference from previous chord root on line of fifths
-        lof = (lof_difference(m_prev,m_root) if m_prev else 0)
+            if val > best_weight:
+                best_root,best_weight = m_root,val
 
-        val = STRENGTH_MULTIPLIER * stren + COMPATIBILITY_MULTIPLIER * comp_score + LOF_MULTIPLIER * lof
+        # use this as the chord-span root
+        self.root = best_root
+        return best_weight
 
-        if val > best_weight:
-            best_root,best_weight = m_root,val
-
-    return best_root,best_weight
+DURK_STEP = 4
 
 def main():
-    chord = []
+    session = Session()
 
-    for trk in session.query(Track).all():
+    cs = None
 
-        # previous note
-        m_prev = None
+    for song in session.query(Song).all():
+        for ts in TimeIterator(song,DURK_STEP):
 
-        # transition threshold
-        threshold = -len(line_of_fifths)
-
-        # iterate through all notes in this track
-        for note in sorted(trk.notes,key=lambda note: note.start):
-
-            # initialize root
-            note.root = m_prev.midi if m_prev else 0
-            note.iso_root = m_prev.name if m_prev else ""
-
-            if len(chord) == 0:
-                chord.append(note)
-            elif note.start == chord[-1].start:
-                chord.append(note)
+            if not cs:
+                cs = ChordSpan(ts,None)
+                score = cs.calc_best_root()
             else:
-                #     process the chord
-                best_root,best_weight = best_next_root(m_prev,chord)
+                # a new segment
+                cs = ChordSpan(ts,cs)
 
-                # update node.root if better than threshold
-                if best_weight > threshold:
-                    note.root = best_root.midi
-                    note.iso_root = best_root.name
-                    m_prev,threshold = best_root,best_weight
-                    print note.iso_root
-                else:
-                    threshold *= THRESHOLD_MULTIPLIER
+                # try other segments.
 
-                chord = []
 
-        session.commit()
 
 if __name__ == '__main__':
     main()
