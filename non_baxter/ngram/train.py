@@ -92,9 +92,6 @@ def main():
 
     (options, args) = parser.parse_args()
 
-    print "outdir", options.outdir
-    print "thread_pool_size", options.thread_pool_size
-
     matrix_size = (NUM_NOTES, NUM_NOTES, NUM_NOTES)
 
     session = Session()

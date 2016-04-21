@@ -9,17 +9,25 @@ import numpy as np
 from collections import deque
 import sys,random,pdb,os,music21
 from ngram_helper import pitch_to_str
+from audiolazy import midi2str
+from optparse import OptionParser
 
 TWELVE_BAR_BLUES = [1,1,1,1,4,4,1,1,5,4,1,1]
 DURKS_PER_MEASURE = 32
 
 class NgramGenerator():
     def __init__(self,key,chord_progression,model_dir):
+        """
+        @param key: music21 key. equal to key model was trained in
+        @param chord_progression: series of music21 roman numerals
+        @param model_dir: directory containing the 7 separate trained models
+        @return:
+        """
         self.durk = 0
         self.key = key
         self.chord_progression = chord_progression
         self.last_two = deque()
-        self.rn = self.chord_progression[self.durk]
+        self.rn = None
 
         # load the various rn models
         self.counts = []
@@ -30,10 +38,10 @@ class NgramGenerator():
     def __iter__(self):
         return self
 
-    def choose_note(self,rn,last_two):
-        mat = counts[rn-1]
+    def _choose_note_once(self,rn,last_two):
+        mat = self.counts[rn.scaleDegree-1]
 
-        row = counts[tuple(last_two)]
+        row = mat[tuple(last_two)]
         total = np.sum(row)
 
         rand = (random.randint(0,total-1) if total > 0 else 0)
@@ -45,55 +53,81 @@ class NgramGenerator():
             i += 1
             rand -= row[i]
 
-        return i
+        return music21.pitch.Pitch(midi2str(i))
 
-    def calc_note_val(self,note):
+    def choose_note(self,rn,last_two,depth=0):
+        # failed too many times. just play the root of the scale
+        if depth >= sys.getrecursionlimit() * 0.75:
+            return self.key.getScale().chord.root()
+
+        # try generating a pitch.
+        gen = self._choose_note_once(rn,last_two)
+        for pitch in rn.pitches:
+            # ensure the pitch is in the rn
+            if gen.pitchClass == pitch.pitchClass:
+                return gen
+
+        # failed. try again to generate
+        return self.choose_note(rn,last_two,depth+1)
+
+    # convert note to 1->7 for GA
+    def calc_note_val(self,pitch_class):
         pitches = self.key.getScale().getChord().pitches
 
         for i in xrange(7):
-            if pitches[i].name == note.name:
+            if pitches[i].pitchClass == pitch_class:
                 return i+1
+
+        # should never happen!
+        return 1
 
     def next(self):
 
-        if self.durk < self.chord_progression * DURKS_PER_MEASURE:
+        if self.durk < len(self.chord_progression) * DURKS_PER_MEASURE:
 
-            rn = self.chord_progression[self.durk % 32]
+            rn = self.chord_progression[self.durk / DURKS_PER_MEASURE]
 
             if rn != self.rn:
                 self.last_two = deque()
 
                 # append the first, third
                 scale = self.key.getScale()
-                deque.append(scale.chord.root())
-                deque.append(scale.chord.third)
+                self.last_two.append(scale.chord.root().midi)
+                self.last_two.append(scale.chord.third.midi)
 
             self.rn = rn
-            note = self.choose_note(rn,self.last_two)
+            pitch = self.choose_note(rn,self.last_two)
 
-            self.last_two.append(note)
+            self.last_two.append(pitch.midi)
             self.last_two.popleft()
 
             self.durk += 4
 
-            note_name = # CALCULATE NOTE NAMME
-            self.calc_note_val(note_name)
+            print self.rn, pitch
+            return self.calc_note_val(pitch.pitchClass)
         else:
             raise StopIteration()
 
-def generate(counts, num_notes):
+def construct_roman_numerals(key,int_seq):
+    rns = []
+    for i in int_seq:
+        rns.append(music21.roman.RomanNumeral(i,key))
+    return rns
 
-    first_two = [60,67]
+def generate(options,cp):
+    key = music21.key.Key(options.key)
+    cp = construct_roman_numerals(key,cp)
+    generator = NgramGenerator(key,cp,options.model_dir)
 
-    return [note for note in NgramGenerator(first_two,num_notes)]
+    return [note for note in generator]
 
 
-if __name__ == '__main__':
-    
-    if len(sys.argv) < 3:
-        print(__doc__)
-        sys.exit(1)
-    with open(sys.argv[1]) as f:
-        counts = np.load(f)
+# if __name__ == '__main__':
+parser = OptionParser()
 
-    print map(pitch_to_str,generate(counts, int(sys.argv[2])))
+parser.add_option("-m", "--model-dir", dest="model_dir")
+parser.add_option("-k", "--key", dest="key", default="C")
+
+(options, args) = parser.parse_args()
+
+print map(pitch_to_str,generate(options,TWELVE_BAR_BLUES))
