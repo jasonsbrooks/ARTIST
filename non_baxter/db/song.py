@@ -19,5 +19,5 @@ class Song(Base):
     tracks = relationship("Track")
 
     def __repr__(self):
-        return "Song(title=%r, ppqn=%r, tracks=%r)" % \
-            (self.title, self.ppqn, self.tracks)
+        return "Song(title=%r, ppqn=%r, len(tracks)=%r)" % \
+            (self.title, self.ppqn, len(self.tracks))

@@ -38,8 +38,9 @@ class ChordSpan(object):
     def label(self):
         # label all the notes in this chord span
         for note in self.notes():
-            note.root = self.root
-            note.iso_root = music21.note.Note(self.root).midi
+            if self.root:
+                note.root = self.root.name
+                note.iso_root = self.root.midi
 
         # label the previous chord span
         if self.prev_cs:

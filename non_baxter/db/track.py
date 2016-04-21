@@ -45,6 +45,6 @@ class Track(Base):
     notes = relationship("Note")
 
     def __repr__(self):
-        return "Track(start_tick=%r, ts= %r/%r, ks=%r/%r, instr_key=%r, instr_name=%r, channel=%r, tempo=%r, dynamic=%r, song=%r, notes=%r)" % \
+        return "Track(start_tick=%r, ts= %r/%r, ks=%r/%r, instr_key=%r, instr_name=%r, channel=%r, tempo=%r, dynamic=%r, song=%r, len(notes)=%r)" % \
             (self.start_tick, self.time_sig_top, self.time_sig_bottom, self.key_sig_top, self.key_sig_bottom, self.instr_key,
-             self.instr_name, self.channel, self.tempo, self.dynamic, self.song, self.notes)
+             self.instr_name, self.channel, self.tempo, self.dynamic, self.song, len(self.notes))
