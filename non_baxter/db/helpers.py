@@ -29,6 +29,10 @@ from . import Base,Session,Song,Track,Note
 DURKS_PER_QUARTER_NOTE = 8
 
 class Runner(threading.Thread):
+
+    done_counter = 0
+    counter_lock = threading.Lock()
+
     def __init__(self,q):
         threading.Thread.__init__(self)
         self.q = q
@@ -40,7 +44,11 @@ class Runner(threading.Thread):
 
             print "Analyzing " + midiPath.split('/')[-1]
             self.midi_to_song(midiPath)
-            print "Finished " + midiPath.split('/')[-1]
+
+            with Runner.counter_lock:
+                Runner.done_counter += 1
+
+            print str(Runner.done_counter) + ". Finished " + midiPath.split('/')[-1]
 
             self.q.task_done()
 
