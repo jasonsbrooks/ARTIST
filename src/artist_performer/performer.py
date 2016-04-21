@@ -10,16 +10,6 @@ from sensor_msgs.msg import (
 import baxter_artist.msg
 from . import BaxterController, KEYS_FILENAME, IMAGE_PATH
 
-notes = {"B5":"63",
-        "C6":"64",
-        "D6":"66",
-        "E6":"68",
-        "F6":"69",
-        "G6":"71",
-        "A6":"73",
-        "B6":"75",
-        "C7":"76"}
-
 class NoteSubscriber(threading.Thread):
     def __init__(self,q):
         threading.Thread.__init__(self)
@@ -54,8 +44,8 @@ class Performer(BaxterController):
 
         arm_obj = (self.left_arm if arm == "left" else self.right_arm)
 
-        wait_for(lambda: self.checkJointPositions(down_pos, arm), rate=4, timeout=2.0, body=arm_obj.set_joint_positions(down_pos))
-        wait_for(lambda: self.checkJointPositions(current_pos, arm), rate=4, timeout=2.0, body=arm_obj.set_joint_positions(current_pos))
+        wait_for(lambda: self.checkJointPositions(down_pos, arm), rate=4, timeout=2.0, raise_on_error=False, body=arm_obj.set_joint_positions(down_pos))
+        wait_for(lambda: self.checkJointPositions(current_pos, arm), rate=4, timeout=2.0, raise_on_error=False, body=arm_obj.set_joint_positions(current_pos))
 
 
     def get_joint_angles(self):
