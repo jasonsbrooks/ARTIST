@@ -98,13 +98,17 @@ class NgramGenerator():
             self.rn = rn
             pitch = self.choose_note(rn,self.last_two)
 
+            # update last_two
             self.last_two.append(pitch.midi)
             self.last_two.popleft()
 
             self.durk += 4
 
-            print self.rn, pitch
-            return self.calc_note_val(pitch.pitchClass)
+            # calculate 1->7 value
+            val = self.calc_note_val(pitch.pitchClass)
+            print self.key, self.rn.figure, pitch, val
+
+            return val
         else:
             raise StopIteration()
 
