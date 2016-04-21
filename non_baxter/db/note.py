@@ -28,7 +28,7 @@ class Note(Base):
 
     id = Column(Integer, primary_key=True)
     pitch = Column(Integer, nullable=False)
-    iso_pitch = Column(String, nullable=True)
+    iso_pitch = Column(String(length=8), nullable=True)
     dur = Column(Integer, nullable=False)
     start = Column(Integer, nullable=False)
     end = Column(Integer, nullable=False)
@@ -38,7 +38,7 @@ class Note(Base):
     track_id = Column(Integer, ForeignKey('track.id'))
     track = relationship("Track", back_populates="notes")
     root = Column(Integer, nullable=True)
-    iso_root = Column(String, nullable=True)
+    iso_root = Column(String(length=8), nullable=True)
 
     def __repr__(self):
         return "note(pitch=%r, iso_pitch=%r, dur=%r, start=%r, tick_dur=%r, start_tick=%r, measure=%r, root=%r, iso_root=%r)" % \
