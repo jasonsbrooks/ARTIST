@@ -1,5 +1,5 @@
 import sys
-from train import InvalidKeySignature
+from db import InvalidKeySignature
 
 # transposes pitch to be same pitch within range [lo,hi] inclusive
 # if multiple pitch matches exist within range, matches to 'closest' pitch

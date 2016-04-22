@@ -24,14 +24,10 @@ from collections import deque
 
 from sqlalchemy import desc, asc
 
-from db import Song, Track, Note, get_sessions
+from db import Song, Track, Note, get_sessions, InvalidKeySignature
 from ngram_helper import key_transpose_pitch
 
 NUM_NOTES = 128
-
-class InvalidKeySignature(Exception):
-    def __init__(self):
-        Exception.__init__(self)
 
 class RomanTrainer(object):
     def __init__(self,name,counts,options):
