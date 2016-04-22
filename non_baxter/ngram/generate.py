@@ -12,7 +12,6 @@ from ngram_helper import pitch_to_str
 from audiolazy import midi2str
 from optparse import OptionParser
 
-TWELVE_BAR_BLUES = [1,1,1,1,4,4,1,1,5,4,1,1]
 DURKS_PER_MEASURE = 32
 
 class NgramGenerator():
@@ -125,8 +124,8 @@ def _generate(o_key,o_model_dir,cp):
 
     return [(note,8) for note in generator]
 
-def generate():
-    return _generate("C","data/model/",TWELVE_BAR_BLUES)
+def generate(model_dir,chord_progression):
+    return _generate("C",model_dir,chord_progression)
 
 if __name__ == '__main__':
     parser = OptionParser()
@@ -136,4 +135,5 @@ if __name__ == '__main__':
 
     (options, args) = parser.parse_args()
 
+    TWELVE_BAR_BLUES = [1,1,1,1,4,4,1,1,5,4,1,1]
     print map(pitch_to_str,_generate(options.key,options.model_dir,TWELVE_BAR_BLUES))
