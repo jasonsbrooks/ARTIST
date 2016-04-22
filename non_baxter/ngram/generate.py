@@ -11,6 +11,7 @@ import sys,random,pdb,os,music21
 from ngram_helper import pitch_to_str
 from audiolazy import midi2str
 from optparse import OptionParser
+import ga
 
 DURKS_PER_MEASURE = 32
 
@@ -136,4 +137,10 @@ if __name__ == '__main__':
     (options, args) = parser.parse_args()
 
     TWELVE_BAR_BLUES = [1,1,1,1,4,4,1,1,5,4,1,1]
+
+    ngram_output = generate(options.model_dir,TWELVE_BAR_BLUES)
+    ga.create_midi_file((0,ngram_output), ga.create_chord_progression())
+    print ngram_output
+
+
     print map(pitch_to_str,_generate(options.key,options.model_dir,TWELVE_BAR_BLUES))
