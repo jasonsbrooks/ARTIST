@@ -2,7 +2,7 @@ from multiprocessing import Value,Lock
 
 class Counter(object):
     def __init__(self, initval=0):
-        self.val = Value(int, initval)
+        self.val = Value('i', initval)
 
     def incrementAndGet(self):
         with self.val.get_lock():
