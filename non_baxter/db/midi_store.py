@@ -10,15 +10,15 @@ if no folder specified, midi_store.py will store all midi files in current direc
 
 import os,fnmatch
 from helpers import Runner
-from Queue import Queue
 from optparse import OptionParser
+from multiprocessing import Queue
 import reset
 
 def main():
     parser = OptionParser()
 
     parser.add_option("-d", "--data-directory", dest="data_directory", default="data/")
-    parser.add_option("-t", "--pool-size", dest="thread_pool_size", default=8, type="int")
+    parser.add_option("-t", "--pool-size", dest="pool_size", default=8, type="int")
     parser.add_option("-u", "--username", dest="db_username", default="postgres")
     parser.add_option("-p", "--password", dest="db_password", default="postgres")
 
@@ -30,14 +30,15 @@ def main():
             midiPath = os.path.abspath(os.path.join(root, filename))
             q.put(midiPath)
 
-    engines = reset.get_engines(options.thread_pool_size,options.db_username,options.db_password)
+    engines = reset.get_engines(options.pool_size,options.db_username,options.db_password)
+    processes = []
+    for i in xrange(options.pool_size):
+        p = Runner(q,engines[i])
+        p.start()
+        processes.append(p)
 
-    for i in xrange(options.thread_pool_size):
-        thrd = Runner(q,engines[i])
-        thrd.daemon = True
-        thrd.start()
-
-    q.join()
+    for p in processes:
+        p.join()
 
 if __name__ == "__main__":
     main()
