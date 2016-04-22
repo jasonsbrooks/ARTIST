@@ -12,7 +12,7 @@ import os,fnmatch
 from helpers import Runner
 from optparse import OptionParser
 from multiprocessing import Queue
-import reset
+from . import get_engines
 
 def main():
     parser = OptionParser()
@@ -30,7 +30,7 @@ def main():
             midiPath = os.path.abspath(os.path.join(root, filename))
             q.put(midiPath)
 
-    engines = reset.get_engines(options.pool_size,options.db_username,options.db_password)
+    engines = get_engines(options.pool_size,options.db_username,options.db_password)
     processes = []
     for i in xrange(options.pool_size):
         p = Runner(q,engines[i])

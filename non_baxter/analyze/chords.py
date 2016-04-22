@@ -1,11 +1,12 @@
-from db import Session,Song,Track,Note
+from db import get_engines,get_sessions,Song,Track,Note
 from iter import TimeIterator
+from sqlalchemy.orm import sessionmaker
 
 from preference_rules import *
 
-import music21,threading
-from Queue import Queue
+import music21
 from optparse import OptionParser
+from multiprocessing import Process,Queue
 
 class ChordSpan(object):
     def __init__(self,initial_ts,prev_cs):
@@ -99,11 +100,12 @@ class ChordSpan(object):
         prev_cs_score = (self.prev_cs.score if self.prev_cs else 0)
         return prev_cs_score + best_weight
 
-class HarmonicAnalyzer(threading.Thread):
-    def __init__(self,q,durk_step):
-        threading.Thread.__init__(self)
+class HarmonicAnalyzer(Process):
+    def __init__(self,q,durk_step,engine):
+        Process.__init__(self)
         self.q = q
         self.durk_step = durk_step
+        Session = sessionmaker(bind=engine)
         self.session = Session()
 
     def run(self):
@@ -160,25 +162,28 @@ def main():
     parser = OptionParser()
 
     parser.add_option("-d", "--durk-step", dest="durk_step", default=4, type="int")
-    parser.add_option("-t", "--pool-size", dest="thread_pool_size", default=8, type="int")
-
+    parser.add_option("-t", "--pool-size", dest="pool_size", default=8, type="int")
+    parser.add_option("-u", "--username", dest="db_username", default="postgres")
+    parser.add_option("-p", "--password", dest="db_password", default="postgres")
     (options, args) = parser.parse_args()
 
-    print "thread_pool_size", options.thread_pool_size
+    print "pool_size", options.pool_size
     print "durk_step", options.durk_step
 
-    session = Session()
     q = Queue()
+    for session in get_sessions(options.pool_size,options.db_username,options.db_password):
+        for song in session.query(Song).all():
+            q.put(song.id)
 
-    for song in session.query(Song).all():
-        q.put(song.id)
+    engines = get_engines(options.pool_size)
+    processes = []
+    for i in xrange(options.pool_size):
+        p = HarmonicAnalyzer(q,options.durk_step,engines[i])
+        processes.append(p)
+        p.start()
 
-    for i in xrange(options.thread_pool_size):
-        thrd = HarmonicAnalyzer(q,options.durk_step)
-        thrd.daemon = True
-        thrd.start()
-
-    q.join()
+    for p in processes:
+        p.join()
 
 if __name__ == '__main__':
     main()
