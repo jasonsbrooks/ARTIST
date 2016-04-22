@@ -39,7 +39,7 @@ if __name__ == '__main__':
     parser.add_option("-u", "--username", dest="db_username", default="postgres")
     parser.add_option("-p", "--password", dest="db_password", default="postgres")
     parser.add_option("-b", "--db", dest="which_db", default=0)
-    parser.add_option("-s", "--song", dest="which_song", default=0)
+    parser.add_option("-s", "--song", dest="which_song", default=1)
     (options, args) = parser.parse_args()
 
     sessions = get_sessions(options.pool_size,options.db_username,options.db_password)
