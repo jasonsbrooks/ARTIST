@@ -31,8 +31,8 @@ class Performer(BaxterController):
         BaxterController.__init__(self)
         self.set_neutral()
         self.q = Queue()
-        self.prev_left_note = 63
-        self.prev_right_note = -1
+        self.prev_left_note = 52
+        self.prev_right_note = 61
 
         with open(KEYS_FILENAME) as f:
             self.keys = json.load(f)
@@ -82,16 +82,16 @@ class Performer(BaxterController):
         self.send_note(int(note))
         if int(note) in [74, 72, 70, 67, 65, 62, 60, 58] and self.prev_right_note not in [74, 72, 70, 67, 65, 62, 60, 58]:
             self.avoid_black_key("right", self.right_arm.joint_angles())
-            time.sleep(0.5)
+            time.sleep(0.25)
 
         self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True)
         if abs(int(note) - int(self.prev_right_note)) > 5:
             rospy.loginfo("Making two motions since notes are too far apart")
-            time.sleep(0.5)
+            time.sleep(0.25)
             self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True)
         # time.sleep(1)
         # self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True)
-        time.sleep(1.5)
+        time.sleep(0.5)
         self.flick("right", self.keys["right"][str(note)])
         self.prev_right_note = int(note)
         # time.sleep(2)
@@ -108,10 +108,10 @@ class Performer(BaxterController):
         self.left_arm.set_joint_positions(self.keys["left"][str(note)], raw=True)
         if abs(int(note) - int(self.prev_left_note)) > 5:
             rospy.loginfo("Making two motions since notes are too far apart")
-            time.sleep(0.5)
+            time.sleep(0.25)
             self.left_arm.set_joint_positions(self.keys["left"][str(note)], raw=True)
 
-        time.sleep(1.5)
+        time.sleep(0.5)
         self.flick("left", self.keys["left"][str(note)])
         self.prev_left_note = int(note)
         # wait_for(lambda: self.checkJointPositions(self.keys["left"][str(note)], "left"), rate=4, raise_on_error=False, timeout=2.0, body=self.left_arm.set_joint_positions(self.keys["left"][str(note)], raw=True))
@@ -127,7 +127,7 @@ class Performer(BaxterController):
         #     return
 
         # # sleep until we can play it
-        # rospy.sleep(sleep_time)
+        rospy.sleep(sleep_time)
 
         # rospy.loginfo("playing: " + str(note.pitch))
         if note.pitch in self.right_notes:
