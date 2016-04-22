@@ -84,7 +84,6 @@ class Performer(BaxterController):
             self.avoid_black_key("right", self.right_arm.joint_angles())
             time.sleep(0.5)
 
-
         self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True)
         if abs(int(note) - int(self.prev_right_note)) > 5:
             rospy.loginfo("Making two motions since notes are too far apart")
@@ -101,8 +100,22 @@ class Performer(BaxterController):
 
     def play_left_note_now(self, note):
         self.send_note(int(note))
-        wait_for(lambda: self.checkJointPositions(self.keys["left"][str(note)], "left"), rate=4, raise_on_error=False, timeout=2.0, body=self.left_arm.set_joint_positions(self.keys["left"][str(note)], raw=True))
-        wait_for(lambda: self.checkJointPositions(self.keys["left"][str(note)], "left"), rate=4, raise_on_error=False, timeout=2.0, body=self.flick("left", self.keys["left"][str(note)]))
+
+        if int(note) in [48, 50, 53, 55, 58, 60, 62] and self.prev_left_note not in [48, 50, 53, 55, 58, 60, 62]:
+            self.avoid_black_key("left", self.left_arm.joint_angles())
+            time.sleep(0.5)
+
+        self.left_arm.set_joint_positions(self.keys["left"][str(note)], raw=True)
+        if abs(int(note) - int(self.prev_left_note)) > 5:
+            rospy.loginfo("Making two motions since notes are too far apart")
+            time.sleep(0.5)
+            self.left_arm.set_joint_positions(self.keys["left"][str(note)], raw=True)
+
+        time.sleep(1.5)
+        self.flick("left", self.keys["left"][str(note)])
+        self.prev_left_note = int(note)
+        # wait_for(lambda: self.checkJointPositions(self.keys["left"][str(note)], "left"), rate=4, raise_on_error=False, timeout=2.0, body=self.left_arm.set_joint_positions(self.keys["left"][str(note)], raw=True))
+        # wait_for(lambda: self.checkJointPositions(self.keys["left"][str(note)], "left"), rate=4, raise_on_error=False, timeout=2.0, body=self.flick("left", self.keys["left"][str(note)]))
 
 
     def play_note(self,note):

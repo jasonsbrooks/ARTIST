@@ -39,7 +39,16 @@ def main():
     # rospy.signal_shutdown("Finished perform control")
     # print("Done with the performance. A+")
 
-    notes = {"B5":63,
+    notes = {"G4": 47,
+        "A4": 49,
+        "B4": 51,
+        "C5": 52,
+        "D5": 54,
+        "E5": 56,
+        "F5": 57,
+        "G5": 59,
+        "A5": 61,
+        "B5":63,
         "C6":64,
         "D6":66,
         "E6":68,
@@ -48,7 +57,6 @@ def main():
         "A6":73,
         "B6":75,
         "C7":76}
-    # pdb.set_trace()
 
     noteNameArray = ["C6", "C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "A6", "G6", "F6", "E6", "D6", "G6", "F6", "E6", "D6", "C6", "B5", "C6", "D6", "B5", "D6"]
     # noteNameArray = ["C6", "C6", "D6", "E6", "F6", "G6", "A6", "B6", "C7", "B6", "A6", "G6", "F6", "E6", "D6", "C6"]
@@ -56,8 +64,10 @@ def main():
     # noteNameArray = ["B5", "C7", "B5", "C7", "B5", "C7", "B5", "C7", "B5", "C7"]
     # noteNameArray = ["C7", "B5", "C7","B5", "C7","B5", "C7","B5", "C7"]
     # noteNameArray = ["C7", "E6"]
+    noteNameArray = ["C5", "C5", "D5", "E5", "C6", "D6", "E6"]
     noteValArray = [notes[x] for x in noteNameArray]
 
+    pdb.set_trace()
     publisher = NotePublisher()
     for note in noteValArray:
         publisher.pub_note(note)
