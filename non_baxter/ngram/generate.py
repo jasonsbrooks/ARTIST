@@ -57,18 +57,19 @@ class NgramGenerator():
 
     def choose_note(self,rn,last_two,depth=0):
         # failed too many times. just play the root of the scale
-        if depth >= sys.getrecursionlimit() * 0.75:
-            return self.key.getScale().chord.root()
+        # if depth >= sys.getrecursionlimit() * 0.75:
+        #     return self.key.getScale().chord.root()
 
         # try generating a pitch.
         gen = self._choose_note_once(rn,last_two)
-        for pitch in rn.pitches:
-            # ensure the pitch is in the rn
-            if gen.pitchClass == pitch.pitchClass:
-                return gen
-
-        # failed. try again to generate
-        return self.choose_note(rn,last_two,depth+1)
+        return gen
+        # for pitch in rn.pitches:
+        #     # ensure the pitch is in the rn
+        #     if gen.pitchClass == pitch.pitchClass:
+        #         return gen
+        #
+        # # failed. try again to generate
+        # return self.choose_note(rn,last_two,depth+1)
 
     # convert note to 1->7 for GA
     def calc_note_val(self,pitch_class):
