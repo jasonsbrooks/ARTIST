@@ -19,7 +19,7 @@ class NotePublisher(object):
                 
         # construct the note message
         msg = baxter_artist.msg.Note()
-        msg.starttime = rospy.Time.now() + rospy.Duration.from_sec(1)
+        msg.starttime = rospy.Time.now() + rospy.Duration.from_sec(2.5)
         msg.pitch = note 
 
         rospy.loginfo("publish - pitch: " + str(msg.pitch))
@@ -53,10 +53,14 @@ def main():
         "D6":66,
         "E6":68,
         "F6":69,
+        "F#6":70,
         "G6":71,
+        "G#6":72,
         "A6":73,
+        "A#6":74,
         "B6":75,
-        "C7":76}
+        "C7":76,
+        "R": -1}
 
     noteNameArray = ["C6", "C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "A6", "G6", "F6", "E6", "D6", "G6", "F6", "E6", "D6", "C6", "B5", "C6", "D6", "B5", "D6"]
     # noteNameArray = ["C6", "C6", "D6", "E6", "F6", "G6", "A6", "B6", "C7", "B6", "A6", "G6", "F6", "E6", "D6", "C6"]
@@ -64,10 +68,13 @@ def main():
     # noteNameArray = ["B5", "C7", "B5", "C7", "B5", "C7", "B5", "C7", "B5", "C7"]
     # noteNameArray = ["C7", "B5", "C7","B5", "C7","B5", "C7","B5", "C7"]
     # noteNameArray = ["C7", "E6"]
-    noteNameArray = ["C5", "C5", "D5", "E5", "C6", "D6", "E6"]
+    # noteNameArray = ["C5", "C5", "D5", "E5", "C6", "D6", "E6", "C6", "F6", "G6", "E6"]
+    noteNameArray = ["C5", "C5", "D5", "E5", "F5", "G5", "A5", "B5", "C6", "D6", "E6", "F6", "G6", "A6", "B6", "C7"]
+    # noteNameArray = ["C6", "C6", "E6", "F6", "F#6", "G6", "A6", "B6", "G6", "C7", "A#6", "A6", "G#6", "G6", "F6", "E6", "D6", "C6", "E6", "F6", "F#6", "G6", "A6", "B6", "G6", "C7", "A#6", "A6", "G#6", "G6", "F6", "E6", "D6", "C6", "E6", "F6", "F#6", "G6", "A6", "B6", "G6", "C7", "A#6", "A6", "G#6", "G6", "F6", "E6", "D6", "C6", "E6", "F6", "F#6", "G6", "A6", "B6", "G6", "C7", "A#6", "A6", "G#6", "G6", "F6", "E6", "D6", "C6", "E6", "F6", "F#6", "G6", "A6", "B6", "G6", "C7", "A#6", "A6", "G#6", "G6", "F6", "E6", "D6", "C6", "E6", "F6", "F#6", "G6", "A6", "B6", "G6", "C7", "A#6", "A6", "G#6", "G6", "F6", "E6", "D6", "C6", "E6", "F6", "F#6", "G6", "A6", "B6", "G6", "C7", "A#6", "A6", "G#6", "G6", "F6", "E6", "D6", "C6", "E6", "F6", "F#6", "G6", "A6", "B6", "G6", "C7", "A#6", "A6", "G#6", "G6", "F6", "E6", "D6"] 
+    noteNameArray = ["C5", "C5", "B5", "C5", "R", "E6", "A5", "G5", "R", "E5", "B4", "C6", "R", "F5", "G5", "R", "C5", "R", "C6", "B4", "C5", "R", "F5", "B5", "C6", "R", "A4", "E5", "G4", "G5", "R", "E5", "R", "R", "F5", "R", "D5", "A4", "R", "C6", "R", "E5", "B4", "C6", "R", "F5", "G5", "R", "C5", "R", "C6", "B4", "C5", "R", "A5", "G5", "R", "E5", "B4", "C6", "R", "F5", "G5", "R", "C5", "R", "C6", "B4", "C5", "R", "F5", "B5", "C6", "R", "A4", "E5", "F5", "R", "E5", "B5", "C5", "R", "E6", "A5", "G5", "R", "B4", "C6", "R", "F5", "G5", "R", "C5", "R", "C6", "B4", "C5"]
     noteValArray = [notes[x] for x in noteNameArray]
 
-    pdb.set_trace()
+    # pdb.set_trace()
     publisher = NotePublisher()
     for note in noteValArray:
         publisher.pub_note(note)
