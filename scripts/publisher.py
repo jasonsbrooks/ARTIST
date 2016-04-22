@@ -64,6 +64,7 @@ def main():
     # noteNameArray = ["B5", "C7", "B5", "C7", "B5", "C7", "B5", "C7", "B5", "C7"]
     # noteNameArray = ["C7", "B5", "C7","B5", "C7","B5", "C7","B5", "C7"]
     # noteNameArray = ["C7", "E6"]
+    noteNameArray = ["C5", "C5", "D5", "E5", "C6", "D6", "E6"]
     noteValArray = [notes[x] for x in noteNameArray]
 
     pdb.set_trace()
