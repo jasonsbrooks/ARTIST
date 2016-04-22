@@ -155,7 +155,7 @@ def main():
 
     for p_id in xrange(options.pool_size):
         for rt_id in xrange(7):
-            with open(os.path.join(options.outdir,str(p_id),str(rt_id + 1) + ".npy")) as f:
+            with open(os.path.join(options.outdir + "/",str(p_id) + "/",str(rt_id + 1) + ".npy")) as f:
                 counts = np.load(f)
                 cumulative_counts[rt_id] = np.add(cumulative_counts[rt_id],counts)
 
