@@ -46,10 +46,10 @@ def pitch_to_str(pitch):
 def key_transpose_pitch(pitch, from_ks, to_ks):
 
     if from_ks[0] > 7:
-        from_ks[0] = from_ks[0] - 256
+        from_ks = (from_ks[0] - 256,from_ks[1])
 
     if to_ks[0] > 7:
-        to_ks[0] = to_ks[0] - 256
+        to_ks = (to_ks[0] - 256,to_ks[1])
 
     octave = 12
 
