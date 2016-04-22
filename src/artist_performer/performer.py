@@ -1,4 +1,4 @@
-import copy, os, rospy, cv2, cv_bridge, json, time, threading
+import copy, os, rospy, cv2, cv_bridge, json, time, threading, signal, sys
 from Queue import Queue
 
 from baxter_dataflow import wait_for
@@ -39,6 +39,12 @@ class Performer(BaxterController):
 
         self.right_notes = [int(x) for x in self.keys['right'].keys()]
         self.left_notes = [int(x) for x in self.keys['left'].keys()]
+
+        signal.signal(signal.SIGINT, self.signal_handler)
+
+    def signal_handler(signum, frame):
+        rospy.loginfo('Signal handler called with signal ' + str(signum))
+        sys.exit(0)
 
     def flick(self,arm,current_pos):
         down_pos = copy.deepcopy(current_pos)

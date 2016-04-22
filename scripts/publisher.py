@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import json, copy, rospy, pdb
+import json, copy, rospy, pdb, sys, signal
 
 from artist_performer import Performer
 import baxter_artist.msg
@@ -63,6 +63,10 @@ def main():
         publisher.pub_note(note)
         rospy.sleep(2)
 
+def signal_handler(signum, frame):
+    rospy.loginfo('Signal handler called with signal ' + str(signum))
+    sys.exit(0)
 
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT, signal_handler)
     main()
