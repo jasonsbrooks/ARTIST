@@ -1,8 +1,11 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
-engine = create_engine("postgresql://charlierproctor@localhost:5432/artist", pool_size=20, max_overflow=100)
-Session = sessionmaker(bind=engine)
+def get_engines(num,usr="postgres",pwd="postgres"):
+    engines = []
+    for i in xrange(num):
+        engines.append(create_engine("postgresql://" + usr + ":" + pwd
+                               + "@localhost:5432/artist_" + str(i), pool_size=20, max_overflow=100))
+    return engines
 
 from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
