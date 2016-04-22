@@ -46,8 +46,7 @@ class RomanTrainer(object):
         notes = list(self.triple)
         for note in notes:
             src_key = (note.track.key_sig_top,note.track.key_sig_bottom)
-            # TODO: actually transpose the pitch
-            #res.append(key_transpose_pitch(note.pitch,src_key,self.dest_key))
+            res.append(key_transpose_pitch(note.pitch,src_key,self.dest_key))
             res.append(note.pitch)
 	return res
 

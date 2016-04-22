@@ -44,6 +44,11 @@ def pitch_to_str(pitch):
 # Note: could convert in either positive or negative direction right now!
 #   so diff range in pitch is [-11, 11]
 def key_transpose_pitch(pitch, from_ks, to_ks):
+    if from_ks > 7:
+        from_ks = from_ks - 256
+    if to_ks > 7:
+        to_ks = to_ks - 256
+
     octave = 12
 
     sf_to_root_major = {7: 1,  # Db
