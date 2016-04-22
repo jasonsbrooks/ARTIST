@@ -122,7 +122,7 @@ def _generate(o_key,o_model_dir,cp):
     cp = construct_roman_numerals(key,cp)
     generator = NgramGenerator(key,cp,o_model_dir)
 
-    return [(note,8) for note in generator]
+    return [(note,4) for note in generator]
 
 def generate(model_dir,chord_progression):
     return _generate("C",model_dir,chord_progression)

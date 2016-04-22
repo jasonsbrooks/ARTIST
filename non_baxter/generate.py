@@ -18,6 +18,9 @@ def main():
 
     if not (options.__dict__["ga"] is None):
         ga.run(ngram_output=ngram_output,num_iter=options.ga)
+    else:
+        # just output the ngram midi
+        ga.create_midi_file(ngram_output, TWELVE_BAR_BLUES)
 
 if __name__ == '__main__':
     main()
