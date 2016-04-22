@@ -1,11 +1,13 @@
-from db import Session,Song,Track,Note
+from db import get_engines,get_sessions,Song,Track,Note
 from iter import TimeIterator
+from utils import Counter
+from sqlalchemy.orm import sessionmaker
 
 from preference_rules import *
 
-import music21,threading
-from Queue import Queue
+import music21
 from optparse import OptionParser
+from multiprocessing import Process,Queue
 
 class ChordSpan(object):
     def __init__(self,initial_ts,prev_cs):
@@ -99,31 +101,29 @@ class ChordSpan(object):
         prev_cs_score = (self.prev_cs.score if self.prev_cs else 0)
         return prev_cs_score + best_weight
 
-class HarmonicAnalyzer(threading.Thread):
-    def __init__(self,q,durk_step):
-        threading.Thread.__init__(self)
-        self.q = q
+class HarmonicAnalyzer(Process):
+    def __init__(self,durk_step,engine,counter):
+        Process.__init__(self)
         self.durk_step = durk_step
+        Session = sessionmaker(bind=engine)
         self.session = Session()
+        self.counter = counter
 
     def run(self):
-        while True:
-            song_id = self.q.get()
+        for song in self.session.query(Song).all():
 
-            # grab and analyze the song
-            song = self.session.query(Song).get(song_id)
+            count = self.counter.incrementAndGet()
+            print count, ". ", song
+
             self.analyze(song)
 
-            # this task is complete
-            self.q.task_done()
 
     def analyze(self,song):
         cs,idx = None,0
-        print "#"*80, "\n", song ,"\n", "#"*80, "\n"
 
         for ts in TimeIterator(song,self.durk_step):
             cs = self.consider_ts(cs,ts)
-            print idx, ts, "--", cs.score, ":", cs
+            # print idx, ts, "--", cs.score, ":", cs
             idx += 1
 
         cs.label()
@@ -160,25 +160,28 @@ def main():
     parser = OptionParser()
 
     parser.add_option("-d", "--durk-step", dest="durk_step", default=4, type="int")
-    parser.add_option("-t", "--pool-size", dest="thread_pool_size", default=8, type="int")
-
+    parser.add_option("-t", "--pool-size", dest="pool_size", default=8, type="int")
+    parser.add_option("-u", "--username", dest="db_username", default="postgres")
+    parser.add_option("-p", "--password", dest="db_password", default="postgres")
     (options, args) = parser.parse_args()
 
-    print "thread_pool_size", options.thread_pool_size
-    print "durk_step", options.durk_step
 
-    session = Session()
-    q = Queue()
+    print "Creating", options.pool_size, "processes."
+    processes = []
+    counter = Counter(0)
 
-    for song in session.query(Song).all():
-        q.put(song.id)
+    engines = get_engines(options.pool_size,options.db_username,options.db_password)
 
-    for i in xrange(options.thread_pool_size):
-        thrd = HarmonicAnalyzer(q,options.durk_step)
-        thrd.daemon = True
-        thrd.start()
+    for i in xrange(options.pool_size):
+        p = HarmonicAnalyzer(options.durk_step,engines[i],counter)
+        processes.append(p)
 
-    q.join()
+    print "Starting", options.pool_size, "processes."
+    for p in processes:
+        p.start()
+
+    for p in processes:
+        p.join()
 
 if __name__ == '__main__':
     main()

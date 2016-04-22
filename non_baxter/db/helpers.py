@@ -23,19 +23,19 @@ import midi, sys, pdb, os, re,threading
 
 from collections import defaultdict
 from audiolazy import midi2str
+from sqlalchemy.orm import sessionmaker
+from multiprocessing import Process
 
-from . import Base,Session,Song,Track,Note
+from . import Song,Track,Note
 
 DURKS_PER_QUARTER_NOTE = 8
 
-class Runner(threading.Thread):
+class Runner(Process):
 
-    done_counter = 0
-    counter_lock = threading.Lock()
-
-    def __init__(self,q):
-        threading.Thread.__init__(self)
+    def __init__(self,q,engine):
+        Process.__init__(self)
         self.q = q
+        Session = sessionmaker(bind=engine)
         self.session = Session()
 
     def run(self):
@@ -44,13 +44,7 @@ class Runner(threading.Thread):
 
             print "Analyzing " + midiPath.split('/')[-1]
             self.midi_to_song(midiPath)
-
-            with Runner.counter_lock:
-                Runner.done_counter += 1
-
-            print str(Runner.done_counter) + ". Finished " + midiPath.split('/')[-1]
-
-            self.q.task_done()
+            print "Finished " + midiPath.split('/')[-1]
 
     # takes midi file and returns a representative song object
     # a Song is a list of many Tracks

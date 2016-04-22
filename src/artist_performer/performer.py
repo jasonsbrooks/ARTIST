@@ -1,4 +1,4 @@
-import copy, os, rospy, cv2, cv_bridge, json, time, threading
+import copy, os, rospy, cv2, cv_bridge, json, time, threading, signal, sys
 from Queue import Queue
 
 from baxter_dataflow import wait_for

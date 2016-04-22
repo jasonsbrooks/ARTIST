@@ -1,4 +1,5 @@
-from db import Session,Song,Track,Note
+from db import get_sessions,Song,Track,Note
+from optparse import OptionParser
 
 from song_iterator import SongIterator
 from chord_iterator import ChordIterator
@@ -67,9 +68,18 @@ class TimeIterator(object):
             return self.current_ts
 
 if __name__ == '__main__':
-    session = Session()
+    parser = OptionParser()
 
-    song = session.query(Song).first()
-    durk_step = 4
-    for ts in TimeIterator(song,durk_step):
+    parser.add_option("-d", "--durk-step", dest="durk_step", default=4, type="int")
+    parser.add_option("-t", "--pool-size", dest="pool_size", default=8, type="int")
+    parser.add_option("-u", "--username", dest="db_username", default="postgres")
+    parser.add_option("-p", "--password", dest="db_password", default="postgres")
+    parser.add_option("-b", "--db", dest="which_db", default=0)
+    parser.add_option("-s", "--song", dest="which_song", default=1)
+    (options, args) = parser.parse_args()
+
+    sessions = get_sessions(options.pool_size,options.db_username,options.db_password)
+
+    song = sessions[options.which_db].query(Song).get(options.which_song)
+    for ts in TimeIterator(song,options.durk_step):
         print ts
