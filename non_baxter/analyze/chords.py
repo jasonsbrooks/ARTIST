@@ -117,13 +117,14 @@ class HarmonicAnalyzer(Process):
             # grab and analyze the song
             song = self.session.query(Song).get(song_id)
 
+            count = self.counter.incrementAndGet()
+            print count, ". ", song
+
             if not song:
                 continue
 
             self.analyze(song)
 
-            count = self.counter.incrementAndGet()
-            print count, ". ", song
 
     def analyze(self,song):
         cs,idx = None,0
