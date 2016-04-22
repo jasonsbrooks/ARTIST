@@ -133,9 +133,8 @@ def main():
 
     # sum counts from different processes
     for p in processes:
-        for rt in p.rts:
-            for i in xrange(7):
-                cumulative_counts[i] = np.add(cumulative_counts[i],rt.counts[i])
+        for i in xrange(7):
+            cumulative_counts[i] = np.add(cumulative_counts[i],p.rts[i].counts)
 
     # write the results
     for i in xrange(7):
