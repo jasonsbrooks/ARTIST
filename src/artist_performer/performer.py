@@ -84,7 +84,6 @@ class Performer(BaxterController):
             self.avoid_black_key("right", self.right_arm.joint_angles())
             time.sleep(0.5)
 
-
         self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True)
         if abs(int(note) - int(self.prev_right_note)) > 5:
             rospy.loginfo("Making two motions since notes are too far apart")
