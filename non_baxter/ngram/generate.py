@@ -118,13 +118,15 @@ def construct_roman_numerals(key,int_seq):
         rns.append(music21.roman.RomanNumeral(i,key))
     return rns
 
-def generate(options,cp):
-    key = music21.key.Key(options.key)
+def _generate(o_key,o_model_dir,cp):
+    key = music21.key.Key(o_key)
     cp = construct_roman_numerals(key,cp)
-    generator = NgramGenerator(key,cp,options.model_dir)
+    generator = NgramGenerator(key,cp,o_model_dir)
 
-    return [note for note in generator]
+    return [(note,8) for note in generator]
 
+def generate():
+    return _generate("C","data/model/",TWELVE_BAR_BLUES)
 
 # if __name__ == '__main__':
 parser = OptionParser()
@@ -134,4 +136,4 @@ parser.add_option("-k", "--key", dest="key", default="C")
 
 (options, args) = parser.parse_args()
 
-print map(pitch_to_str,generate(options,TWELVE_BAR_BLUES))
+print map(pitch_to_str,_generate(options.key,options.model_dir,TWELVE_BAR_BLUES))
