@@ -102,27 +102,18 @@ class ChordSpan(object):
         return prev_cs_score + best_weight
 
 class HarmonicAnalyzer(Process):
-    def __init__(self,q,durk_step,engine,counter):
+    def __init__(self,durk_step,engine,counter):
         Process.__init__(self)
-        self.q = q
         self.durk_step = durk_step
         Session = sessionmaker(bind=engine)
         self.session = Session()
         self.counter = counter
 
     def run(self):
-        while True:
-            song_id = self.q.get()
-            print song_id
-
-            # grab and analyze the song
-            song = self.session.query(Song).get(song_id)
+        for song in self.session.query(Song).all():
 
             count = self.counter.incrementAndGet()
             print count, ". ", song
-
-            if not song:
-                continue
 
             self.analyze(song)
 
@@ -174,18 +165,15 @@ def main():
     parser.add_option("-p", "--password", dest="db_password", default="postgres")
     (options, args) = parser.parse_args()
 
-    print "Loading songs into Queue."
-    q = Queue()
-    for session in get_sessions(options.pool_size,options.db_username,options.db_password):
-        for song in session.query(Song).all():
-            q.put(song.id)
 
     print "Creating", options.pool_size, "processes."
-    engines = get_engines(options.pool_size)
     processes = []
     counter = Counter(0)
+
+    engines = get_engines(options.pool_size,options.db_username,options.db_password)
+
     for i in xrange(options.pool_size):
-        p = HarmonicAnalyzer(q,options.durk_step,engines[i],counter)
+        p = HarmonicAnalyzer(options.durk_step,engines[i],counter)
         processes.append(p)
 
     print "Starting", options.pool_size, "processes."
@@ -195,5 +183,5 @@ def main():
     for p in processes:
         p.join()
 
-if __name__ == '__main__':
-    main()
+    if __name__ == '__main__':
+        main()
