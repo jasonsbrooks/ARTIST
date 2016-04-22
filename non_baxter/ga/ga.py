@@ -14,7 +14,7 @@ from ga_midi import create_midi_file
 from mutation import mutate
 from fitness import calc_fitness
 from chords import create_chord_progression
-from ngram import generate
+from ..ngram import generate
 
 
 # duration in durk units: 1 === a 32nd note....32  === a whole note
