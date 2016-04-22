@@ -122,7 +122,7 @@ class HarmonicAnalyzer(Process):
 
             self.analyze(song)
 
-            count = self.counter.increment()
+            count = self.counter.incrementAndGet()
             print count, ". ", song
 
     def analyze(self,song):
