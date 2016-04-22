@@ -16,15 +16,15 @@ Complete:
 
 '''
 import numpy as np
-import sys, os, threading, re, music21
+import sys, os, re, music21
 from optparse import OptionParser
+from multiprocessing import Process
 
 from collections import deque
-from Queue import Queue
 
 from sqlalchemy import desc, asc
 
-from db import Session, Song, Track, Note
+from db import Song, Track, Note, get_sessions
 from ngram_helper import key_transpose_pitch
 
 NUM_NOTES = 128
@@ -54,25 +54,25 @@ class RomanTrainer(object):
             self.triple.popleft()
             np.add.at(self.counts, tuple(self.transposed_triple()), 1)
 
-    def write(self):
-        with open(os.path.join(self.options.outdir,str(self.name) + ".npy"), 'w') as outfile:
-            np.save(outfile, self.counts)
+class TrackTrainer(Process):
+    def __init__(self,session,options):
+        Process.__init__(self)
+        self.session = session
 
-class TrackTrainer(threading.Thread):
-    def __init__(self,q,rts):
-        threading.Thread.__init__(self)
-        self.session = Session()
-        self.q = q
-        self.rts = rts
+        self.rts = []
+        matrix_size = (NUM_NOTES, NUM_NOTES, NUM_NOTES)
+
+        # construct the roman trainers
+        for i in xrange(7):
+            rt = RomanTrainer(i + 1,np.zeros(matrix_size, dtype=np.int16),options)
+            self.rts.append(rt)
 
     def run(self):
-        while True:
-            trk_id = self.q.get()
-            self.train(trk_id)
-            self.q.task_done()
+        # iterate through all the tracks
+        for trk in self.session.query(Track).all():
+            self.train(trk)
 
-    def train(self,trk_id):
-        trk = self.session.query(Track).get(trk_id)
+    def train(self,trk):
         print os.path.basename(trk.song.title), ":", trk.instr_name
 
         # skip percurssion tracks
@@ -100,36 +100,42 @@ def main():
     parser = OptionParser()
 
     parser.add_option("-o", "--outdir", dest="outdir")
-    parser.add_option("-t", "--poolsize", dest="thread_pool_size", default=8, type="int")
+    parser.add_option("-t", "--poolsize", dest="pool_size", default=8, type="int")
     parser.add_option("-k", "--key", dest="key", default="C")
+    parser.add_option("-u", "--username", dest="db_username", default="postgres")
+    parser.add_option("-p", "--password", dest="db_password", default="postgres")
 
     (options, args) = parser.parse_args()
 
-    matrix_size = (NUM_NOTES, NUM_NOTES, NUM_NOTES)
-
-    session = Session()
-    q = Queue()
-
-    rts = []
-    # construct the roman trainers
-    for i in xrange(7):
-        rt = RomanTrainer(i + 1,np.zeros(matrix_size, dtype=np.int16),options)
-        rts.append(rt)
-
-    # iterate through all the tracks
-    for trk in session.query(Track).all():
-        q.put(trk.id)
+    sessions = get_sessions(options.pool_size,options.db_username,options.db_password)
+    processes = []
 
     # construct and start the threads
-    for i in xrange(options.thread_pool_size):
-        thrd = TrackTrainer(q,rts)
-        thrd.daemon = True
-        thrd.start()
+    for i in xrange(options.pool_size):
+        p = TrackTrainer(sessions[i],options)
+        processes.append(p)
+        p.start()
 
-    q.join()
+    # wait for processes to complete
+    for p in processes:
+        p.join()
 
-    for rt in rts:
-        rt.write()
+    # construct cumulative counts matrices
+    matrix_size = (NUM_NOTES, NUM_NOTES, NUM_NOTES)
+    cumulative_counts = []
+    for i in xrange(7):
+        cumulative_counts.append(np.zeros(matrix_size, dtype=np.int16))
+
+    # sum counts from different processes
+    for p in processes:
+        for rt in p.rts:
+            for i in xrange(7):
+                cumulative_counts[i] = np.add(cumulative_counts[i],rt.counts[i])
+
+    # write the results
+    for i in xrange(7):
+        with open(os.path.join(options.outdir,str(i) + ".npy"), 'w') as outfile:
+            np.save(outfile, cumulative_counts)
 
 if __name__ == '__main__':
     main()
