@@ -20,7 +20,7 @@ def main():
         ga.run(ngram_output=ngram_output,num_iter=options.ga)
     else:
         # just output the ngram midi
-        ga.create_midi_file(ngram_output, TWELVE_BAR_BLUES)
+        ga.create_midi_file((0,ngram_output), ga.create_chord_progression())
 
 if __name__ == '__main__':
     main()
