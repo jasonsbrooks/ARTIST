@@ -113,6 +113,7 @@ class HarmonicAnalyzer(Process):
     def run(self):
         while True:
             song_id = self.q.get()
+            print song_id
 
             # grab and analyze the song
             song = self.session.query(Song).get(song_id)
