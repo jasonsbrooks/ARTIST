@@ -40,12 +40,6 @@ class Performer(BaxterController):
         self.right_notes = [int(x) for x in self.keys['right'].keys()]
         self.left_notes = [int(x) for x in self.keys['left'].keys()]
 
-        signal.signal(signal.SIGINT, self.signal_handler)
-
-    def signal_handler(signum, frame):
-        rospy.loginfo('Signal handler called with signal ' + str(signum))
-        sys.exit(0)
-
     def flick(self,arm,current_pos):
         down_pos = copy.deepcopy(current_pos)
         down_pos[arm + "_w1"] = current_pos[arm + "_w1"] + 0.8

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import rospy
+import rospy,signal,sys
 from artist_performer import Performer
 
 def main():
@@ -10,5 +10,10 @@ def main():
     performer = Performer()
     performer.subscribe()
 
+def signal_handler(signum, frame):
+    rospy.loginfo('Signal handler called with signal ' + str(signum))
+    sys.exit(0)
+
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT, signal_handler)
     main()
