@@ -128,12 +128,12 @@ def _generate(o_key,o_model_dir,cp):
 def generate():
     return _generate("C","data/model/",TWELVE_BAR_BLUES)
 
-# if __name__ == '__main__':
-parser = OptionParser()
+if __name__ == '__main__':
+    parser = OptionParser()
 
-parser.add_option("-m", "--model-dir", dest="model_dir")
-parser.add_option("-k", "--key", dest="key", default="C")
+    parser.add_option("-m", "--model-dir", dest="model_dir")
+    parser.add_option("-k", "--key", dest="key", default="C")
 
-(options, args) = parser.parse_args()
+    (options, args) = parser.parse_args()
 
-print map(pitch_to_str,_generate(options.key,options.model_dir,TWELVE_BAR_BLUES))
+    print map(pitch_to_str,_generate(options.key,options.model_dir,TWELVE_BAR_BLUES))
