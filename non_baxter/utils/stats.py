@@ -4,7 +4,6 @@ from optparse import OptionParser
 def stat(options):
     song_count,trk_count,note_count = 0,0,0
     for session in get_sessions(options.pool_size,options.db_username,options.db_password):
-        print session
         song_count += session.query(Song).count()
         trk_count += session.query(Track).count()
         note_count += session.query(Note).count()
