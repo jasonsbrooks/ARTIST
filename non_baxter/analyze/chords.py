@@ -1,5 +1,6 @@
 from db import get_engines,get_sessions,Song,Track,Note
 from iter import TimeIterator
+from utils import Counter
 from sqlalchemy.orm import sessionmaker
 
 from preference_rules import *
@@ -101,12 +102,13 @@ class ChordSpan(object):
         return prev_cs_score + best_weight
 
 class HarmonicAnalyzer(Process):
-    def __init__(self,q,durk_step,engine):
+    def __init__(self,q,durk_step,engine,counter):
         Process.__init__(self)
         self.q = q
         self.durk_step = durk_step
         Session = sessionmaker(bind=engine)
         self.session = Session()
+        self.counter = counter
 
     def run(self):
         while True:
@@ -115,6 +117,10 @@ class HarmonicAnalyzer(Process):
             # grab and analyze the song
             song = self.session.query(Song).get(song_id)
             self.analyze(song)
+
+            count = self.counter.increment()
+            if count % 1000 == 0:
+                print count, " | ", song
 
     def analyze(self,song):
         cs,idx = None,0
@@ -171,8 +177,9 @@ def main():
 
     engines = get_engines(options.pool_size)
     processes = []
+    counter = Counter(0)
     for i in xrange(options.pool_size):
-        p = HarmonicAnalyzer(q,options.durk_step,engines[i])
+        p = HarmonicAnalyzer(q,options.durk_step,engines[i],counter)
         processes.append(p)
         p.start()
 
