@@ -116,9 +116,6 @@ class HarmonicAnalyzer(Process):
             song = self.session.query(Song).get(song_id)
             self.analyze(song)
 
-            # this task is complete
-            self.q.task_done()
-
     def analyze(self,song):
         cs,idx = None,0
         print "#"*80, "\n", song ,"\n", "#"*80, "\n"
