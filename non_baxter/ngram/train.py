@@ -139,7 +139,7 @@ def main():
 
     # write the results
     for i in xrange(7):
-        with open(os.path.join(options.outdir,str(i) + ".npy"), 'w') as outfile:
+        with open(os.path.join(options.outdir,str(i+1) + ".npy"), 'w') as outfile:
             np.save(outfile, cumulative_counts)
 
 if __name__ == '__main__':
