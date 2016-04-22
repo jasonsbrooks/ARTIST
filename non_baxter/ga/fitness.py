@@ -73,7 +73,7 @@ def suspensions(genotype, chord_progression, weight=20):
         elif suspension_pitch == -1:
             total += weight * .25  # rest
         elif i < len(chord_progression) - 1:
-            if suspension_pitch in get_chord_notes(chord_root, a_train=True) and suspension_pitch in get_chord_notes(chord_progression[i+1][0], a_train=True):  # note member of both chords
+            if suspension_pitch in get_chord_notes(chord_root) and suspension_pitch in get_chord_notes(chord_progression[i+1][0]):  # note member of both chords
                 total += weight * .5
             else:
                 total += weight * -1
@@ -92,7 +92,7 @@ def downbeat(genotype, chord_progression, weight=20):
     total_dur = 0
     for i, (chord_root, chord_dur) in enumerate(chord_progression):
         (suspension_pitch, _) = get_pitch_at_time(genotype, total_dur)
-        if suspension_pitch in get_chord_notes(chord_root, a_train=True):
+        if suspension_pitch in get_chord_notes(chord_root):
             total += weight * .5
         elif suspension_pitch == -1:
             total += weight * .5
@@ -114,7 +114,7 @@ def halfbar(genotype, chord_progression, weight=20):
     total_dur = chord_progression[0][1]/2  # DANGER: ASSUMES that all chords are the same duration
     for i, (chord_root, chord_dur) in enumerate(chord_progression):
         (suspension_pitch, _) = get_pitch_at_time(genotype, total_dur)
-        if suspension_pitch in get_chord_notes(chord_root, a_train=True):
+        if suspension_pitch in get_chord_notes(chord_root):
             total += weight * .25
         elif suspension_pitch == -1:
             total += weight * .25
@@ -136,7 +136,7 @@ def longnote(genotype, chord_progression, weight=20, long_note=8):
     for i, (ed, dur) in enumerate(genotype):
         if dur >= long_note:
             (chord_root, _) = get_pitch_at_time(chord_progression, total_dur)  # DANGER: note used for chord_progression this tiem!
-            if ed in get_chord_notes(chord_root, a_train=True):
+            if ed in get_chord_notes(chord_root):
                 total += weight * .5
             else:
                 total += weight * -1
