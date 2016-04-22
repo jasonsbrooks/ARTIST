@@ -167,9 +167,6 @@ def main():
     parser.add_option("-p", "--password", dest="db_password", default="postgres")
     (options, args) = parser.parse_args()
 
-    print "pool_size", options.pool_size
-    print "durk_step", options.durk_step
-
     q = Queue()
     for session in get_sessions(options.pool_size,options.db_username,options.db_password):
         for song in session.query(Song).all():
