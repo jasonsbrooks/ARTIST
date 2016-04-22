@@ -116,19 +116,21 @@ class HarmonicAnalyzer(Process):
 
             # grab and analyze the song
             song = self.session.query(Song).get(song_id)
+
+            if not song:
+                continue
+
             self.analyze(song)
 
             count = self.counter.increment()
-            if count % 1000 == 0:
-                print count, " | ", song
+            print count, ". ", song
 
     def analyze(self,song):
         cs,idx = None,0
-        print "#"*80, "\n", song ,"\n", "#"*80, "\n"
 
         for ts in TimeIterator(song,self.durk_step):
             cs = self.consider_ts(cs,ts)
-            print idx, ts, "--", cs.score, ":", cs
+            # print idx, ts, "--", cs.score, ":", cs
             idx += 1
 
         cs.label()
