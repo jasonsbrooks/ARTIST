@@ -173,17 +173,22 @@ def main():
     parser.add_option("-p", "--password", dest="db_password", default="postgres")
     (options, args) = parser.parse_args()
 
+    print "Loading songs into Queue."
     q = Queue()
     for session in get_sessions(options.pool_size,options.db_username,options.db_password):
         for song in session.query(Song).all():
             q.put(song.id)
 
+    print "Creating", options.pool_size, "processes."
     engines = get_engines(options.pool_size)
     processes = []
     counter = Counter(0)
     for i in xrange(options.pool_size):
         p = HarmonicAnalyzer(q,options.durk_step,engines[i],counter)
         processes.append(p)
+
+    print "Starting", options.pool_size, "processes."
+    for p in processes:
         p.start()
 
     for p in processes:
