@@ -29,6 +29,10 @@ from ngram_helper import key_transpose_pitch
 
 NUM_NOTES = 128
 
+class InvalidKeySignature(Exception):
+    def __init__(self):
+        Exception.__init__(self)
+
 class RomanTrainer(object):
     def __init__(self,name,counts,options):
         self.name = name
@@ -51,8 +55,13 @@ class RomanTrainer(object):
         self.triple.append(note)
 
         if len(self.triple) > 3:
-            self.triple.popleft()
-            np.add.at(self.counts, tuple(self.transposed_triple()), 1)
+            old_note = self.triple.popleft()
+            try:
+                np.add.at(self.counts, tuple(self.transposed_triple()), 1)
+            except InvalidKeySignature, e:
+                # remove the bad note, append the old note.
+                self.triple.pop()
+                self.triple.appendleft(old_note)
 
 class TrackTrainer(Process):
     def __init__(self,session,options):

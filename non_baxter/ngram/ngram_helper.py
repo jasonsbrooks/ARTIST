@@ -1,5 +1,5 @@
 import sys
-
+from train import InvalidKeySignature
 
 # transposes pitch to be same pitch within range [lo,hi] inclusive
 # if multiple pitch matches exist within range, matches to 'closest' pitch
@@ -75,7 +75,7 @@ def key_transpose_pitch(pitch, from_ks, to_ks):
             to_root = (sf_to_root_major[to_ks[0]] - 3) % octave
     except Exception as e:
         print 'Exception in key_tranpose_pitch: invalid key signature, ' + str(e)
-        return
+        raise InvalidKeySignature()
 
     diff = to_root - from_root  # Note: wrong assupmtion that diff is always positive...
     new_pitch = pitch + diff
