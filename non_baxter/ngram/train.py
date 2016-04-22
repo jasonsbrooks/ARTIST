@@ -30,8 +30,10 @@ from ngram_helper import key_transpose_pitch
 NUM_NOTES = 128
 
 class RomanTrainer(object):
-    def __init__(self,name,counts,options):
+    def __init__(self,proc,name,counts,options):
+        self.proc = proc
         self.name = name
+
         self.counts = counts
         self.triple = deque()
         self.options = options
@@ -59,23 +61,38 @@ class RomanTrainer(object):
                 self.triple.pop()
                 self.triple.appendleft(old_note)
 
+    # write the results
+    def write(self):
+        with open(os.path.join(self.options.outdir,str(self.proc),str(self.name) + ".npy"), 'w') as outfile:
+            np.save(outfile, self.counts)
+
 class TrackTrainer(Process):
-    def __init__(self,session,options):
+    def __init__(self,name,session,options):
         Process.__init__(self)
         self.session = session
+        self.options = options
 
         self.rts = []
         matrix_size = (NUM_NOTES, NUM_NOTES, NUM_NOTES)
 
         # construct the roman trainers
         for i in xrange(7):
-            rt = RomanTrainer(i + 1,np.zeros(matrix_size, dtype=np.int16),options)
+            rt = RomanTrainer(name,i + 1,np.zeros(matrix_size, dtype=np.int16),options)
             self.rts.append(rt)
 
     def run(self):
         # iterate through all the tracks
         for trk in self.session.query(Track).all():
             self.train(trk)
+
+        # make the process output directory if not there already
+        pt = os.path.join(self.options.outdir,str(self.name))
+        if not os.path.exists(pt):
+            os.mkdir(pt)
+
+        # write all the rts
+        for rt in self.rts:
+            rt.write()
 
     def train(self,trk):
         print os.path.basename(trk.song.title), ":", trk.instr_name
@@ -117,7 +134,7 @@ def main():
 
     # construct and start the threads
     for i in xrange(options.pool_size):
-        p = TrackTrainer(sessions[i],options)
+        p = TrackTrainer(str(i),sessions[i],options)
         processes.append(p)
         p.start()
 
@@ -128,18 +145,19 @@ def main():
     # construct cumulative counts matrices
     matrix_size = (NUM_NOTES, NUM_NOTES, NUM_NOTES)
     cumulative_counts = []
+
     for i in xrange(7):
         cumulative_counts.append(np.zeros(matrix_size, dtype=np.int16))
 
-    # sum counts from different processes
-    for p in processes:
-        for i in xrange(7):
-            cumulative_counts[i] = np.add(cumulative_counts[i],p.rts[i].counts)
+    for p_id in xrange(options.pool_size):
+        for rt_id in xrange(7):
+            with open(os.path.join(options.outdir,str(p_id),str(rt_id) + ".npy")) as f:
+                counts = np.load(f)
+                cumulative_counts[rt_id] = np.add(cumulative_counts[rt_id],counts)
 
-    # write the results
     for i in xrange(7):
-        with open(os.path.join(options.outdir,str(i+1) + ".npy"), 'w') as outfile:
-            np.save(outfile, cumulative_counts[i])
+        with open(os.path.join(options.outdir,str(i+1),".npy"), "w") as f:
+            np.save(f,cumulative_counts[i])
 
 if __name__ == '__main__':
     main()
