@@ -142,5 +142,3 @@ if __name__ == '__main__':
     ga.create_midi_file((0,ngram_output), ga.create_chord_progression())
     print ngram_output
 
-
-    print map(pitch_to_str,_generate(options.key,options.model_dir,TWELVE_BAR_BLUES))
