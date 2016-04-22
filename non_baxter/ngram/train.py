@@ -107,7 +107,7 @@ def main():
 
     (options, args) = parser.parse_args()
 
-    sessions = get_sessions()
+    sessions = get_sessions(options.pool_size,options.db_username,options.db_password)
     processes = []
 
     # construct and start the threads
