@@ -91,9 +91,9 @@ class NgramGenerator():
                 self.last_two = deque()
 
                 # append the first, third
-                scale = self.key.getScale()
-                self.last_two.append(scale.chord.root().midi)
-                self.last_two.append(scale.chord.third.midi)
+                self.last_two.append(rn.pitches[0].midi)
+                # TODO: this is not the THIRD!
+                self.last_two.append(rn.pitches[2].midi)
 
             self.rn = rn
             pitch = self.choose_note(rn,self.last_two)

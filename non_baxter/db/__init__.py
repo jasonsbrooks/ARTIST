@@ -22,3 +22,4 @@ Base = declarative_base()
 from song import Song
 from track import Track
 from note import Note
+from exceptions import InvalidKeySignature
