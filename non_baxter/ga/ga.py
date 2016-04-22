@@ -32,12 +32,12 @@ def choose_duration(simple=False):
 
 # returns list of (fitness, genotype)
 # fitness holds junk value (-99)-- fitness function used to evaluate it
-def initialize_chromosomes(n, d, chord_progression, ngram_output=[]):
+def initialize_chromosomes(n, d, chord_progression, ngram_generate=None):
     chromosomes = []
     for _ in range(n):  # makes n chromosomes
         fitness = -99
         genotype = []
-        if not ngram_output:
+        if not ngram_generate:
             total_duration = 0
             while total_duration < d:
                 # choose rest 12.5% of time for extended_degree
@@ -52,7 +52,7 @@ def initialize_chromosomes(n, d, chord_progression, ngram_output=[]):
                 genotype.append((extended_degree, duration))
                 total_duration += duration
         else:
-            genotype = ngram_output
+            genotype = ngram_generate()
 
         fitness = calc_fitness(genotype, chord_progression)
         chromosomes.append((fitness, genotype))
@@ -143,9 +143,9 @@ def crossover(parent1, parent2, d):
 # runs ga on
 # population of size n
 # returns list of chromosomes in descending order by fitness (highest fitness first)
-def ga(chord_progression, n=40, num_iter=200, prob_local=.5, ngram_output=[]):
+def ga(chord_progression, n=40, num_iter=200, prob_local=.5, ngram_generate=None):
     d = sum([d for (_, d) in chord_progression])  # d is total duration of song
-    chromosome_list = initialize_chromosomes(n, d, chord_progression, ngram_output=ngram_output)  # list of (fitness, genotype)
+    chromosome_list = initialize_chromosomes(n, d, chord_progression, ngram_generate=ngram_generate)  # list of (fitness, genotype)
     elitism_coef = 25  # how many elites to keep in each round
 
     for i in range(0, num_iter):
@@ -200,11 +200,11 @@ def ga(chord_progression, n=40, num_iter=200, prob_local=.5, ngram_output=[]):
     chromosome_list.sort(reverse=True, key=lambda x: x[0])  # sort by decreasing fitness
     return chromosome_list
 
-def run(ngram_output=[],num_iter=800):
+def run(ngram_generate=None,num_iter=800):
     # hard coded chord progression for 12 bar blues
     chord_progression = create_chord_progression()  # list of (chord, duration)
     # chromosomes = ga(chord_progression, n=40, num_iter=800, prob_local=.2)
-    chromosomes = ga(chord_progression, n=40, num_iter=num_iter, prob_local=.2, ngram_output=ngram_output)  # n=300, p=.8 works well!4
+    chromosomes = ga(chord_progression, n=40, num_iter=num_iter, prob_local=.2, ngram_generate=ngram_generate)  # n=300, p=.8 works well!4
     print [f for (f, _) in chromosomes]
     create_midi_file(chromosomes[0], chord_progression)
     print "Final Fitness: " + str(chromosomes[0][0])
