@@ -24,7 +24,7 @@ from chords import create_chord_progression
 def choose_duration(simple=False):
     possible_durations = []
     if simple:
-        possible_durations = [8]
+        possible_durations = [8, 16]
     else:
         possible_durations = [1, 2, 3, 4, 6, 8, 12, 16]
 
@@ -201,12 +201,11 @@ def ga(chord_progression, n=40, num_iter=200, prob_local=.5):
 
 def main():
     # hard coded chord progression for 12 bar blues
-    chord_progression = create_chord_progression()  # list of (chord, duration)
+    chord_progression = create_chord_progression(a_train=True)  # list of (chord, duration)
     # chromosomes = ga(chord_progression, n=40, num_iter=800, prob_local=.2)
-    chromosomes = ga(chord_progression, n=40, num_iter=800, prob_local=.2)  # n=300, p=.8 works well!
-
+    chromosomes = ga(chord_progression, n=40, num_iter=800, prob_local=.2)  # n=300, p=.8 works well!4
     print [f for (f, _) in chromosomes]
-    create_midi_file(chromosomes[0])
+    create_midi_file(chromosomes[0], chord_progression)
     print "Final Fitness: " + str(chromosomes[0][0])
     # print "Num durks: " + str(sum([d for (_, d) in chromosomes[1][1]]))
     print "Best Genotype: \n" + str(chromosomes[0][1])
