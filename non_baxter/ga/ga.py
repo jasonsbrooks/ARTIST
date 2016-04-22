@@ -14,6 +14,7 @@ from ga_midi import create_midi_file
 from mutation import mutate
 from fitness import calc_fitness
 from chords import create_chord_progression
+from ngram import generate
 
 
 # duration in durk units: 1 === a 32nd note....32  === a whole note
@@ -33,24 +34,27 @@ def choose_duration(simple=False):
 
 # returns list of (fitness, genotype)
 # fitness holds junk value (-99)-- fitness function used to evaluate it
-def initialize_chromosomes(n, d, chord_progression):
+def initialize_chromosomes(n, d, chord_progression, use_ngram=False):
     chromosomes = []
     for _ in range(n):  # makes n chromosomes
         fitness = -99
         genotype = []
-        total_duration = 0
-        while total_duration < d:
-            # choose rest 12.5% of time for extended_degree
-            extended_degree = random.randint(1, 21)
-            if random.randint(1, 8) == 8:
-                extended_degree = -1
+        if not use_ngram:
+            total_duration = 0
+            while total_duration < d:
+                # choose rest 12.5% of time for extended_degree
+                extended_degree = random.randint(1, 21)
+                if random.randint(1, 8) == 8:
+                    extended_degree = -1
 
-            duration = choose_duration(simple=True)  # DANGER this is really important!
-            while (duration + total_duration > d):
-                duration = choose_duration()  # ensures duration of chromosomes equal to d
+                duration = choose_duration(simple=True)  # DANGER this is really important!
+                while (duration + total_duration > d):
+                    duration = choose_duration()  # ensures duration of chromosomes equal to d
 
-            genotype.append((extended_degree, duration))
-            total_duration += duration
+                genotype.append((extended_degree, duration))
+                total_duration += duration
+        else:
+            genotype = generate()
 
         fitness = calc_fitness(genotype, chord_progression)
         chromosomes.append((fitness, genotype))
@@ -143,7 +147,7 @@ def crossover(parent1, parent2, d):
 # returns list of chromosomes in descending order by fitness (highest fitness first)
 def ga(chord_progression, n=40, num_iter=200, prob_local=.5):
     d = sum([d for (_, d) in chord_progression])  # d is total duration of song
-    chromosome_list = initialize_chromosomes(n, d, chord_progression)  # list of (fitness, genotype)
+    chromosome_list = initialize_chromosomes(n, d, chord_progression, use_ngram=False)  # list of (fitness, genotype)
     elitism_coef = 25  # how many elites to keep in each round
 
     for i in range(0, num_iter):
@@ -187,7 +191,7 @@ def ga(chord_progression, n=40, num_iter=200, prob_local=.5):
 
             new_genotype = mutate(chrom, d, prob_local=prob_local)  # 1
             new_fitness = calc_fitness(new_genotype, chord_progression)
-            if new_fitness >= old_fitness:  #hill climbing implemented here
+            if new_fitness >= old_fitness:  # hill climbing implemented here
                 new_chromosome_list[i] = (new_fitness, new_genotype)
             else:
                 new_chromosome_list[i] = (old_fitness, old_genotype)
@@ -201,7 +205,7 @@ def ga(chord_progression, n=40, num_iter=200, prob_local=.5):
 
 def main():
     # hard coded chord progression for 12 bar blues
-    chord_progression = create_chord_progression(a_train=True)  # list of (chord, duration)
+    chord_progression = create_chord_progression()  # list of (chord, duration)
     # chromosomes = ga(chord_progression, n=40, num_iter=800, prob_local=.2)
     chromosomes = ga(chord_progression, n=40, num_iter=800, prob_local=.2)  # n=300, p=.8 works well!4
     print [f for (f, _) in chromosomes]

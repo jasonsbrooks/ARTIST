@@ -155,7 +155,7 @@ def create_midi_file((fitness, genotype), chord_progression):
     pattern.append(track)
 
     for (root, dur) in chord_progression:  # Assumes chords all last 1 measure (32 durks duration)
-        temp_track = create_chord_measure(root, a_train=True)
+        temp_track = create_chord_measure(root)
         track += temp_track
 
     # for _ in range(4):
