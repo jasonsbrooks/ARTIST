@@ -10,6 +10,10 @@ from optparse import OptionParser
 from multiprocessing import Process,Queue
 
 class ChordSpan(object):
+    """
+    A ChordSpan is a series of TimeInstances that all have the same root.
+    Each ChordSpan also maintains a pointer (prev_cs) to the previous ChordSpan computed in the song.
+    """
     def __init__(self,initial_ts,prev_cs):
         self.tss = [initial_ts]
         self.root = None
@@ -21,15 +25,31 @@ class ChordSpan(object):
         return "<ChordSpan: root=%r>" % (self.root)
 
     def last_ts(self):
+        """
+        Calculate and return the last TimeInstance in this ChordSpan.
+        @return: the last time instance in the ChordSpan
+        """
         return max(self.tss,key=lambda ts: ts.time)
 
     def add(self,ts):
+        """
+        Add a TimeInstance to this ChordSpan
+        @param ts: the TimeInstance to add
+        """
         self.tss.append(ts)
 
     def remove(self,ts):
+        """
+        Remove a TimeInstance from this ChordSpan
+        @param ts: the TimeInstance to remove
+        """
         self.tss.remove(ts)
 
     def notes(self):
+        """
+        Flatten all notes in the TimeInstances that comprise this ChordSpan.
+        @return: All notes played in this ChordSpan
+        """
         res = []
         # iterate through all chords
         for ts in self.tss:
@@ -39,6 +59,12 @@ class ChordSpan(object):
         return res
 
     def roman_numeral(self,track):
+        """
+        Calculate the roman numeral corresponding to the computed root and key of the corresponding track
+        @param track: The track to which a Note in this ChordSpan belongs. Note: Here we assume that at any moment in
+        time, there is only one key signature in all tracks of the song.
+        @return: the Music21 Roman Numeral object.
+        """
 
         pitch = music21.key.sharpsToPitch(track.key_sig_top)
         key = music21.key.Key(pitch)
@@ -53,6 +79,10 @@ class ChordSpan(object):
         return music21.roman.romanNumeralFromChord(chord,key).scaleDegree
 
     def label(self):
+        """
+        Label all the notes in this ChordSpan with the determined root.
+        Then proceed to recursively label the preceding ChordSpan
+        """
         rn = None
         # label all the notes in this chord span
         for note in self.notes():
@@ -68,6 +98,16 @@ class ChordSpan(object):
             self.prev_cs.label()
 
     def pr_score(self,m_root):
+        """
+        Calculate the preference rule score, when using m_root as a root for this ChordSpan.
+        Note this method is the core of the Preference Rule approach to Harmonic Analysis
+
+        Such an approach is heavily inspired by the work of Daniel Sleater and David Temperley at CMU
+        in their Melisma Music Analyzer: http://www.link.cs.cmu.edu/melisma/
+
+        @param m_root: A Music21 Note representing the proposed root of this chord
+        @return: the score obtained using this note as a root
+        """
         last_ts = self.last_ts()
         ts_notes = last_ts.notes()
 
@@ -83,6 +123,10 @@ class ChordSpan(object):
         return STRENGTH_MULTIPLIER * stren + COMPATIBILITY_MULTIPLIER * comp_score + LOF_MULTIPLIER * lof
 
     def calc_best_root(self):
+        """
+        Calculate the best root for this chord span
+        @return: the combined score of this ChordSpan and its predecessor
+        """
 
         # start with C, weight of 0
         best_root,best_weight = music21.note.Note('C'),-len(line_of_fifths)
@@ -98,30 +142,59 @@ class ChordSpan(object):
         # use this as the chord-span root
         self.root = best_root
 
+        # calculate the combined score
         prev_cs_score = (self.prev_cs.score if self.prev_cs else 0)
         return prev_cs_score + best_weight
 
 class HarmonicAnalyzer(Process):
+    """
+    Run Harmonic Analysis in a separate process.
+
+    Such an approach is heavily inspired by the work of Daniel Sleater and David Temperley at CMU
+        in their Melisma Music Analyzer: http://www.link.cs.cmu.edu/melisma/
+    """
     def __init__(self,durk_step,engine,counter):
+
+        # Initialize the Process
         Process.__init__(self)
+
+        # time step used in TimeIterator
         self.durk_step = durk_step
+
+        # session to pull songs from
         Session = sessionmaker(bind=engine)
         self.session = Session()
+
+        # Counter object representing number of songs that have been processed
         self.counter = counter
 
     def run(self):
+        """
+        Start the Process. Note that this method overrides Process.run()
+        """
+
+        # Iterate through every song in the database attached to this process
         for song in self.session.query(Song).all():
 
+            # Atomically increment the song counter
             count = self.counter.incrementAndGet()
             print count, ". ", song
 
+            # and run the analysis
             self.analyze(song)
 
 
     def analyze(self,song):
+        """
+        Run Harmonic Analysis on a particular Song
+        @param song: the song to analyze
+        """
         cs,idx = None,0
 
+        # iterate through every TimeInstance in the song
         for ts in TimeIterator(song,self.durk_step):
+
+            # and consider what to do...
             cs = self.consider_ts(cs,ts)
             # print idx, ts, "--", cs.score, ":", cs
             idx += 1
@@ -131,10 +204,21 @@ class HarmonicAnalyzer(Process):
 
 
     def consider_ts(self,cs,ts):
+        """
+        Consider how to segment a new TimeInstance.
+        Note: this method is the core of the Dynamic Programming approach to Harmonic Analysis.
+        @param cs: the latest determined ChordSpan in the Song being evaluated
+        @param ts: the TimeInstance under consideration
+        @return: the new latest ChordSpan
+        """
+
+        # if this is the first ChordSpan created.
         if not cs:
             res = ChordSpan(ts,None)
             score = res.calc_best_root()
         else:
+            # we already have a ChordSpan in progress.
+
             # option 1: start a new chord-span
             opt1_cs = ChordSpan(ts,cs)
             opt1_score = cs.calc_best_root()
@@ -143,6 +227,7 @@ class HarmonicAnalyzer(Process):
             cs.add(ts)
             opt2_score = cs.calc_best_root()
 
+            # determine which option is superior
             if opt1_score > opt2_score:
                 cs.remove(ts)
                 res = opt1_cs
@@ -157,6 +242,10 @@ class HarmonicAnalyzer(Process):
         return res
 
 def main():
+    """
+    Run harmonic analysis on all songs in all databases. This will take a LONG time.
+    @return:
+    """
     parser = OptionParser()
 
     parser.add_option("-d", "--durk-step", dest="durk_step", default=4, type="int")
@@ -168,18 +257,24 @@ def main():
 
     print "Creating", options.pool_size, "processes."
     processes = []
+
+    # Initialize the counter to 0
     counter = Counter(0)
 
+    # get all database engines
     engines = get_engines(options.pool_size,options.db_username,options.db_password)
 
+    # Construct a new HarmonicAnalyzer process for each database.
     for i in xrange(options.pool_size):
         p = HarmonicAnalyzer(options.durk_step,engines[i],counter)
         processes.append(p)
 
+    # Start the processes
     print "Starting", options.pool_size, "processes."
     for p in processes:
         p.start()
 
+    # And wait for them to finish
     for p in processes:
         p.join()
 
