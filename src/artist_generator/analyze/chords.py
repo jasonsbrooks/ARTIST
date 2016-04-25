@@ -231,8 +231,17 @@ class HarmonicAnalyzer(Process):
         """
         cs,idx = None,0
 
+	try:
+		# construct the iterator
+		ti = TimeIterator(song,self.durk_step)
+	except ValueError,e:
+		# something is very wrong with this song... let's skip it!
+		sys.stderr.write("Skipping " + str(song) + ":")
+		sys.stderr.write("\t" + str(e))
+		return False
+
         # iterate through every TimeInstance in the song
-        for ts in TimeIterator(song,self.durk_step):
+        for ts in ti:
 
             # and consider what to do...
             cs = self.consider_ts(cs,ts)
