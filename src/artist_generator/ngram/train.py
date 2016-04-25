@@ -6,11 +6,11 @@ Train an ngram model
     $ python -m ngram.train -o outdir [-t poolsize] [-k key] [-u username] [-p password]
 
 where:
-    - outdir is where the trained models will be saved
-    - poolsize is the number of databases
-    - key is the key to save the models in
-    - username is the database username
-    - password is the database password
+    - `outdir` is where the trained models will be saved
+    - `poolsize` is the number of databases
+    - `key` is the key to save the models in
+    - `username` is the database username
+    - `password` is the database password
 """
 
 import numpy as np
@@ -56,6 +56,7 @@ class RomanTrainer(object):
     def transposed_triple(self):
         """
         Transpose a triple into the appropriate key
+
         Returns:
             int[]: the transposed triple
         """
@@ -69,6 +70,7 @@ class RomanTrainer(object):
     def train(self,note):
         """
         Train this RomanTrained on a given note
+
         Args:
             note: the note to train on
         """
@@ -131,6 +133,7 @@ class TrackTrainer(Process):
     def train(self,trk):
         """
         Train the ngram model on a specific track
+        
         Args:
             trk: the track on which to train
         """

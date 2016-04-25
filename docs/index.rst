@@ -15,6 +15,7 @@ Contents:
    src/artist_generator/db
    src/artist_generator/iter
    src/artist_generator/utils
+   src/artist_generator/ngram
 
 
 Indices and tables

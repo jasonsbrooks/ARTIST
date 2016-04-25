@@ -28,6 +28,7 @@ class NgramGenerator():
     def __init__(self,key,chord_progression,model_dir):
         """
         Initialize our generator
+
         Args:
             key (music21.key.Key): equal to key model was trained in
             chord_progression (music21.roman.RomanNumeral[]): a series of music21 roman numerals
@@ -51,6 +52,7 @@ class NgramGenerator():
     def choose_note(self,rn,last_two):
         """
         Choose the next note to output, given the current Roman Numeral and the last two notes played
+
         Args:
             rn (music21.roman.RomanNumeral): the current roman numeral
             last_two (int[]): array of last midi pitches played
@@ -81,6 +83,7 @@ class NgramGenerator():
     def calc_note_val(self,pitch_class):
         """
         Convert note to 1->7 for input into genetic algorithm
+
         Args:
             pitch_class: pitch class of the note to output
 
@@ -101,6 +104,7 @@ class NgramGenerator():
     def next(self):
         """
         Generate the next note in the trigram model
+
         Returns:
             int: the next note to play :)
         """
@@ -143,6 +147,7 @@ class NgramGenerator():
 def construct_roman_numerals(key,int_seq):
     """
     Given a key and sequence of ints, construct music21.roman.RomanNumeral objects.
+
     Args:
         key: the key in which the roman numerals belong
         int_seq: sequences of I,II, ... roman numerals
@@ -165,6 +170,7 @@ def _generate(o_key,o_model_dir,cp):
 def generate(model_dir,chord_progression):
     """
     Generate notes for the chord_progression, using the ngram model
+
     Args:
         model_dir: directory where the ngram models live
         chord_progression: chord progression over which to generate
