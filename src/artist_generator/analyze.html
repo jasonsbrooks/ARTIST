@@ -1,0 +1,477 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>analyze package &mdash; ARTIST 1.0.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ARTIST 1.0.0 documentation" href="../../index.html"/>
+        <link rel="next" title="db package" href="db.html"/>
+        <link rel="prev" title="Welcome to ARTIST’s documentation!" href="../../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ARTIST
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">analyze package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-analyze.chords">analyze.chords module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-analyze.preference_rules">analyze.preference_rules module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-analyze">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="db.html">db package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iter.html">iter package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ngram.html">ngram package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ARTIST</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+    <li>analyze package</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/src/artist_generator/analyze.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="analyze-package">
+<h1>analyze package<a class="headerlink" href="#analyze-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-analyze.chords">
+<span id="analyze-chords-module"></span><h2>analyze.chords module<a class="headerlink" href="#module-analyze.chords" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="analyze.chords.ChordSpan">
+<em class="property">class </em><code class="descclassname">analyze.chords.</code><code class="descname">ChordSpan</code><span class="sig-paren">(</span><em>initial_ts</em>, <em>prev_cs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/chords.html#ChordSpan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.chords.ChordSpan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A ChordSpan is a series of TimeInstances that all have the same root.
+Each ChordSpan also maintains a pointer (prev_cs) to the previous ChordSpan computed in the song.</p>
+<dl class="method">
+<dt id="analyze.chords.ChordSpan.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>ts</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/chords.html#ChordSpan.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.chords.ChordSpan.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a TimeInstance to this ChordSpan</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ts</strong> &#8211; the TimeInstance to add</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="analyze.chords.ChordSpan.calc_best_root">
+<code class="descname">calc_best_root</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/chords.html#ChordSpan.calc_best_root"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.chords.ChordSpan.calc_best_root" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the best root for this chord span</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the combined score of this ChordSpan and its predecessor</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="analyze.chords.ChordSpan.label">
+<code class="descname">label</code><span class="sig-paren">(</span><em>depth=0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/chords.html#ChordSpan.label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.chords.ChordSpan.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Label all the notes in this ChordSpan with the determined root.</p>
+<p>Then proceed to recursively label the preceding ChordSpan</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="analyze.chords.ChordSpan.last_ts">
+<code class="descname">last_ts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/chords.html#ChordSpan.last_ts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.chords.ChordSpan.last_ts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate and return the last TimeInstance in this ChordSpan.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the last time instance in the ChordSpan</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="iter.html#iter.time_iterator.TimeInstance" title="iter.time_iterator.TimeInstance">TimeInstance</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="analyze.chords.ChordSpan.notes">
+<code class="descname">notes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/chords.html#ChordSpan.notes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.chords.ChordSpan.notes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flatten all notes in the TimeInstances that comprise this ChordSpan.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">All notes played in this ChordSpan</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="analyze.chords.ChordSpan.pr_score">
+<code class="descname">pr_score</code><span class="sig-paren">(</span><em>m_root</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/chords.html#ChordSpan.pr_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.chords.ChordSpan.pr_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the preference rule score, when using m_root as a root for this ChordSpan.
+Note this method is the core of the Preference Rule approach to Harmonic Analysis</p>
+<p>Such an approach is heavily inspired by the work of Daniel Sleater and David Temperley at CMU
+in their Melisma Music Analyzer: <a class="reference external" href="http://www.link.cs.cmu.edu/melisma/">http://www.link.cs.cmu.edu/melisma/</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>m_root</strong> (<em>Music21.note.Note</em>) &#8211; a note representing the proposed root of this chord</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the score obtained using this note as a root</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="analyze.chords.ChordSpan.remove">
+<code class="descname">remove</code><span class="sig-paren">(</span><em>ts</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/chords.html#ChordSpan.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.chords.ChordSpan.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a TimeInstance from this ChordSpan</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ts</strong> &#8211; the TimeInstance to remove</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="analyze.chords.ChordSpan.roman_numeral">
+<code class="descname">roman_numeral</code><span class="sig-paren">(</span><em>track</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/chords.html#ChordSpan.roman_numeral"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.chords.ChordSpan.roman_numeral" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the roman numeral corresponding to the computed root and key of the corresponding track</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>track</strong> &#8211; The track to which a Note in this ChordSpan belongs. Note: Here we assume that at any moment in</li>
+<li><strong>there is only one key signature in all tracks of the song.</strong> (<em>time,</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the Music21 Roman Numeral object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="analyze.chords.HarmonicAnalyzer">
+<em class="property">class </em><code class="descclassname">analyze.chords.</code><code class="descname">HarmonicAnalyzer</code><span class="sig-paren">(</span><em>durk_step</em>, <em>engine</em>, <em>counter</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/chords.html#HarmonicAnalyzer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.chords.HarmonicAnalyzer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">multiprocessing.process.Process</span></code></p>
+<p>Run Harmonic Analysis in a separate process.</p>
+<dl class="docutils">
+<dt>Such an approach is heavily inspired by the work of Daniel Sleater and David Temperley at CMU</dt>
+<dd>in their Melisma Music Analyzer: <a class="reference external" href="http://www.link.cs.cmu.edu/melisma/">http://www.link.cs.cmu.edu/melisma/</a></dd>
+</dl>
+<dl class="method">
+<dt id="analyze.chords.HarmonicAnalyzer.analyze">
+<code class="descname">analyze</code><span class="sig-paren">(</span><em>song</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/chords.html#HarmonicAnalyzer.analyze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.chords.HarmonicAnalyzer.analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run Harmonic Analysis on a particular Song</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>song</strong> (<a class="reference internal" href="db.html#db.song.Song" title="db.song.Song"><em>Song</em></a>) &#8211; the song to analyze</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="analyze.chords.HarmonicAnalyzer.consider_ts">
+<code class="descname">consider_ts</code><span class="sig-paren">(</span><em>cs</em>, <em>ts</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/chords.html#HarmonicAnalyzer.consider_ts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.chords.HarmonicAnalyzer.consider_ts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Consider how to segment a new TimeInstance.</p>
+<p>Note: this method is the core of the Dynamic Programming approach to Harmonic Analysis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cs</strong> &#8211; the latest determined ChordSpan in the Song being evaluated</li>
+<li><strong>ts</strong> &#8211; the TimeInstance under consideration</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the new latest ChordSpan</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="analyze.chords.HarmonicAnalyzer.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/chords.html#HarmonicAnalyzer.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.chords.HarmonicAnalyzer.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the Process. Note that this method overrides Process.run()</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="analyze.chords.main">
+<code class="descclassname">analyze.chords.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/chords.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.chords.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run harmonic analysis on all songs in all databases. This will take a LONG time.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-analyze.preference_rules">
+<span id="analyze-preference-rules-module"></span><h2>analyze.preference_rules module<a class="headerlink" href="#module-analyze.preference_rules" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="analyze.preference_rules.beat_strength">
+<code class="descclassname">analyze.preference_rules.</code><code class="descname">beat_strength</code><span class="sig-paren">(</span><em>notes</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/preference_rules.html#beat_strength"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.preference_rules.beat_strength" title="Permalink to this definition">¶</a></dt>
+<dd><p>The strength of the note corresponds to where it lies relative to 1,1/2,1/4 notes...</p>
+<p>This corresponds to Temperley&#8217;s HPR 2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>notes</strong> &#8211; the notes to consider (from the ChordSpan)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the score obtained</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="analyze.preference_rules.compatibility">
+<code class="descclassname">analyze.preference_rules.</code><code class="descname">compatibility</code><span class="sig-paren">(</span><em>notes</em>, <em>m_root</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/preference_rules.html#compatibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.preference_rules.compatibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the compatibility of m_root and each note in notes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>notes</strong> (<em>Note[]</em>) &#8211; the Notes in the ChordSpan</li>
+<li><strong>m_root</strong> (<em>music21.note.Note</em>) &#8211; the root to compare against</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the score obtained</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="analyze.preference_rules.lof_difference">
+<code class="descclassname">analyze.preference_rules.</code><code class="descname">lof_difference</code><span class="sig-paren">(</span><em>m_prev</em>, <em>m_note</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/analyze/preference_rules.html#lof_difference"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analyze.preference_rules.lof_difference" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the difference between two notes on the line of fifths.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>m_prev</strong> (<em>music21.note.Note</em>) &#8211; the previous root</li>
+<li><strong>m_note</strong> (<em>music21.note.Note</em>) &#8211; the current root</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the difference in position on LOF</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-analyze">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-analyze" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="db.html" class="btn btn-neutral float-right" title="db package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../../index.html" class="btn btn-neutral" title="Welcome to ARTIST’s documentation!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Jason Brooks, Kevin Jiang, and Charles Proctor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
