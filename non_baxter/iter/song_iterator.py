@@ -6,6 +6,12 @@ class SongIterator(object):
     Iterate through a song, Note by Note
     """
     def __init__(self,song):
+        """
+        Initialize a SongIterator
+
+        Args:
+            song: the song through which to iterate
+        """
         self.indx = 0
 
         # get all the notes in the piece
@@ -22,7 +28,8 @@ class SongIterator(object):
     def next(self):
         """
         Determine the next Note in the Song
-        @return: the next Note
+        Returns:
+            Note: the next Note
         """
         # stop iteration!
         if self.indx >= len(self.notes):

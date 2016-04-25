@@ -30,6 +30,14 @@ class TimeIterator(object):
     Iterate through a song, TimeInstance by TimeInstance.
     """
     def __init__(self,song,durk_step):
+        """
+        Initialize a TimeIterator
+
+        Args:
+            song (Song): the song to iterate through
+            durk_step (int): number of durks between TimeInstances
+        """
+
         # durk_step is the step size between TimeInstances.
         self.durk_step = durk_step
 
@@ -52,7 +60,9 @@ class TimeIterator(object):
     def next(self):
         """
         Compute and return the next TimeInstance in this song
-        @return: the next TimeInstance.
+
+        Returns:
+            TimeInstance: the next TimeInstance.
         """
         # past the end of the song
         if self.time >= self.max_time:

@@ -9,6 +9,9 @@ class Chord(object):
     ~ lasting the same time
     """
     def __init__(self):
+        """
+        Initialize a ChordSpan
+        """
         self.notes = []
         self.start = -1
         self.dur = -1
@@ -16,8 +19,12 @@ class Chord(object):
     def add(self,note):
         """
         Add a note to this chord, after verifying that it has the same start time / duration
-        @param note: the Note object to add
-        @return: the note if added, False if not added
+
+        Args:
+            note (Note): the Note object to add
+
+        Returns:
+             Note: the note if added, False if not added
         """
         if len(self.notes) == 0:
             self.dur = note.dur
@@ -33,15 +40,21 @@ class Chord(object):
     def end_time(self):
         """
         Compute the end time of this chord
-        @return: start + dur
+
+        Returns:
+            int: start + dur
         """
         return self.start + self.dur
 
     def on_at_time(self,time):
         """
         Determine whether this note is on at a given time
-        @param time: the time to check
-        @return: True if yes, False if no
+
+        Args:
+            time (int): the time to check
+
+        Returns:
+            bool: True if yes, False if no
         """
         return (self.start <= time) and (time <= self.end_time())
 
@@ -50,6 +63,12 @@ class ChordIterator(object):
     Iterate through a song, Chord by Chord.
     """
     def __init__(self,song):
+        """
+        Construct a new ChordIterator
+
+        Args:
+            song: the song through which to iterate
+        """
         self.indx = 0
 
         # construct the array of chords
@@ -71,7 +90,9 @@ class ChordIterator(object):
     def next(self):
         """
         Determines and returns the next chord
-        @return: the next chord
+
+        Returns
+            Chord: the next chord
         """
         # stop iteration!
         if self.indx >= len(self.chords):
