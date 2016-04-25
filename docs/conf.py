@@ -15,7 +15,8 @@
 import sys
 import os
 
-sys.path.insert(0,os.path.abspath("../non_baxter"))
+sys.path.insert(0,os.path.abspath("../src/artist_performer"))
+sys.path.insert(0,os.path.abspath("../src/artist_generator"))
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -60,7 +61,7 @@ author = u'Jason Brooks, Kevin Jiang, and Charles Proctor'
 # built documents.
 #
 # The short X.Y version.
-version = u'1.0.0'
+version = u'1.0'
 # The full version, including alpha/beta/rc tags.
 release = u'1.0.0'
 

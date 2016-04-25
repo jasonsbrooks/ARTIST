@@ -11,8 +11,8 @@ Contents:
 .. toctree::
    :maxdepth: 5
 
-   src/non_baxter/
-
+   src/baxter_generator/analyze
+   src/baxter_generator/iter
 
 
 Indices and tables
