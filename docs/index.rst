@@ -14,6 +14,7 @@ Contents:
    src/artist_generator/analyze
    src/artist_generator/db
    src/artist_generator/iter
+   src/artist_generator/utils
 
 
 Indices and tables

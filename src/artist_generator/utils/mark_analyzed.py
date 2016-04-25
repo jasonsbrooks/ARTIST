@@ -2,6 +2,13 @@
 """
 A quick utility script to mark analyzed songs as analyzed.
 A song has been analyzed if any notes contain a non-NULL root.
+
+    $ python -m utils.mark_analyzed [-t DBPOOL_SIZE] [-u USERNAME] [-p PASSWORD]
+
+where:
+    - DBPOOL_SIZE is the number of databases
+    - USERNAME is the database username
+    - PASSWORD is the database password
 """
 
 from db import get_sessions,Song

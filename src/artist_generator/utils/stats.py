@@ -2,13 +2,12 @@
 """
 A quick Python script to calculate the total number of songs, tracks, and notes stored in our database(s)
 
-USAGE:
-    python -m utils.stats -t DBPOOL_SIZE -u USERNAME -p PASSWORD
+    $ python -m utils.mark_analyzed [-t DBPOOL_SIZE] [-u USERNAME] [-p PASSWORD]
 
 where:
-    DBPOOL_SIZE is the number of databases
-    USERNAME is the database username
-    PASSWORD is the database password
+    - DBPOOL_SIZE is the number of databases
+    - USERNAME is the database username
+    - PASSWORD is the database password
 """
 
 from db import get_sessions,Song,Track,Note
