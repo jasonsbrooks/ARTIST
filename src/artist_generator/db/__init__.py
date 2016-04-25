@@ -2,6 +2,16 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 def get_engines(num,usr="postgres",pwd="postgres"):
+    """
+    Get engines for num different databases
+    Args:
+        num: number of databases
+        usr: database username
+        pwd: database password
+
+    Returns:
+        engine[]: the database engines
+    """
     engines = []
     for i in xrange(num):
         engines.append(create_engine("postgresql://" + usr + ":" + pwd
@@ -9,6 +19,16 @@ def get_engines(num,usr="postgres",pwd="postgres"):
     return engines
 
 def get_sessions(num,usr="postgres",pwd="postgres"):
+    """
+    Get sessions for num different databases
+    Args:
+        num: number of databases
+        usr: database username
+        pwd: database password
+
+    Returns:
+        Session[]: the database sessions
+    """
     engines = get_engines(num,usr,pwd)
     sessions = []
     for engine in engines:

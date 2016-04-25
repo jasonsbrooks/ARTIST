@@ -31,14 +31,26 @@ from . import Song,Track,Note
 DURKS_PER_QUARTER_NOTE = 8
 
 class Runner(Process):
+    """
+    A database worker process. Parses MIDI files pulled from self.q and stores them in the database specified by self.engine.
+    """
 
     def __init__(self,q,engine):
+        """
+        Initialize a Runner
+        Args:
+            q: the queue of MIDI file names
+            engine: the database engine into which we store the Notes
+        """
         Process.__init__(self)
         self.q = q
         Session = sessionmaker(bind=engine)
         self.session = Session()
 
     def run(self):
+        """
+        Start the process
+        """
         while True:
             midiPath = self.q.get()
 
@@ -46,11 +58,16 @@ class Runner(Process):
             self.midi_to_song(midiPath)
             print "Finished " + midiPath.split('/')[-1]
 
-    # takes midi file and returns a representative song object
-    # a Song is a list of many Tracks
-    # a Track is a list of many Notes representing a common
-    #   1) key signature, 2) time signature, and 3) instrument key
     def midi_to_song(self,midifilename):
+        """
+        Takes midi file and returns a representative song object
+
+        - a Song is a list of many Tracks
+        - a Track is a list of many Notes representing a common 1) key signature, 2) time signature, and 3) instrument key
+
+        Args:
+            midifilename: filename of the MIDI file to parse and store in the database
+        """
 
         try:
             pattern = midi.read_midifile(midifilename)
@@ -165,12 +182,17 @@ class Runner(Process):
         self.session.commit()
         return song
 
-
-    # Takes a track object
-    # Inserts rests into appropriate locations (where no pitch is being played)
-    # Returns nothing
-    # Danger: directly modifies the track object that is passed to it!
     def insert_rests_into_track(self,track, ppqn):
+        """
+        Take a Track object, inserts rest inot the appropriate locations (where no pitch is being played)
+
+        Warnings:
+            Directly modifies the Track object that is passed to it!
+
+        Args:
+            track: the Track into which we insert rests
+            ppqn:
+        """
         # find total number of durks in track
         firstNote = self.session.query(Note).filter(Note.track == track).order_by(Note.start.asc()).first()
         lastNote = self.session.query(Note).filter(Note.track == track).order_by(Note.end.desc()).first()
@@ -216,10 +238,17 @@ class Runner(Process):
         return
 
 
-    # checks if midi track object is an instrument track
-    # returns dic (instr_key, instr_name (may be empty), channel) if true
-    # else returns None
     def is_instr_track(self,track):
+        """
+        Checks if midi track object is an instrument track
+
+        Args:
+            track (Track): the track to check
+
+        Returns:
+            dict: dic (instr_key, instr_name (may be empty), channel) if true. None if false
+
+        """
         should_return = False
         instr_key = -1
         instr_name = ""
@@ -238,11 +267,22 @@ class Runner(Process):
             return None
 
 
-    # given a list of note events (from function get_note_events)
-    #   and ppqn (pulses per quarter note)
-    # returns list of note objects with appropriate durations and other properties
-    # this method calculates appropriate durations based on ppqn of track
     def get_notes(self,note_events, ppqn, track):
+        """
+        Given a list of note events (from function get_note_events), and ppqn (pulses per quarter note)
+           returns list of note objects with appropriate durations and other properties
+
+        Notes:
+            this method calculates appropriate durations based on ppqn of track
+
+        Args:
+            note_events: the note events
+            ppqn: pulses per quarter notes
+            track (Track): the Track to analyze.
+
+        Returns:
+            Note[]: list of note objects with appropriate durations and other properties
+        """
         note_objs = []
         unclosed_notes = defaultdict(lambda: [])  # holds running hash of notes that haven't seen an off event yet
                                                   # key is note pitch (integer from 0-127), value is a QUEUE of note_event tuples
@@ -279,8 +319,16 @@ class Runner(Process):
         return note_objs
 
 
-    # given a track returns NoteOnEvent and NoteOffEvent as list of tuples (on/off, tick, pitch, velocity)
     def get_note_events(self,track):
+        """
+        Given a track returns NoteOnEvent and NoteOffEvent as list of tuples (on/off, tick, pitch, velocity)
+
+        Args:
+            track (Track): the Track to analyze
+
+        Returns:
+            tuple: NoteOnEvent and NoteOffEvent as list of tuples (on/off, tick, pitch, velocity)
+        """
         notes = []
         for event in track:
             if type(event) is midi.NoteOnEvent:

@@ -15,6 +15,10 @@ from multiprocessing import Queue
 from . import get_engines
 
 def main():
+    """
+    Called when midi_store is run directly. Starts a series of database worker processes and kicks off the parsing of
+     the MIDI files and storing them in the database(s).
+    """
     parser = OptionParser()
 
     parser.add_option("-d", "--data-directory", dest="data_directory", default="data/")
@@ -24,12 +28,14 @@ def main():
 
     (options, args) = parser.parse_args()
 
+    # construct the mp.Queue of midi files to process
     q = Queue()
     for root, dirnames, filenames in os.walk(options.data_directory):
         for filename in fnmatch.filter(filenames, '*.mid'):
             midiPath = os.path.abspath(os.path.join(root, filename))
             q.put(midiPath)
 
+    # construct the series of database engines
     engines = get_engines(options.pool_size,options.db_username,options.db_password)
     processes = []
     for i in xrange(options.pool_size):
@@ -37,6 +43,7 @@ def main():
         p.start()
         processes.append(p)
 
+    # wait for all engines to complete.
     for p in processes:
         p.join()
 

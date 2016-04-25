@@ -6,22 +6,32 @@ class Note(Base):
     """
     A Note represents a line of note in a track with the following properties:
 
-    Properties
-        pitch: Integer from 0-127 representing note pitch
+    Attributes:
+        pitch (int): Integer from 0-127 representing note pitch
             Note: Defaults at 60 (C3)
             Note: -1 represents a "rest note"
-        dur: Integer where 1 === 32nd note and 32 === whole note.  Call this unit "durks"
-        start: Integer representing start time of note relative to Song in "durk" units (see dur)
-        tick_dur: Integer representing duration of note in ticks
+
+        iso_pitch (str): ISO representation of the note's pitch (eg. C, G, D, A E, B, F# ...)
+
+        dur (int): Integer where 1 === 32nd note and 32 === whole note.  Call this unit "durks"
+
+        start (int): Integer representing start time of note relative to Song in "durk" units (see dur)
+
+        tick_dur (int): Integer representing duration of note in ticks
             Note: will be -1 for rest (no meaning)
-        start_tick: Integer representing start time of note relative to Song (i.e. 0 is beginning of song) in tick units
+
+        start_tick (int): Integer representing start time of note relative to Song (i.e. 0 is beginning of song) in tick units
             Note: NOT relative to Track object, relative to Song object!
             Note: will be -1 for rest (no meaning)
-        measure: Integer representing measure of Song note is contained within
+
+        measure (int): Integer representing measure of Song note is contained within
             Note: 0 is the first measure of a Song
-        root: root of chord that this note start being played within
+
+        root (int): root of chord that this note start being played within
             Note: ...-2 -1  0  1  2  3  4  5  6  7  8  9 10 11 12 ...
                   ... Ab Eb Bb F  C  G  D  A  E  B  F# C# G# D# A#...
+
+        iso_root (String): ISO representation of the root of the chord.
     """
 
     __tablename__ = 'note'

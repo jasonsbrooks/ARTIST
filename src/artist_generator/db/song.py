@@ -6,10 +6,10 @@ class Song(Base):
     """
     A Song with the following properties:
 
-    Properties
-        title: String representing title of Song
-        ppqn: Integer representing "pulses per quarter note" (i.e. 96 ticks/ quarter note)
-        tracks: list of Track objects that constitute the song
+    Attributes:
+        title (str): String representing title of Song
+        ppqn (int): Integer representing "pulses per quarter note" (i.e. 96 ticks/ quarter note)
+        tracks (Track[]): list of Track objects that constitute the song
     """
     __tablename__ = 'song'
 

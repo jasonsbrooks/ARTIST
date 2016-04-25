@@ -5,19 +5,47 @@ from optparse import OptionParser
 import sys
 
 def create(eng):
+    """
+    Create the database specified by engine
+
+    Args:
+        eng: the database engine
+    """
     if not database_exists(eng.url):
         create_database(eng.url)
         Base.metadata.create_all(eng)
 
 def drop(eng):
+    """
+    Drop the database specified by engine
+
+    Args:
+        eng: the database engine
+    """
     if database_exists(eng.url):
         drop_database(eng.url)
 
 def create_many(num,usr="postgres",pwd="postgres"):
+    """
+    Create many databases
+
+    Args:
+        num: number of databases to create
+        usr: username to connect to the database
+        pwd: password to connect to the database
+    """
     for engine in get_engines(num,usr,pwd):
         create(engine)
 
 def drop_many(num,usr="postgres",pwd="postgres"):
+    """
+    Drop many databases
+
+    Args:
+        num: number of databases to drop
+        usr: username to connect to the database
+        pwd: password to connect to the database
+    """
     for engine in get_engines(num,usr,pwd):
         drop(engine)
 
