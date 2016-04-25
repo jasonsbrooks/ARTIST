@@ -1,0 +1,268 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>db.note &mdash; ARTIST 1.0.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ARTIST 1.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="db" href="../db.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ARTIST
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/analyze.html">analyze package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/db.html">db package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/iter.html">iter package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/utils.html">utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/ngram.html">ngram package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ARTIST</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../db.html">db</a> &raquo;</li>
+      
+    <li>db.note</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for db.note</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">Column</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">,</span> <span class="n">String</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">relationship</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">Base</span>
+
+<div class="viewcode-block" id="Note"><a class="viewcode-back" href="../../src/artist_generator/db.html#db.note.Note">[docs]</a><span class="k">class</span> <span class="nc">Note</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Note represents a line of note in a track with the following properties:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;note&#39;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;int: primary key&quot;&quot;&quot;</span>
+
+    <span class="n">pitch</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;int: Integer from 0-127 representing note pitch</span>
+
+<span class="sd">            Note: Defaults at 60 (C3)</span>
+
+<span class="sd">            Note: -1 represents a &quot;rest note&quot; &quot;&quot;&quot;</span>
+
+    <span class="n">iso_pitch</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">8</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;str: ISO representation of the note&#39;s pitch (eg. C, G, D, A E, B, F# ...)&quot;&quot;&quot;</span>
+
+    <span class="n">dur</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;int: Integer where 1 === 32nd note and 32 === whole note.  Call this unit &quot;durks&quot;&quot;&quot;</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;int: Integer representing start time of note relative to Song in &quot;durk&quot; units (see dur)&quot;&quot;&quot;</span>
+
+    <span class="n">end</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;int: Integer representing end time of note relative to Song in &quot;durk&quot; units (see dur)&quot;&quot;&quot;</span>
+
+    <span class="n">tick_dur</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;int: Integer representing duration of note in ticks</span>
+
+<span class="sd">            Note: will be -1 for rest (no meaning)&quot;&quot;&quot;</span>
+
+    <span class="n">start_tick</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;int: Integer representing start time of note relative to Song (i.e. 0 is beginning of song) in tick units</span>
+
+<span class="sd">            Note: NOT relative to Track object, relative to Song object!</span>
+
+<span class="sd">            Note: will be -1 for rest (no meaning)&quot;&quot;&quot;</span>
+
+    <span class="n">measure</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;int: Integer representing measure of Song note is contained within</span>
+<span class="sd">            Note: 0 is the first measure of a Song&quot;&quot;&quot;</span>
+
+    <span class="n">track_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;track.id&#39;</span><span class="p">))</span>
+    <span class="sd">&quot;&quot;&quot;int: id of the Track to which this Note belongs&quot;&quot;&quot;</span>
+
+
+    <span class="n">track</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;Track&quot;</span><span class="p">,</span> <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;notes&quot;</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;Track: the track to which this Note belongs&quot;&quot;&quot;</span>
+
+    <span class="n">root</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;int: root of chord that this note start being played within</span>
+
+<span class="sd">            Note: ...-2 -1  0  1  2  3  4  5  6  7  8  9 10 11 12 ...</span>
+
+<span class="sd">                  ... Ab Eb Bb F  C  G  D  A  E  B  F# C# G# D# A#...&quot;&quot;&quot;</span>
+
+    <span class="n">iso_root</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">8</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;str: ISO representation of the root of the chord.&quot;&quot;&quot;</span>
+
+    <span class="n">roman</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;int: the Roman Numeral representation of this Note&#39;s chord root&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;note(pitch=</span><span class="si">%r</span><span class="s2">, iso_pitch=</span><span class="si">%r</span><span class="s2">, dur=</span><span class="si">%r</span><span class="s2">, start=</span><span class="si">%r</span><span class="s2">, tick_dur=</span><span class="si">%r</span><span class="s2">, start_tick=</span><span class="si">%r</span><span class="s2">, measure=</span><span class="si">%r</span><span class="s2">, root=</span><span class="si">%r</span><span class="s2">, iso_root=</span><span class="si">%r</span><span class="s2">)&quot;</span> <span class="o">%</span> \
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pitch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">iso_pitch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dur</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_dur</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_tick</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">measure</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">iso_root</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Jason Brooks, Kevin Jiang, and Charles Proctor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

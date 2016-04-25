@@ -1,0 +1,748 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>db package &mdash; ARTIST 1.0.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ARTIST 1.0.0 documentation" href="../../index.html"/>
+        <link rel="next" title="iter package" href="iter.html"/>
+        <link rel="prev" title="analyze package" href="analyze.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ARTIST
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="analyze.html">analyze package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">db package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-db.exceptions">db.exceptions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-db.helpers">db.helpers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-db.midi_store">db.midi_store module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-db.note">db.note module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-db.reset">db.reset module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-db.song">db.song module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-db.track">db.track module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-db">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="iter.html">iter package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ngram.html">ngram package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ARTIST</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+    <li>db package</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/src/artist_generator/db.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="db-package">
+<h1>db package<a class="headerlink" href="#db-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-db.exceptions">
+<span id="db-exceptions-module"></span><h2>db.exceptions module<a class="headerlink" href="#module-db.exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="db.exceptions.InvalidKeySignature">
+<em class="property">exception </em><code class="descclassname">db.exceptions.</code><code class="descname">InvalidKeySignature</code><a class="reference internal" href="../../_modules/db/exceptions.html#InvalidKeySignature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.exceptions.InvalidKeySignature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
+<p>Exception to raise when we encounter an invalid key signature.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-db.helpers">
+<span id="db-helpers-module"></span><h2>db.helpers module<a class="headerlink" href="#module-db.helpers" title="Permalink to this headline">¶</a></h2>
+<p>Complete:
+1) Get all TimeSignatureEvent and SetTempoEvent
+2) tag tracks with this metadata (including time signature and tempo)
+2) investigate why occasional on/off note event mismatch errors</p>
+<blockquote>
+<div>Answer: just use queue</div></blockquote>
+<ol class="arabic" start="3">
+<li><dl class="first docutils">
+<dt>duration in get_notes&#8211; subtracting ticks doesn&#8217;t seem to give you the</dt>
+<dd><p class="first last">exact right float value...seems to be a bit short everytime</p>
+</dd>
+</dl>
+</li>
+</ol>
+<dl class="docutils">
+<dt>3b) Figure out how to insert rests into note list from information given</dt>
+<dd>but do this after you think more about what the duration actually means</dd>
+</dl>
+<p>Todo:
+4) figure out a way to NOT include drums (key is 0?  same as piano?)</p>
+<blockquote>
+<div>idea: drums are always on channel 9 (i.e. 0-indexed 10 from <a class="reference external" href="https://www.cs.cmu.edu/~music/cmsip/readings/MIDI%20tutorial%20for%20programmers.html">https://www.cs.cmu.edu/~music/cmsip/readings/MIDI%20tutorial%20for%20programmers.html</a>)</div></blockquote>
+<ol class="arabic simple" start="5">
+<li>Add naive tempo/dynamics in track</li>
+</ol>
+<p>Important MIDI Notes:
+1) NoteOnEvent with velocity of 0 === NoteOffEvent
+2) pattern.resolution contains resolution (ppqn)</p>
+<dl class="class">
+<dt id="db.helpers.Runner">
+<em class="property">class </em><code class="descclassname">db.helpers.</code><code class="descname">Runner</code><span class="sig-paren">(</span><em>q</em>, <em>engine</em>, <em>counter</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db/helpers.html#Runner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.helpers.Runner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">multiprocessing.process.Process</span></code></p>
+<p>A database worker process. Parses MIDI files pulled from self.q and stores them in the database specified by self.engine.</p>
+<dl class="method">
+<dt id="db.helpers.Runner.get_note_events">
+<code class="descname">get_note_events</code><span class="sig-paren">(</span><em>track</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db/helpers.html#Runner.get_note_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.helpers.Runner.get_note_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a track returns NoteOnEvent and NoteOffEvent as list of tuples (on/off, tick, pitch, velocity)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>track</strong> (<a class="reference internal" href="#db.track.Track" title="db.track.Track"><em>Track</em></a>) &#8211; the Track to analyze</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">NoteOnEvent and NoteOffEvent as list of tuples (on/off, tick, pitch, velocity)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="db.helpers.Runner.get_notes">
+<code class="descname">get_notes</code><span class="sig-paren">(</span><em>note_events</em>, <em>ppqn</em>, <em>track</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db/helpers.html#Runner.get_notes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.helpers.Runner.get_notes" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Given a list of note events (from function get_note_events), and ppqn (pulses per quarter note)</dt>
+<dd>returns list of note objects with appropriate durations and other properties</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>this method calculates appropriate durations based on ppqn of track</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>note_events</strong> &#8211; the note events</li>
+<li><strong>ppqn</strong> &#8211; pulses per quarter notes</li>
+<li><strong>track</strong> (<a class="reference internal" href="#db.track.Track" title="db.track.Track"><em>Track</em></a>) &#8211; the Track to analyze.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list of note objects with appropriate durations and other properties</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Note[]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="db.helpers.Runner.insert_rests_into_track">
+<code class="descname">insert_rests_into_track</code><span class="sig-paren">(</span><em>track</em>, <em>ppqn</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db/helpers.html#Runner.insert_rests_into_track"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.helpers.Runner.insert_rests_into_track" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take a Track object, inserts rest inot the appropriate locations (where no pitch is being played)</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Directly modifies the Track object that is passed to it!</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>track</strong> &#8211; the Track into which we insert rests</li>
+<li><strong>ppqn</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="db.helpers.Runner.is_instr_track">
+<code class="descname">is_instr_track</code><span class="sig-paren">(</span><em>track</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db/helpers.html#Runner.is_instr_track"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.helpers.Runner.is_instr_track" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if midi track object is an instrument track</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>track</strong> (<a class="reference internal" href="#db.track.Track" title="db.track.Track"><em>Track</em></a>) &#8211; the track to check</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dic (instr_key, instr_name (may be empty), channel) if true. None if false</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="db.helpers.Runner.midi_to_song">
+<code class="descname">midi_to_song</code><span class="sig-paren">(</span><em>midifilename</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db/helpers.html#Runner.midi_to_song"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.helpers.Runner.midi_to_song" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes midi file and returns a representative song object</p>
+<ul class="simple">
+<li>a Song is a list of many Tracks</li>
+<li>a Track is a list of many Notes representing a common 1) key signature, 2) time signature, and 3) instrument key</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>midifilename</strong> &#8211; filename of the MIDI file to parse and store in the database</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="db.helpers.Runner.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db/helpers.html#Runner.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.helpers.Runner.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the process</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-db.midi_store">
+<span id="db-midi-store-module"></span><h2>db.midi_store module<a class="headerlink" href="#module-db.midi_store" title="Permalink to this headline">¶</a></h2>
+<p>Stores midi files in a directory into DB</p>
+<p>&gt;&gt; ./midi_store.py [optional-folder]</p>
+<p>if no folder specified, midi_store.py will store all midi files in current directory</p>
+<dl class="function">
+<dt id="db.midi_store.main">
+<code class="descclassname">db.midi_store.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db/midi_store.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.midi_store.main" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Called when midi_store is run directly. Starts a series of database worker processes and kicks off the parsing of</dt>
+<dd>the MIDI files and storing them in the database(s).</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-db.note">
+<span id="db-note-module"></span><h2>db.note module<a class="headerlink" href="#module-db.note" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="db.note.Note">
+<em class="property">class </em><code class="descclassname">db.note.</code><code class="descname">Note</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db/note.html#Note"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.note.Note" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></code></p>
+<p>A Note represents a line of note in a track with the following properties:</p>
+<dl class="attribute">
+<dt id="db.note.Note.dur">
+<code class="descname">dur</code><a class="headerlink" href="#db.note.Note.dur" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; Integer where 1 === 32nd note and 32 === whole note.  Call this unit &#8220;durks</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.note.Note.end">
+<code class="descname">end</code><a class="headerlink" href="#db.note.Note.end" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; Integer representing end time of note relative to Song in &#8220;durk&#8221; units (see dur)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.note.Note.id">
+<code class="descname">id</code><a class="headerlink" href="#db.note.Note.id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; primary key</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.note.Note.iso_pitch">
+<code class="descname">iso_pitch</code><a class="headerlink" href="#db.note.Note.iso_pitch" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; ISO representation of the note&#8217;s pitch (eg. C, G, D, A E, B, F# ...)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.note.Note.iso_root">
+<code class="descname">iso_root</code><a class="headerlink" href="#db.note.Note.iso_root" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; ISO representation of the root of the chord.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.note.Note.measure">
+<code class="descname">measure</code><a class="headerlink" href="#db.note.Note.measure" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; Integer representing measure of Song note is contained within
+Note: 0 is the first measure of a Song</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.note.Note.pitch">
+<code class="descname">pitch</code><a class="headerlink" href="#db.note.Note.pitch" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; Integer from 0-127 representing note pitch</p>
+<p>Note: Defaults at 60 (C3)</p>
+<p>Note: -1 represents a &#8220;rest note&#8221;</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.note.Note.roman">
+<code class="descname">roman</code><a class="headerlink" href="#db.note.Note.roman" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; the Roman Numeral representation of this Note&#8217;s chord root</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.note.Note.root">
+<code class="descname">root</code><a class="headerlink" href="#db.note.Note.root" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; root of chord that this note start being played within</p>
+<p>Note: ...-2 -1  0  1  2  3  4  5  6  7  8  9 10 11 12 ...</p>
+<blockquote>
+<div>... Ab Eb Bb F  C  G  D  A  E  B  F# C# G# D# A#...</div></blockquote>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.note.Note.start">
+<code class="descname">start</code><a class="headerlink" href="#db.note.Note.start" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; Integer representing start time of note relative to Song in &#8220;durk&#8221; units (see dur)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.note.Note.start_tick">
+<code class="descname">start_tick</code><a class="headerlink" href="#db.note.Note.start_tick" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; Integer representing start time of note relative to Song (i.e. 0 is beginning of song) in tick units</p>
+<p>Note: NOT relative to Track object, relative to Song object!</p>
+<p>Note: will be -1 for rest (no meaning)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.note.Note.tick_dur">
+<code class="descname">tick_dur</code><a class="headerlink" href="#db.note.Note.tick_dur" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; Integer representing duration of note in ticks</p>
+<p>Note: will be -1 for rest (no meaning)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.note.Note.track">
+<code class="descname">track</code><a class="headerlink" href="#db.note.Note.track" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Track</em> &#8211; the track to which this Note belongs</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.note.Note.track_id">
+<code class="descname">track_id</code><a class="headerlink" href="#db.note.Note.track_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; id of the Track to which this Note belongs</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-db.reset">
+<span id="db-reset-module"></span><h2>db.reset module<a class="headerlink" href="#module-db.reset" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="db.reset.create">
+<code class="descclassname">db.reset.</code><code class="descname">create</code><span class="sig-paren">(</span><em>eng</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db/reset.html#create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.reset.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the database specified by engine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>eng</strong> &#8211; the database engine</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="db.reset.create_many">
+<code class="descclassname">db.reset.</code><code class="descname">create_many</code><span class="sig-paren">(</span><em>num</em>, <em>usr='postgres'</em>, <em>pwd='postgres'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db/reset.html#create_many"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.reset.create_many" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create many databases</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>num</strong> &#8211; number of databases to create</li>
+<li><strong>usr</strong> &#8211; username to connect to the database</li>
+<li><strong>pwd</strong> &#8211; password to connect to the database</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="db.reset.drop">
+<code class="descclassname">db.reset.</code><code class="descname">drop</code><span class="sig-paren">(</span><em>eng</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db/reset.html#drop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.reset.drop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drop the database specified by engine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>eng</strong> &#8211; the database engine</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="db.reset.drop_many">
+<code class="descclassname">db.reset.</code><code class="descname">drop_many</code><span class="sig-paren">(</span><em>num</em>, <em>usr='postgres'</em>, <em>pwd='postgres'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db/reset.html#drop_many"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.reset.drop_many" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drop many databases</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>num</strong> &#8211; number of databases to drop</li>
+<li><strong>usr</strong> &#8211; username to connect to the database</li>
+<li><strong>pwd</strong> &#8211; password to connect to the database</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-db.song">
+<span id="db-song-module"></span><h2>db.song module<a class="headerlink" href="#module-db.song" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="db.song.Song">
+<em class="property">class </em><code class="descclassname">db.song.</code><code class="descname">Song</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db/song.html#Song"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.song.Song" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></code></p>
+<p>A Song with the following properties:</p>
+<dl class="attribute">
+<dt id="db.song.Song.analyzed">
+<code class="descname">analyzed</code><a class="headerlink" href="#db.song.Song.analyzed" title="Permalink to this definition">¶</a></dt>
+<dd><p>True once this song has been analyzed, NULL otherwise</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.song.Song.id">
+<code class="descname">id</code><a class="headerlink" href="#db.song.Song.id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; primary key</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.song.Song.ppqn">
+<code class="descname">ppqn</code><a class="headerlink" href="#db.song.Song.ppqn" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; Integer representing &#8220;pulses per quarter note&#8221; (i.e. 96 ticks/ quarter note)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.song.Song.title">
+<code class="descname">title</code><a class="headerlink" href="#db.song.Song.title" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; String representing title of Song</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.song.Song.tracks">
+<code class="descname">tracks</code><a class="headerlink" href="#db.song.Song.tracks" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of Track objects that constitute the song</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-db.track">
+<span id="db-track-module"></span><h2>db.track module<a class="headerlink" href="#module-db.track" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="db.track.Track">
+<em class="property">class </em><code class="descclassname">db.track.</code><code class="descname">Track</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db/track.html#Track"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.track.Track" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Base</span></code></p>
+<p>A Track represents a line of music in a Song with a single</p>
+<ol class="arabic simple">
+<li>time signature</li>
+<li>key signature</li>
+<li>instrument key</li>
+</ol>
+<dl class="attribute">
+<dt id="db.track.Track.channel">
+<code class="descname">channel</code><a class="headerlink" href="#db.track.Track.channel" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; Integer (0-15) representing MIDI channel</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.track.Track.dynamic">
+<code class="descname">dynamic</code><a class="headerlink" href="#db.track.Track.dynamic" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; (naive) Integer representing dynamic marking (0-127, corresponds to MIDI velocity)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.track.Track.id">
+<code class="descname">id</code><a class="headerlink" href="#db.track.Track.id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; primary key</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.track.Track.instr_key">
+<code class="descname">instr_key</code><a class="headerlink" href="#db.track.Track.instr_key" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; Integer representing MIDI instrument key</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.track.Track.instr_name">
+<code class="descname">instr_name</code><a class="headerlink" href="#db.track.Track.instr_name" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> &#8211; String (may be empty) representation of instrument</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.track.Track.key_sig_bottom">
+<code class="descname">key_sig_bottom</code><a class="headerlink" href="#db.track.Track.key_sig_bottom" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; 0 =&gt; major key, 1 =&gt; minor key</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.track.Track.key_sig_top">
+<code class="descname">key_sig_top</code><a class="headerlink" href="#db.track.Track.key_sig_top" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; number of sharps in the key signature</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.track.Track.notes">
+<code class="descname">notes</code><a class="headerlink" href="#db.track.Track.notes" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Notes[]</em> &#8211; list of Note objects that constitute the track</p>
+<p>Note: notes are NOT in chronological order by start</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.track.Track.song">
+<code class="descname">song</code><a class="headerlink" href="#db.track.Track.song" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Song</em> &#8211; song to which this Track belongs</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.track.Track.song_id">
+<code class="descname">song_id</code><a class="headerlink" href="#db.track.Track.song_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; id of the Song to which this Track belongs</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.track.Track.start_tick">
+<code class="descname">start_tick</code><a class="headerlink" href="#db.track.Track.start_tick" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; Integer representing start time of track relative to song (i.e. 0 is beginning of song)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.track.Track.tempo">
+<code class="descname">tempo</code><a class="headerlink" href="#db.track.Track.tempo" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; (naive) Integer representing tempo marking</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.track.Track.time_sig_bottom">
+<code class="descname">time_sig_bottom</code><a class="headerlink" href="#db.track.Track.time_sig_bottom" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; denominator of time signature</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="db.track.Track.time_sig_top">
+<code class="descname">time_sig_top</code><a class="headerlink" href="#db.track.Track.time_sig_top" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> &#8211; numerator of time signature</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-db">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-db" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="db.get_engines">
+<code class="descclassname">db.</code><code class="descname">get_engines</code><span class="sig-paren">(</span><em>num</em>, <em>usr='postgres'</em>, <em>pwd='postgres'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db.html#get_engines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.get_engines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get engines for num different databases
+:param num: number of databases
+:param usr: database username
+:param pwd: database password</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the database engines</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">engine[]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="db.get_sessions">
+<code class="descclassname">db.</code><code class="descname">get_sessions</code><span class="sig-paren">(</span><em>num</em>, <em>usr='postgres'</em>, <em>pwd='postgres'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db.html#get_sessions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.get_sessions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get sessions for num different databases
+:param num: number of databases
+:param usr: database username
+:param pwd: database password</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the database sessions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Session[]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="iter.html" class="btn btn-neutral float-right" title="iter package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="analyze.html" class="btn btn-neutral" title="analyze package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Jason Brooks, Kevin Jiang, and Charles Proctor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
