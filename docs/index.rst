@@ -9,7 +9,9 @@ Welcome to ARTIST's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 5
+
+   src/non_baxter/
 
 
 
