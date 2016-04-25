@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 
 from preference_rules import *
 
-import music21
+import music21,sys
 from optparse import OptionParser
 from multiprocessing import Process,Queue
 
@@ -97,7 +97,7 @@ class ChordSpan(object):
 
         return music21.roman.romanNumeralFromChord(chord,key).scaleDegree
 
-    def label(self):
+    def label(self,depth=0):
         """
         Label all the notes in this ChordSpan with the determined root.
 
@@ -113,8 +113,8 @@ class ChordSpan(object):
                     rn = self.roman_numeral(note.track)
                 note.roman = rn
 
-        # label the previous chord span
-        if self.prev_cs:
+        # label the previous chord span (assuming we haven't surpassed max recursion limit)
+        if self.prev_cs and depth < sys.getrecursionlimit() - 1:
             self.prev_cs.label()
 
     def pr_score(self,m_root):
@@ -171,6 +171,9 @@ class ChordSpan(object):
         prev_cs_score = (self.prev_cs.score if self.prev_cs else 0)
         return prev_cs_score + best_weight
 
+# increased recursion limit for dynamic programming back-pointer labelling process
+RECURSION_LIMIT = 10000
+
 class HarmonicAnalyzer(Process):
     """
     Run Harmonic Analysis in a separate process.
@@ -199,6 +202,9 @@ class HarmonicAnalyzer(Process):
 
         # Counter object representing number of songs that have been processed
         self.counter = counter
+	
+	# increase the recursion limit
+	sys.setrecursionlimit(RECURSION_LIMIT)
 
     def run(self):
         """
