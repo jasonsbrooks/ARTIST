@@ -1,4 +1,4 @@
-import music21
+import music21,sys
 
 # in choosing roots for chord-spans, prefer certain TPC-root relationships over others, in the following order:
 # 1, 5, 3, b3, b7, b5, b9, ornamental
