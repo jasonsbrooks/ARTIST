@@ -2,19 +2,17 @@
 
 """
 Train an ngram model
-USAGE: ./ngram.py THREAD_POOL_SIZE OUTFILE_NAME
+
+    $ python -m ngram.train -o outdir [-t poolsize] [-k key] [-u username] [-p password]
+
+where:
+    - outdir is where the trained models will be saved
+    - poolsize is the number of databases
+    - key is the key to save the models in
+    - username is the database username
+    - password is the database password
 """
 
-'''
-Todo:
-1) key transposition (multiple ngram models or transpose into one?)
-2) skip bass/rhythm/strings/piano?
-
-
-Complete:
-1) Skip all drums
-
-'''
 import numpy as np
 import sys, os, re, music21
 from optparse import OptionParser
@@ -30,7 +28,21 @@ from ngram_helper import key_transpose_pitch
 NUM_NOTES = 128
 
 class RomanTrainer(object):
+    """
+    A RomanTrainer is the model trainer
+
+    1. for a given process / database, and
+    2. for a given roman numeral.
+    """
     def __init__(self,p_id,rt_id,counts,options):
+        """
+        Initialize the RomanTrainer
+        Args:
+            p_id: process id
+            rt_id: roman numeral id
+            counts: counts matrix
+            options: options passed into script
+        """
         self.p_id = p_id
         self.rt_id = rt_id
 
@@ -42,6 +54,11 @@ class RomanTrainer(object):
         self.dest_key = (music21.key.Key(options.key).sharps,0)
 
     def transposed_triple(self):
+        """
+        Transpose a triple into the appropriate key
+        Returns:
+            int[]: the transposed triple
+        """
         res = []
         notes = list(self.triple)
         for note in notes:
@@ -50,24 +67,43 @@ class RomanTrainer(object):
 	return res
 
     def train(self,note):
+        """
+        Train this RomanTrained on a given note
+        Args:
+            note: the note to train on
+        """
         self.triple.append(note)
 
         if len(self.triple) > 3:
+            # remove the old note
             old_note = self.triple.popleft()
             try:
+                # increment the matrix, where appropriate
                 np.add.at(self.counts, tuple(self.transposed_triple()), 1)
             except InvalidKeySignature, e:
                 # remove the bad note, append the old note.
                 self.triple.pop()
                 self.triple.appendleft(old_note)
 
-    # write the results
     def write(self):
-       with open(os.path.join(self.options.outdir,str(self.p_id),str(self.rt_id) + ".npy"), 'w') as outfile:
+        """
+        Write the numpy counts matrix out to file.
+        """
+        with open(os.path.join(self.options.outdir,str(self.p_id),str(self.rt_id) + ".npy"), 'w') as outfile:
             np.save(outfile, self.counts)
 
 class TrackTrainer(Process):
+    """
+    Separate process to train ngram models, all music sourcing from one database
+    """
     def __init__(self,p_id,session,options):
+        """
+        Initialize the TrackTrainer process
+        Args:
+            p_id: process id
+            session: the database session to load from
+            options (dict): options passed to script
+        """
         Process.__init__(self)
         self.session = session
         self.options = options
@@ -81,6 +117,9 @@ class TrackTrainer(Process):
             self.rts.append(rt)
 
     def run(self):
+        """
+        Start the process, training on each track separately
+        """
         # iterate through all the tracks
         for trk in self.session.query(Track).all():
             self.train(trk)
@@ -90,6 +129,11 @@ class TrackTrainer(Process):
             rt.write()
 
     def train(self,trk):
+        """
+        Train the ngram model on a specific track
+        Args:
+            trk: the track on which to train
+        """
         print os.path.basename(trk.song.title), ":", trk.instr_name
 
         # skip percurssion tracks

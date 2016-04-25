@@ -1,9 +1,19 @@
 import sys
 from db import InvalidKeySignature
 
-# transposes pitch to be same pitch within range [lo,hi] inclusive
-# if multiple pitch matches exist within range, matches to 'closest' pitch
 def range_transpose_pitch(pitch, lo, hi):
+    """
+    Transposes pitch to be same pitch within range [lo,hi] inclusive.
+    If multiple pitch matches exist within range, matches to 'closest' pitch
+
+    Args:
+        pitch (int): pitch to transpose
+        lo (int): lower bound
+        hi (int): upper bound
+
+    Returns:
+        int: transposed MIDI pitch
+    """
     octave = 12
 
     if (hi - lo) < (octave - 1):
@@ -18,9 +28,15 @@ def range_transpose_pitch(pitch, lo, hi):
     return pitch
 
 
-# given a pitch (MIDI integer from 0-127)
-# returns correpsonding string representation of note
 def pitch_to_str(pitch):
+    """
+    Calculate the corresponding string representation of a note, given the MIDI pitch number
+    Args:
+        pitch (int): MIDI pitch number
+
+    Returns:
+        str: corresponding note name
+    """
     p_to_l_dic = {0: 'C',
                   1: 'C#',
                   2: 'D',
@@ -37,13 +53,20 @@ def pitch_to_str(pitch):
     return p_to_l_dic[pitch % 12]
 
 
-# key_sig: (sf, mi)
-#    sf = -7 =>  flats, sf = 4 => 4 sharps, mi = 0 => major key, mi = 1 => minor key
-# takes a pitch, and converts from from_ks to appropriate key in to_ks
-# ensures pitch in range [0, 127]
-# Note: could convert in either positive or negative direction right now!
-#   so diff range in pitch is [-11, 11]
 def key_transpose_pitch(pitch, from_ks, to_ks):
+    """
+    Takes a pitch and transposes it from from_ks to to_ks.
+
+    Note: could convert in either positive or negative direction right now! so diff range in pitch is [-11, 11]
+
+    Args:
+        pitch (int): MIDI number of the pitch
+        from_ks: source key signature (top,bottom)
+        to_ks: destination key signature (top,bottom)
+
+    Returns:
+        int: transposed MIDI pitch
+    """
 
     if from_ks[0] > 7:
         from_ks = (from_ks[0] - 256,from_ks[1])
