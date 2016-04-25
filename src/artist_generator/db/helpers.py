@@ -47,6 +47,7 @@ class Runner(Process):
         self.q = q
         Session = sessionmaker(bind=engine)
         self.session = Session()
+        self.counter = counter
 
     def run(self):
         """
