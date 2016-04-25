@@ -218,9 +218,21 @@ class HarmonicAnalyzer(Process):
             count = self.counter.incrementAndGet()
             print count, ". ", song
 
-            # and run the analysis
-            self.analyze(song)
+            # skip songs that have already been analyzed
+            if song.analyzed:
+                print count, ". Already analyzed. Skipping."
+                continue
 
+            # and run the analysis
+            try:
+                self.analyze(song)
+
+                # mark this song as analyzed
+                song.analyzed = True
+                self.session.commit()
+            except Exception,e:
+                sys.stderr.write("Exception when processing " + str(song) + ":\n")
+                sys.stderr.write("\t" + str(e) + "\n")
 
     def analyze(self,song):
         """
@@ -236,8 +248,8 @@ class HarmonicAnalyzer(Process):
 		ti = TimeIterator(song,self.durk_step)
 	except ValueError,e:
 		# something is very wrong with this song... let's skip it!
-		sys.stderr.write("Skipping " + str(song) + ":")
-		sys.stderr.write("\t" + str(e))
+		sys.stderr.write("Exception when processing " + str(song) + ":\n")
+                sys.stderr.write("\t" + str(e) + "\n")
 		return False
 
         # iterate through every TimeInstance in the song

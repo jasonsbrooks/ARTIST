@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func
+from sqlalchemy import Column, DateTime, String, Integer, ForeignKey, func, Boolean
 from sqlalchemy.orm import relationship
 from . import Base
 
@@ -19,7 +19,10 @@ class Song(Base):
 
     tracks = relationship("Track")
     """list of Track objects that constitute the song"""
+    
+    analyzed = Column(Boolean, nullable=True)
+    """True once this song has been analyzed, NULL otherwise"""
 
     def __repr__(self):
-        return "Song(title=%r, ppqn=%r, len(tracks)=%r)" % \
-            (self.title, self.ppqn, len(self.tracks))
+        return "Song(title=%r, ppqn=%r, len(tracks)=%r, analyzed=%r)" % \
+            (self.title, self.ppqn, len(self.tracks), self.analyzed)

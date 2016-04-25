@@ -45,8 +45,8 @@ def compatibility(notes,m_root):
             comp.append(_dual_compatibility(m_root,m_note))
         except music21.pitch.AccidentalException,e:
             # this should rarely / never happen... but occasionally it does :(
-            sys.stderr.write("Caught: " + str(e))
-            pass
+            sys.stderr.write("Exception when processing: " + str(note) + "\n")
+            sys.stderr.write("\t" + str(e) + "\n")
 
     # return the average of the scores obtained.
     return sum(comp) / float(len(notes))
