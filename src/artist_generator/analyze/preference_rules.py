@@ -40,8 +40,13 @@ def compatibility(notes,m_root):
 
     # iterate through all notes, adding each score to comp[]
     for note in notes:
-        m_note = music21.note.Note(note.iso_pitch)
-        comp.append(_dual_compatibility(m_root,m_note))
+        try:
+            m_note = music21.note.Note(note.iso_pitch)
+            comp.append(_dual_compatibility(m_root,m_note))
+        except music21.pitch.AccidentalException,e:
+            # this should rarely / never happen... but occasionally it does :(
+            sys.stderr.write("Caught: " + str(e))
+            pass
 
     # return the average of the scores obtained.
     return sum(comp) / float(len(notes))
