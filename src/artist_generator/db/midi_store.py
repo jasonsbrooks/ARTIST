@@ -13,6 +13,7 @@ from helpers import Runner
 from optparse import OptionParser
 from multiprocessing import Queue
 from . import get_engines
+from utils import Counter
 
 def main():
     """
@@ -38,8 +39,9 @@ def main():
     # construct the series of database engines
     engines = get_engines(options.pool_size,options.db_username,options.db_password)
     processes = []
+    counter = Counter(0)
     for i in xrange(options.pool_size):
-        p = Runner(q,engines[i])
+        p = Runner(q,engines[i],counter)
         p.start()
         processes.append(p)
 

@@ -35,17 +35,19 @@ class Runner(Process):
     A database worker process. Parses MIDI files pulled from self.q and stores them in the database specified by self.engine.
     """
 
-    def __init__(self,q,engine):
+    def __init__(self,q,engine,counter):
         """
         Initialize a Runner
         Args:
             q: the queue of MIDI file names
             engine: the database engine into which we store the Notes
+            counter: count the number of songs that have been parsed.
         """
         Process.__init__(self)
         self.q = q
         Session = sessionmaker(bind=engine)
         self.session = Session()
+        self.counter = counter
 
     def run(self):
         """
@@ -54,7 +56,8 @@ class Runner(Process):
         while True:
             midiPath = self.q.get()
 
-            print "Analyzing " + midiPath.split('/')[-1]
+            count = self.counter.incrementAndGet()
+            print str(count) + ". Analyzing " + midiPath.split('/')[-1]
             self.midi_to_song(midiPath)
             print "Finished " + midiPath.split('/')[-1]
 

@@ -53,7 +53,7 @@ class Track(Base):
 
     notes = relationship("Note")
     """Notes[]: list of Note objects that constitute the track
-    
+
             Note: notes are NOT in chronological order by start"""
 
     def __repr__(self):
