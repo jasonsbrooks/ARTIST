@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>db.reset &mdash; ARTIST 1.0.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ARTIST 1.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="db" href="../db.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ARTIST
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/analyze.html">analyze package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/db.html">db package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/iter.html">iter package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/utils.html">utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/ngram.html">ngram package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ARTIST</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../db.html">db</a> &raquo;</li>
+      
+    <li>db.reset</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for db.reset</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">sqlalchemy_utils</span> <span class="kn">import</span> <span class="n">database_exists</span><span class="p">,</span> <span class="n">create_database</span><span class="p">,</span> <span class="n">drop_database</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">get_engines</span><span class="p">,</span><span class="n">Base</span>
+<span class="kn">from</span> <span class="nn">optparse</span> <span class="kn">import</span> <span class="n">OptionParser</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<div class="viewcode-block" id="create"><a class="viewcode-back" href="../../src/artist_generator/db.html#db.reset.create">[docs]</a><span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">eng</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create the database specified by engine</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        eng: the database engine</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">database_exists</span><span class="p">(</span><span class="n">eng</span><span class="o">.</span><span class="n">url</span><span class="p">):</span>
+        <span class="n">create_database</span><span class="p">(</span><span class="n">eng</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="drop"><a class="viewcode-back" href="../../src/artist_generator/db.html#db.reset.drop">[docs]</a><span class="k">def</span> <span class="nf">drop</span><span class="p">(</span><span class="n">eng</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Drop the database specified by engine</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        eng: the database engine</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">database_exists</span><span class="p">(</span><span class="n">eng</span><span class="o">.</span><span class="n">url</span><span class="p">):</span>
+        <span class="n">drop_database</span><span class="p">(</span><span class="n">eng</span><span class="o">.</span><span class="n">url</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="create_many"><a class="viewcode-back" href="../../src/artist_generator/db.html#db.reset.create_many">[docs]</a><span class="k">def</span> <span class="nf">create_many</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="n">usr</span><span class="o">=</span><span class="s2">&quot;postgres&quot;</span><span class="p">,</span><span class="n">pwd</span><span class="o">=</span><span class="s2">&quot;postgres&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create many databases</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        num: number of databases to create</span>
+<span class="sd">        usr: username to connect to the database</span>
+<span class="sd">        pwd: password to connect to the database</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">get_engines</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="n">usr</span><span class="p">,</span><span class="n">pwd</span><span class="p">):</span>
+        <span class="n">create</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="drop_many"><a class="viewcode-back" href="../../src/artist_generator/db.html#db.reset.drop_many">[docs]</a><span class="k">def</span> <span class="nf">drop_many</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="n">usr</span><span class="o">=</span><span class="s2">&quot;postgres&quot;</span><span class="p">,</span><span class="n">pwd</span><span class="o">=</span><span class="s2">&quot;postgres&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Drop many databases</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        num: number of databases to drop</span>
+<span class="sd">        usr: username to connect to the database</span>
+<span class="sd">        pwd: password to connect to the database</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">get_engines</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="n">usr</span><span class="p">,</span><span class="n">pwd</span><span class="p">):</span>
+        <span class="n">drop</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span></div>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">OptionParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-u&quot;</span><span class="p">,</span> <span class="s2">&quot;--username&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;db_username&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;postgres&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-p&quot;</span><span class="p">,</span> <span class="s2">&quot;--password&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;db_password&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;postgres&quot;</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;create&#39;</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s2">&quot;Creating &quot;</span> <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; databases!&quot;</span>
+        <span class="n">create_many</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span><span class="n">options</span><span class="o">.</span><span class="n">db_username</span><span class="p">,</span><span class="n">options</span><span class="o">.</span><span class="n">db_password</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;drop&#39;</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s2">&quot;Dropping &quot;</span> <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; databases!&quot;</span>
+        <span class="n">drop_many</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span><span class="n">options</span><span class="o">.</span><span class="n">db_username</span><span class="p">,</span><span class="n">options</span><span class="o">.</span><span class="n">db_password</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Jason Brooks, Kevin Jiang, and Charles Proctor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
