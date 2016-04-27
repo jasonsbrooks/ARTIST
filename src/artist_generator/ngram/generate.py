@@ -160,24 +160,12 @@ def construct_roman_numerals(key,int_seq):
         rns.append(music21.roman.RomanNumeral(i,key))
     return rns
 
-def random_dur(upto):
-    durs = filter(lambda x: x <= upto, [4, 8, 12, 16, 20, 24, 28, 32])
-    return random.choice(durs)
-
 def _generate(o_key,o_model_dir,cp):
     key = music21.key.Key(o_key)
     cp = construct_roman_numerals(key,cp)
     generator = NgramGenerator(key,cp,o_model_dir)
 
-    total = 4 * len(cp)
-    res = []
-
-    while total > 0:
-        dur = random_dur(total)
-        res.append((generator.next(),dur))
-        total -= dur
-
-    return res
+    return [(note,4) for note in generator]
 
 def generate(model_dir,chord_progression):
     """
