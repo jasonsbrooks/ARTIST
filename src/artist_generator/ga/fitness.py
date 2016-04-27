@@ -184,14 +184,14 @@ def end_on_root(genotype, weight=20):
 # returns fitness value for that genotype
 # Detailed: prints (total, Dic containing detailed breakdown)
 def calc_fitness(genotype, chord_progression, detailed=False):
-    li = large_intervals(genotype)
-    pm = pattern_matching(genotype, weight=20)
+    li = large_intervals(genotype,10)
+    pm = pattern_matching(genotype, weight=10)
     su = suspensions(genotype, chord_progression)
     db = downbeat(genotype, chord_progression)
     hb = halfbar(genotype, chord_progression)
     ln = longnote(genotype, chord_progression)
     er = end_on_root(genotype)
-    ps = penalize_short(genotype, weight=40)
+    ps = penalize_short(genotype, weight=80)
     pop = penalize_off_pulse(genotype, weight=20)
 
     total = li + pm + su + db + hb + ln + er + pop + ps
