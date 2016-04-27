@@ -10,23 +10,39 @@ from sensor_msgs.msg import (
 )
 
 QUEUE_SIZE = 100
+SECONDS_PER_DURK = 0.25
 
 class NotePublisher(object):
     def __init__(self):
+        rospy.loginfo("Initializing NotePublisher")
         self.publisher = rospy.Publisher('baxter_artist_notes', baxter_artist.msg.Note, queue_size=QUEUE_SIZE)
     
-    def pub_note(self,note):
-                
+    def pub_note(self,pitch,starttime):
+        
         # construct the note message
         msg = baxter_artist.msg.Note()
-        msg.starttime = rospy.Time.now() + rospy.Duration.from_sec(2.5)
-        msg.pitch = note 
+        msg.starttime = starttime
+        msg.pitch = pitch 
 
         rospy.loginfo("publish - pitch: " + str(msg.pitch))
         
         # publish the message
         self.publisher.publish(msg)
 
+    def pub_notes(self,notes):
+        # wait 2 seconds before starting the piece
+        piece_starttime = rospy.Time.now() + rospy.Duration.from_sec(2)
+
+        # when the next note should start
+        note_starttime = piece_starttime
+
+        for note in notes:
+            pitch = note[0]
+            dur = note[1]
+
+            # send the note message
+            self.pub_note(pitch,note_starttime)
+            note_starttime += rospy.Duration.from_sec(dur * SECONDS_PER_DURK)
 
 def main():
     rospy.loginfo("Initializing node... ")
@@ -62,23 +78,25 @@ def main():
         "C7":76,
         "R": -1}
 
-    noteNameArray = ["C6", "C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "A6", "G6", "F6", "E6", "D6", "G6", "F6", "E6", "D6", "C6", "B5", "C6", "D6", "B5", "D6"]
+    # noteNameArray = ["C6", "C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "C6", "E6", "G6", "C7", "D6", "B6", "C7", "C6", "C6", "A6", "G6", "F6", "E6", "D6", "G6", "F6", "E6", "D6", "C6", "B5", "C6", "D6", "B5", "D6"]
     # noteNameArray = ["C6", "C6", "D6", "E6", "F6", "G6", "A6", "B6", "C7", "B6", "A6", "G6", "F6", "E6", "D6", "C6"]
     # noteNameArray = ["B5", "C6", "D6", "C6", "B5", "C6", "D6", "C6", "B5", "C6", "D6", "C6"]
     # noteNameArray = ["B5", "C7", "B5", "C7", "B5", "C7", "B5", "C7", "B5", "C7"]
     # noteNameArray = ["C7", "B5", "C7","B5", "C7","B5", "C7","B5", "C7"]
     # noteNameArray = ["C7", "E6"]
     # noteNameArray = ["C5", "C5", "D5", "E5", "C6", "D6", "E6", "C6", "F6", "G6", "E6"]
-    noteNameArray = ["C5", "C5", "D5", "E5", "F5", "G5", "A5", "B5", "C6", "D6", "E6", "F6", "G6", "A6", "B6", "C7"]
+    # noteNameArray = ["C5", "C5", "D5", "E5", "F5", "G5", "A5", "B5", "C6", "D6", "E6", "F6", "G6", "A6", "B6", "C7"]
     # noteNameArray = ["C6", "C6", "E6", "F6", "F#6", "G6", "A6", "B6", "G6", "C7", "A#6", "A6", "G#6", "G6", "F6", "E6", "D6", "C6", "E6", "F6", "F#6", "G6", "A6", "B6", "G6", "C7", "A#6", "A6", "G#6", "G6", "F6", "E6", "D6", "C6", "E6", "F6", "F#6", "G6", "A6", "B6", "G6", "C7", "A#6", "A6", "G#6", "G6", "F6", "E6", "D6", "C6", "E6", "F6", "F#6", "G6", "A6", "B6", "G6", "C7", "A#6", "A6", "G#6", "G6", "F6", "E6", "D6", "C6", "E6", "F6", "F#6", "G6", "A6", "B6", "G6", "C7", "A#6", "A6", "G#6", "G6", "F6", "E6", "D6", "C6", "E6", "F6", "F#6", "G6", "A6", "B6", "G6", "C7", "A#6", "A6", "G#6", "G6", "F6", "E6", "D6", "C6", "E6", "F6", "F#6", "G6", "A6", "B6", "G6", "C7", "A#6", "A6", "G#6", "G6", "F6", "E6", "D6", "C6", "E6", "F6", "F#6", "G6", "A6", "B6", "G6", "C7", "A#6", "A6", "G#6", "G6", "F6", "E6", "D6"] 
-    noteNameArray = ["C5", "C5", "B5", "C5", "R", "E6", "A5", "G5", "R", "E5", "B4", "C6", "R", "F5", "G5", "R", "C5", "R", "C6", "B4", "C5", "R", "F5", "B5", "C6", "R", "A4", "E5", "G4", "G5", "R", "E5", "R", "R", "F5", "R", "D5", "A4", "R", "C6", "R", "E5", "B4", "C6", "R", "F5", "G5", "R", "C5", "R", "C6", "B4", "C5", "R", "A5", "G5", "R", "E5", "B4", "C6", "R", "F5", "G5", "R", "C5", "R", "C6", "B4", "C5", "R", "F5", "B5", "C6", "R", "A4", "E5", "F5", "R", "E5", "B5", "C5", "R", "E6", "A5", "G5", "R", "B4", "C6", "R", "F5", "G5", "R", "C5", "R", "C6", "B4", "C5"]
-    noteValArray = [notes[x] for x in noteNameArray]
+    # noteNameArray = ["C5", "C5", "B5", "C5", "R", "E6", "A5", "G5", "R", "E5", "B4", "C6", "R", "F5", "G5", "R", "C5", "R", "C6", "B4", "C5", "R", "F5", "B5", "C6", "R", "A4", "E5", "G4", "G5", "R", "E5", "R", "R", "F5", "R", "D5", "A4", "R", "C6", "R", "E5", "B4", "C6", "R", "F5", "G5", "R", "C5", "R", "C6", "B4", "C5", "R", "A5", "G5", "R", "E5", "B4", "C6", "R", "F5", "G5", "R", "C5", "R", "C6", "B4", "C5", "R", "F5", "B5", "C6", "R", "A4", "E5", "F5", "R", "E5", "B5", "C5", "R", "E6", "A5", "G5", "R", "B4", "C6", "R", "F5", "G5", "R", "C5", "R", "C6", "B4", "C5"]
+    # noteNameArray = ["C6","C6","B5","A5","G5","F5"]
+    noteNameArray = ["B5","B5","C6","D6","E6","F6","G6","A6","B6","C7"]
+    # noteNameArray = ["C6","C6","C6","C6","C6","C6"]
+    notes = [(notes[x],4) for x in noteNameArray]
 
     # pdb.set_trace()
+    rospy.sleep(10)
     publisher = NotePublisher()
-    for note in noteValArray:
-        publisher.pub_note(note)
-        rospy.sleep(2)
+    publisher.pub_notes(notes)
 
 def signal_handler(signum, frame):
     rospy.loginfo('Signal handler called with signal ' + str(signum))

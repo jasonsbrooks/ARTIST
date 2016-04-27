@@ -141,7 +141,7 @@ class Performer(BaxterController):
         subscriber = NoteSubscriber(self.q)
         subscriber.daemon = True
         subscriber.start()
-
+        rospy.loginfo("[subscribe] NoteSubscriber listening for notes.")
         while True:
             note = self.q.get()
             rospy.loginfo("dequeue: " + str(note.pitch))
