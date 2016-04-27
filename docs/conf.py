@@ -34,6 +34,7 @@ sys.path.insert(0,os.path.abspath("../src/artist_generator"))
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
+    'sphinx.ext.githubpages',
     'sphinx.ext.napoleon'
 ]
 
