@@ -134,7 +134,7 @@ class NgramGenerator():
             self.last_two.popleft()
 
             # and move forward in time
-            self.durk += 4
+            self.durk += 8
 
             # calculate 1->7 value
             val = self.calc_note_val(pitch.pitchClass)
@@ -165,7 +165,7 @@ def _generate(o_key,o_model_dir,cp):
     cp = construct_roman_numerals(key,cp)
     generator = NgramGenerator(key,cp,o_model_dir)
 
-    return [(note,4) for note in generator]
+    return [(note,8) for note in generator]
 
 def generate(model_dir,chord_progression):
     """
