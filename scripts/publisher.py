@@ -16,7 +16,10 @@ class NotePublisher(object):
     def __init__(self):
         rospy.loginfo("Initializing NotePublisher")
         self.publisher = rospy.Publisher('baxter_artist_notes', baxter_artist.msg.Note, queue_size=QUEUE_SIZE)
-    
+        
+        # need to sleep between creating Publisher and publishing to it.
+        rospy.sleep(3)
+
     def pub_note(self,pitch,starttime):
         
         # construct the note message
@@ -92,9 +95,9 @@ def main():
     noteNameArray = ["B5","B5","C6","D6","E6","F6","G6","A6","B6","C7"]
     # noteNameArray = ["C6","C6","C6","C6","C6","C6"]
     notes = [(notes[x],4) for x in noteNameArray]
+    rospy.loginfo(str(notes))
 
     # pdb.set_trace()
-    rospy.sleep(10)
     publisher = NotePublisher()
     publisher.pub_notes(notes)
 
