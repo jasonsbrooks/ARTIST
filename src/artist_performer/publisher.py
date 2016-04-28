@@ -2,7 +2,7 @@ import rospy
 import baxter_artist.msg
 
 QUEUE_SIZE = 100
-BPM = 60
+BPM = 45
 
 # convert BPM to DURKS_PER_SECOND
 DURKS_PER_SECOND = 8.0 * float(BPM) / 60.0
