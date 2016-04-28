@@ -10,7 +10,11 @@ from sensor_msgs.msg import (
 )
 
 QUEUE_SIZE = 100
-SECONDS_PER_DURK = 0.25
+BPM = 60
+
+# convert BPM to DURKS_PER_SECOND
+DURKS_PER_SECOND = 8.0 * float(BPM) / 60.0
+SECONDS_PER_DURK = 1.0 / float(DURKS_PER_SECOND)
 
 class NotePublisher(object):
     def __init__(self):
@@ -18,7 +22,8 @@ class NotePublisher(object):
         self.publisher = rospy.Publisher('baxter_artist_notes', baxter_artist.msg.Note, queue_size=QUEUE_SIZE)
         
         # need to sleep between creating Publisher and publishing to it.
-        rospy.sleep(3)
+        rospy.loginfo("Sleeping...")
+        rospy.sleep(5)
 
     def pub_note(self,pitch,starttime):
         
@@ -58,7 +63,7 @@ def main():
     # rospy.signal_shutdown("Finished perform control")
     # print("Done with the performance. A+")
 
-    notes = {"G4": 47,
+    noteToNum = {"G4": 47,
         "A4": 49,
         "B4": 51,
         "C5": 52,
@@ -94,7 +99,14 @@ def main():
     # noteNameArray = ["C6","C6","B5","A5","G5","F5"]
     noteNameArray = ["B5","B5","C6","D6","E6","F6","G6","A6","B6","C7"]
     # noteNameArray = ["C6","C6","C6","C6","C6","C6"]
-    notes = [(notes[x],4) for x in noteNameArray]
+    # notes = [(notes[x],4) for x in noteNameArray]
+
+
+    # notes = [("B5",8),("B5",4),("C6",8),("D6",4),("E6",8),("F6",4),("G6",8),("A6",4),("B6",8),("C7",4)]
+    notes = [("B5",8),("E6",8),("B5",8),("E6",8),("C7",8),("G6",8),("C7",8),("G6",8),("B6",8),("C7",8)]
+
+    notes = map(lambda (pitch,dur): (noteToNum[pitch],dur),notes)
+
     rospy.loginfo(str(notes))
 
     # pdb.set_trace()

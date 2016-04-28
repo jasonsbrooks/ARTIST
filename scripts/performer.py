@@ -9,6 +9,7 @@ def main():
 
     performer = Performer()
     performer.subscribe()
+    performer.set_neutral()
 
 def signal_handler(signum, frame):
     rospy.loginfo('Signal handler called with signal ' + str(signum))

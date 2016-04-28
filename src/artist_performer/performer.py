@@ -29,7 +29,6 @@ class Performer(BaxterController):
         Performs the instrument like a boss
         """
         BaxterController.__init__(self)
-        self.set_neutral()
         self.q = Queue()
         self.prev_left_note = 52
         self.prev_right_note = 61
@@ -80,18 +79,23 @@ class Performer(BaxterController):
 
     def play_right_note_now(self,note):
         self.send_note(int(note))
+
+        total_sleep = 0.5
         if int(note) in [74, 72, 70, 67, 65, 62, 60, 58] and self.prev_right_note not in [74, 72, 70, 67, 65, 62, 60, 58]:
             self.avoid_black_key("right", self.right_arm.joint_angles())
             time.sleep(0.25)
+            total_sleep -= 0.25
 
         self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True)
         if abs(int(note) - int(self.prev_right_note)) > 5:
             rospy.loginfo("Making two motions since notes are too far apart")
             time.sleep(0.25)
+            total_sleep -= 0.25
             self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True)
+
         # time.sleep(1)
         # self.right_arm.set_joint_positions(self.keys["right"][str(note)], raw=True)
-        time.sleep(0.5)
+        time.sleep(total_sleep)
         self.flick("right", self.keys["right"][str(note)])
         self.prev_right_note = int(note)
         # time.sleep(2)
