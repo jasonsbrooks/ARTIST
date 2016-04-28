@@ -16,7 +16,7 @@ import sys,random,pdb,os,music21
 from ngram_helper import pitch_to_str
 from audiolazy import midi2str
 from optparse import OptionParser
-import ga
+from artist_generator import ga
 
 DURKS_PER_MEASURE = 32
 """int: Number of durks per measure."""

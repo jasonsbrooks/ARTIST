@@ -1,5 +1,5 @@
 import sys
-from db import InvalidKeySignature
+from exceptions import InvalidKeySignature
 
 def range_transpose_pitch(pitch, lo, hi):
     """
