@@ -14,3 +14,4 @@ KEYS_FILENAME = os.path.join(ARTIST_SHARE_DIR,'keys.json')
 from .controller import BaxterController
 from .learner import Learner
 from .performer import Performer
+from .publisher import NotePublisher
