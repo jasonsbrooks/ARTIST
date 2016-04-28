@@ -40,6 +40,9 @@ def main():
     ngram_dir = ARTIST_SHARE_DIR + "/ngram"
     notes = ga.run(ngram_generate=(lambda: ngram.generate(ngram_dir,TWELVE_BAR_BLUES)),num_iter=800)
 
+    # Song: Now's the time!
+    # notes = [(9, 4), (12, 4), (12, 4), (13, 4), (9, 4), (12, 12), (9, 4),(12, 4), (12, 4), (13, 4), (9, 4), (12, 12), (9, 4), (12, 4), (12, 4), (13, 4), (9, 4), (12, 4), (12, 4), (13, 4), (9, 4), (12, 4), (12, 4), (13, 4), (9, 4), (12, 12), (9, 4), (12, 4), (12, 4), (13, 4), (9, 4), (12, 4), (9, 12), (12, 4), (12, 4), (13, 4), (9, 4), (12, 4), (9, 12), (12, 4), (12, 4), (13, 4), (9, 4), (12, 4), (12, 4), (13, 4), (9, 4), (12, 4), (12, 4), (13, 4), (9, 4), (12, 8), (9, 4)]
+    
     notes = map(lambda (pitch,dur): (noteToNum[pitch],dur), notes)
     publisher = NotePublisher()
     publisher.pub_notes(notes)
