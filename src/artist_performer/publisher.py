@@ -1,5 +1,8 @@
-import rospy
-import baxter_artist.msg
+from . import ROS_ENABLED
+
+if ROS_ENABLED:
+    import rospy
+    import baxter_artist.msg
 
 QUEUE_SIZE = 100
 BPM = 45

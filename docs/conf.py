@@ -15,8 +15,8 @@
 import sys
 import os
 
-sys.path.insert(0,os.path.abspath("../src/artist_performer"))
-sys.path.insert(0,os.path.abspath("../src/artist_generator"))
+# sys.path.insert(0,os.path.abspath("../src/artist_performer"))
+# sys.path.insert(0,os.path.abspath("../src/artist_generator"))
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the

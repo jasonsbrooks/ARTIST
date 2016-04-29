@@ -1,14 +1,15 @@
 from .controller import BaxterController
+from . import ROS_ENABLED,CONFIG_FILENAME,KEYS_FILENAME,IMAGE_PATH
 
-import rospy, os, time, json
+if ROS_ENABLED:
+    import rospy, cv2, cv_bridge
 
-import cv2, cv_bridge
+    from sensor_msgs.msg import (
+        Image,
+    )
 
-from sensor_msgs.msg import (
-    Image,
-)
+import os, time, json
 
-from . import CONFIG_FILENAME,KEYS_FILENAME,IMAGE_PATH
 NUM_KEYS = 88
 NEUTRAL_KEY = 0
 

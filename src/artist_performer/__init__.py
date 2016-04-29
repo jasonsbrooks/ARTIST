@@ -1,11 +1,27 @@
-import rospy,rospkg,os
+import os
 
-# calculate directory location information
-_rospack = rospkg.RosPack()
+if os.environ.get("ROS_ROOT"):
+    import rospy,rospkg
 
-ARTIST_PKG_DIR = _rospack.get_path('baxter_artist')
-"""Location of the baxter_artist/ package
-"""
+    ROS_ENABLED = True
+    """Are we running in a ROS environment?
+    """
+
+    # calculate directory location information
+    _rospack = rospkg.RosPack()
+
+    ARTIST_PKG_DIR = _rospack.get_path('baxter_artist')
+    """Location of the baxter_artist/ package
+    """
+else:
+    ROS_ENABLED = False
+    """Are we running in a ROS environment?
+    """
+
+    ARTIST_PKG_DIR = os.path.join(os.path.dirname(__file__),os.pardir,os.pardir)
+    print ARTIST_PKG_DIR
+    """Location of the baxter_artist/ package
+    """
 
 ARTIST_SHARE_DIR = os.path.join(ARTIST_PKG_DIR,'share/')
 """ Location of the share/ directory

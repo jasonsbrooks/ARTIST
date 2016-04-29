@@ -1,13 +1,18 @@
-import copy, os, rospy, cv2, cv_bridge, json, time, threading, signal, sys
+import copy, os, json, time, threading, signal, sys
 from Queue import Queue
 
-from baxter_dataflow import wait_for
+from . import ROS_ENABLED
 
-from sensor_msgs.msg import (
-    Image,
-)
+if ROS_ENABLED:
+    import rospy, cv2, cv_bridge
+    from baxter_dataflow import wait_for
 
-import baxter_artist.msg
+    from sensor_msgs.msg import (
+        Image,
+    )
+
+    import baxter_artist.msg
+
 from . import BaxterController, KEYS_FILENAME, IMAGE_PATH
 
 class NoteSubscriber(threading.Thread):

@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 
-import rospy, baxter_interface, json
-from baxter_interface import CHECK_VERSION
-from . import CONFIG_FILENAME
+from . import ROS_ENABLED, CONFIG_FILENAME
+
+if ROS_ENABLED:
+    import rospy, baxter_interface
+    from baxter_interface import CHECK_VERSION
+
+import json
 
 class BaxterController(object):
     """
