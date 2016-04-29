@@ -1,3 +1,12 @@
+"""
+The artist_performer packages contains the principle code for controlling Baxter, including:
+
+- `controller.py`: a superclass to configure Baxter and its limbs,
+- `learner.py`: a class to manage the learning of joint positions for various keys,
+- `performer.py`: a class to manage the performance (actually hitting the notes), and
+- `publisher.py`: a class to publish notes to the `baxter_artist_notes` topic, which will be heard by the subscriber in `performer.py`
+"""
+
 import os
 
 if os.environ.get("ROS_ROOT"):

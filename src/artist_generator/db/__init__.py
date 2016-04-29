@@ -1,3 +1,16 @@
+"""
+The db package contains model definitions for
+
+- `song.py`
+- `track.py`: a line of music in a Song with a single time signature, key signature, instrument key
+- `note.py`
+
+and
+
+- `helpers.py` for parsing the MIDI files (this is the exciting part !),
+- `midi_store.py` for running the parser,
+- `reset.py` for creating / dropping databases.
+"""
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
