@@ -6,19 +6,19 @@
 Welcome to ARTIST's documentation!
 ==================================
 
-Contents:
+For installation and basic usage instructtions, take a look at:
 
 .. toctree::
    :maxdepth: 5
 
-   src/artist_generator/analyze
-   src/artist_generator/db
-   src/artist_generator/ga
-   src/artist_generator/iter
-   src/artist_generator/utils
-   src/artist_generator/ngram
+   src/installation
 
-   src/artist_performer/artist_performer.rst
+For detailed documentation, with further example usage, see:
+
+.. toctree::
+   :maxdepth: 5
+
+   src/modules
 
 
 Indices and tables
