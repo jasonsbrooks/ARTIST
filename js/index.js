@@ -1,4 +1,23 @@
-$(document).ready(function() { 
+function hideElements() {
+  if ($(window).width() < 932) {
+    if ($(window).width() < 534) {
+      $(".documentation").hide();
+    } else {
+      $(".documentation").show();
+    }
+    $(".toHide").hide();
+  } else {
+    $(".toHide").show();
+  }
+}
+
+$(document).ready(function() {
+  hideElements();
+
+  $(window).resize(function() {
+    hideElements();
+  });
+
   var scroll_start = 0;
   $('#logo').hide();
   var offset = $(window).height() / 3;
@@ -24,3 +43,4 @@ $(document).ready(function() {
   });
 
 });
+
