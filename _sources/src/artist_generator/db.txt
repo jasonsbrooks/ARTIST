@@ -1,8 +1,10 @@
 db package
 ==========
 
-Submodules
-----------
+.. automodule:: db
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 db.exceptions module
 --------------------
@@ -56,15 +58,6 @@ db.track module
 ---------------
 
 .. automodule:: db.track
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: db
     :members:
     :undoc-members:
     :show-inheritance:

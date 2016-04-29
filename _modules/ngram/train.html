@@ -81,13 +81,10 @@
             
             
                 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/analyze.html">analyze package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/db.html">db package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/ga.html">ga package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/iter.html">iter package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/utils.html">utils package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/ngram.html">ngram package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../src/artist_performer/artist_performer.html">artist_performer package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/installation.html">Installation on Ubuntu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/training.html">Training the Trigram Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/generation.html">Generating Music</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/baxter.html">Using Baxter</a></li>
 </ul>
 
             
@@ -157,8 +154,9 @@
 
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">desc</span><span class="p">,</span> <span class="n">asc</span>
 
-<span class="kn">from</span> <span class="nn">db</span> <span class="kn">import</span> <span class="n">Song</span><span class="p">,</span> <span class="n">Track</span><span class="p">,</span> <span class="n">Note</span><span class="p">,</span> <span class="n">get_sessions</span><span class="p">,</span> <span class="n">InvalidKeySignature</span>
+<span class="kn">from</span> <span class="nn">db</span> <span class="kn">import</span> <span class="n">Song</span><span class="p">,</span> <span class="n">Track</span><span class="p">,</span> <span class="n">Note</span><span class="p">,</span> <span class="n">get_sessions</span>
 <span class="kn">from</span> <span class="nn">ngram_helper</span> <span class="kn">import</span> <span class="n">key_transpose_pitch</span>
+<span class="kn">from</span> <span class="nn">exceptions</span> <span class="kn">import</span> <span class="n">InvalidKeySignature</span>
 
 <span class="n">NUM_NOTES</span> <span class="o">=</span> <span class="mi">128</span>
 

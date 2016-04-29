@@ -31,8 +31,9 @@
 
   
     <link rel="top" title="ARTIST 1.0.0 documentation" href="../../index.html"/>
-        <link rel="next" title="ngram package" href="ngram.html"/>
-        <link rel="prev" title="iter package" href="iter.html"/> 
+        <link rel="up" title="Training the Trigram Model" href="../training.html"/>
+        <link rel="next" title="Generating Music" href="../generation.html"/>
+        <link rel="prev" title="ngram package" href="ngram.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -81,21 +82,11 @@
           
             
             
-                <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="analyze.html">analyze package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="db.html">db package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ga.html">ga package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="iter.html">iter package</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">utils package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-utils.counter">utils.counter module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-utils.mark_analyzed">utils.mark_analyzed module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-utils.stats">utils.stats module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-utils">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="ngram.html">ngram package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../artist_performer/artist_performer.html">artist_performer package</a></li>
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation on Ubuntu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../training.html">Training the Trigram Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generation.html">Generating Music</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../baxter.html">Using Baxter</a></li>
 </ul>
 
             
@@ -126,6 +117,8 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../../index.html">Docs</a> &raquo;</li>
       
+          <li><a href="../training.html">Training the Trigram Model</a> &raquo;</li>
+      
     <li>utils package</li>
       <li class="wy-breadcrumbs-aside">
         
@@ -140,11 +133,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="utils-package">
-<h1>utils package<a class="headerlink" href="#utils-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
+  <div class="section" id="module-utils">
+<span id="utils-package"></span><h1>utils package<a class="headerlink" href="#module-utils" title="Permalink to this headline">¶</a></h1>
+<p>The utils package contains a series of utilities for running and analyzing other scripts, including:</p>
+<ul class="simple">
+<li><cite>counter.py</cite>: a process-safe counter,</li>
+<li><cite>mark_analyzed.py</cite>: a script to mark songs as analyzed (harmonically),</li>
+<li><cite>stats.py</cite>: a script to calculate the number of notes, tracks, and songs in our dataset.</li>
+</ul>
 <div class="section" id="module-utils.counter">
 <span id="utils-counter-module"></span><h2>utils.counter module<a class="headerlink" href="#module-utils.counter" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -237,9 +233,6 @@ A song has been analyzed if any notes contain a non-NULL root.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-utils">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-utils" title="Permalink to this headline">¶</a></h2>
-</div>
 </div>
 
 
@@ -249,10 +242,10 @@ A song has been analyzed if any notes contain a non-NULL root.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="ngram.html" class="btn btn-neutral float-right" title="ngram package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../generation.html" class="btn btn-neutral float-right" title="Generating Music" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="iter.html" class="btn btn-neutral" title="iter package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="ngram.html" class="btn btn-neutral" title="ngram package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

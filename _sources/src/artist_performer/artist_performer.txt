@@ -1,8 +1,10 @@
 artist_performer package
 ========================
 
-Submodules
-----------
+.. automodule:: artist_performer
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 artist_performer.controller module
 ----------------------------------
@@ -36,11 +38,3 @@ artist_performer.publisher module
     :undoc-members:
     :show-inheritance:
 
-
-Module contents
----------------
-
-.. automodule:: artist_performer
-    :members:
-    :undoc-members:
-    :show-inheritance:

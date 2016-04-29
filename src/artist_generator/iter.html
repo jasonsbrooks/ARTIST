@@ -31,8 +31,9 @@
 
   
     <link rel="top" title="ARTIST 1.0.0 documentation" href="../../index.html"/>
-        <link rel="next" title="utils package" href="utils.html"/>
-        <link rel="prev" title="ga package" href="ga.html"/> 
+        <link rel="up" title="Training the Trigram Model" href="../training.html"/>
+        <link rel="next" title="analyze package" href="analyze.html"/>
+        <link rel="prev" title="db package" href="db.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -81,21 +82,11 @@
           
             
             
-                <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="analyze.html">analyze package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="db.html">db package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ga.html">ga package</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">iter package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-iter.chord_iterator">iter.chord_iterator module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-iter.song_iterator">iter.song_iterator module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-iter.time_iterator">iter.time_iterator module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-iter">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">utils package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ngram.html">ngram package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../artist_performer/artist_performer.html">artist_performer package</a></li>
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation on Ubuntu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../training.html">Training the Trigram Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generation.html">Generating Music</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../baxter.html">Using Baxter</a></li>
 </ul>
 
             
@@ -126,6 +117,8 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../../index.html">Docs</a> &raquo;</li>
       
+          <li><a href="../training.html">Training the Trigram Model</a> &raquo;</li>
+      
     <li>iter package</li>
       <li class="wy-breadcrumbs-aside">
         
@@ -140,11 +133,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="iter-package">
-<h1>iter package<a class="headerlink" href="#iter-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
+  <div class="section" id="module-iter">
+<span id="iter-package"></span><h1>iter package<a class="headerlink" href="#module-iter" title="Permalink to this headline">¶</a></h1>
+<p>The iter package contains a series of 3 iterators for traversing a piece of music:</p>
+<ul class="simple">
+<li><cite>note_iterator.py</cite> iterates through notes in non-decreasing time order,</li>
+<li><cite>chord_iterator.py</cite> iterates through a song by chord, and</li>
+<li><cite>time_iterator.py</cite> iterates through a song by time instance (what is playing at a particular moment).</li>
+</ul>
 <div class="section" id="module-iter.chord_iterator">
 <span id="iter-chord-iterator-module"></span><h2>iter.chord_iterator module<a class="headerlink" href="#module-iter.chord_iterator" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -284,9 +280,6 @@
 </dd></dl>
 
 </div>
-<div class="section" id="module-iter">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-iter" title="Permalink to this headline">¶</a></h2>
-</div>
 </div>
 
 
@@ -296,10 +289,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="utils.html" class="btn btn-neutral float-right" title="utils package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="analyze.html" class="btn btn-neutral float-right" title="analyze package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="ga.html" class="btn btn-neutral" title="ga package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="db.html" class="btn btn-neutral" title="db package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

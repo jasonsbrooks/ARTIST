@@ -31,8 +31,9 @@
 
   
     <link rel="top" title="ARTIST 1.0.0 documentation" href="../../index.html"/>
-        <link rel="next" title="ga package" href="ga.html"/>
-        <link rel="prev" title="analyze package" href="analyze.html"/> 
+        <link rel="up" title="Training the Trigram Model" href="../training.html"/>
+        <link rel="next" title="iter package" href="iter.html"/>
+        <link rel="prev" title="Training the Trigram Model" href="../training.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -82,24 +83,30 @@
             
             
                 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="analyze.html">analyze package</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">db package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-db.exceptions">db.exceptions module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-db.helpers">db.helpers module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-db.midi_store">db.midi_store module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-db.note">db.note module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-db.reset">db.reset module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-db.song">db.song module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-db.track">db.track module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-db">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation on Ubuntu</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../training.html">Training the Trigram Model</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../training.html#create-the-databases">Create the Databases</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../training.html#parse-midi-into-database">Parse MIDI into Database</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">db package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#db-exceptions-module">db.exceptions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-db.helpers">db.helpers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-db.midi_store">db.midi_store module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-db.note">db.note module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-db.reset">db.reset module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-db.song">db.song module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-db.track">db.track module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="ga.html">ga package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="iter.html">iter package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">utils package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ngram.html">ngram package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../artist_performer/artist_performer.html">artist_performer package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../training.html#iterating-through-the-music">Iterating through the Music</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../training.html#harmonic-analysis">Harmonic Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../training.html#id1">Training the Trigram Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../training.html#random-utilities">Random Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../generation.html">Generating Music</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../baxter.html">Using Baxter</a></li>
 </ul>
 
             
@@ -130,6 +137,8 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../../index.html">Docs</a> &raquo;</li>
       
+          <li><a href="../training.html">Training the Trigram Model</a> &raquo;</li>
+      
     <li>db package</li>
       <li class="wy-breadcrumbs-aside">
         
@@ -144,20 +153,60 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="db-package">
-<h1>db package<a class="headerlink" href="#db-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-db.exceptions">
-<span id="db-exceptions-module"></span><h2>db.exceptions module<a class="headerlink" href="#module-db.exceptions" title="Permalink to this headline">¶</a></h2>
-<dl class="exception">
-<dt id="db.exceptions.InvalidKeySignature">
-<em class="property">exception </em><code class="descclassname">db.exceptions.</code><code class="descname">InvalidKeySignature</code><a class="headerlink" href="#db.exceptions.InvalidKeySignature" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
-<p>Exception to raise when we encounter an invalid key signature.</p>
+  <div class="section" id="module-db">
+<span id="db-package"></span><h1>db package<a class="headerlink" href="#module-db" title="Permalink to this headline">¶</a></h1>
+<p>The db package contains model definitions for</p>
+<ul class="simple">
+<li><cite>song.py</cite></li>
+<li><cite>track.py</cite>: a line of music in a Song with a single time signature, key signature, instrument key</li>
+<li><cite>note.py</cite></li>
+</ul>
+<p>and</p>
+<ul class="simple">
+<li><cite>helpers.py</cite> for parsing the MIDI files (this is the exciting part !),</li>
+<li><cite>midi_store.py</cite> for running the parser,</li>
+<li><cite>reset.py</cite> for creating / dropping databases.</li>
+</ul>
+<dl class="function">
+<dt id="db.get_engines">
+<code class="descclassname">db.</code><code class="descname">get_engines</code><span class="sig-paren">(</span><em>num</em>, <em>usr='postgres'</em>, <em>pwd='postgres'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db.html#get_engines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.get_engines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get engines for num different databases
+:param num: number of databases
+:param usr: database username
+:param pwd: database password</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the database engines</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">engine[]</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
+<dl class="function">
+<dt id="db.get_sessions">
+<code class="descclassname">db.</code><code class="descname">get_sessions</code><span class="sig-paren">(</span><em>num</em>, <em>usr='postgres'</em>, <em>pwd='postgres'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db.html#get_sessions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.get_sessions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get sessions for num different databases
+:param num: number of databases
+:param usr: database username
+:param pwd: database password</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the database sessions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Session[]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="section" id="db-exceptions-module">
+<h2>db.exceptions module<a class="headerlink" href="#db-exceptions-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-db.helpers">
 <span id="db-helpers-module"></span><h2>db.helpers module<a class="headerlink" href="#module-db.helpers" title="Permalink to this headline">¶</a></h2>
@@ -312,8 +361,17 @@
 <div class="section" id="module-db.midi_store">
 <span id="db-midi-store-module"></span><h2>db.midi_store module<a class="headerlink" href="#module-db.midi_store" title="Permalink to this headline">¶</a></h2>
 <p>Stores midi files in a directory into DB</p>
-<p>&gt;&gt; ./midi_store.py [optional-folder]</p>
-<p>if no folder specified, midi_store.py will store all midi files in current directory</p>
+<p>python -m db.midi_store [-d data_directory] [-t pool_size] [-u username] [-p password]</p>
+<dl class="docutils">
+<dt>where:</dt>
+<dd><ul class="first last simple">
+<li><cite>data_directory</cite> is the location of the MIDI files.</li>
+<li><cite>pool_size</cite> is the number of databases</li>
+<li><cite>username</cite> is the database username</li>
+<li><cite>password</cite> is the database password</li>
+</ul>
+</dd>
+</dl>
 <dl class="function">
 <dt id="db.midi_store.main">
 <code class="descclassname">db.midi_store.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db/midi_store.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.midi_store.main" title="Permalink to this definition">¶</a></dt>
@@ -636,47 +694,6 @@ Note: 0 is the first measure of a Song</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-db">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-db" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="db.get_engines">
-<code class="descclassname">db.</code><code class="descname">get_engines</code><span class="sig-paren">(</span><em>num</em>, <em>usr='postgres'</em>, <em>pwd='postgres'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db.html#get_engines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.get_engines" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get engines for num different databases
-:param num: number of databases
-:param usr: database username
-:param pwd: database password</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the database engines</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">engine[]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="db.get_sessions">
-<code class="descclassname">db.</code><code class="descname">get_sessions</code><span class="sig-paren">(</span><em>num</em>, <em>usr='postgres'</em>, <em>pwd='postgres'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/db.html#get_sessions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#db.get_sessions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get sessions for num different databases
-:param num: number of databases
-:param usr: database username
-:param pwd: database password</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the database sessions</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Session[]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
 </div>
 
 
@@ -686,10 +703,10 @@ Note: 0 is the first measure of a Song</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="ga.html" class="btn btn-neutral float-right" title="ga package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="iter.html" class="btn btn-neutral float-right" title="iter package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="analyze.html" class="btn btn-neutral" title="analyze package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../training.html" class="btn btn-neutral" title="Training the Trigram Model" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -31,8 +31,9 @@
 
   
     <link rel="top" title="ARTIST 1.0.0 documentation" href="../../index.html"/>
-        <link rel="next" title="iter package" href="iter.html"/>
-        <link rel="prev" title="db package" href="db.html"/> 
+        <link rel="up" title="Generating Music" href="../generation.html"/>
+        <link rel="next" title="Using Baxter" href="../baxter.html"/>
+        <link rel="prev" title="Generating Music" href="../generation.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -82,22 +83,21 @@
             
             
                 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="analyze.html">analyze package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="db.html">db package</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">ga package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-ga.chords">ga.chords module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-ga.fitness">ga.fitness module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-ga.ga">ga.ga module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#ga-ga-midi-module">ga.ga_midi module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-ga.mutation">ga.mutation module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-ga">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation on Ubuntu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../training.html">Training the Trigram Model</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../generation.html">Generating Music</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ngram.html">ngram package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ga package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-ga.chords">ga.chords module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ga.fitness">ga.fitness module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ga.ga">ga.ga module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ga-ga-midi-module">ga.ga_midi module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ga.mutation">ga.mutation module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="iter.html">iter package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">utils package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ngram.html">ngram package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../artist_performer/artist_performer.html">artist_performer package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../baxter.html">Using Baxter</a></li>
 </ul>
 
             
@@ -128,6 +128,8 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../../index.html">Docs</a> &raquo;</li>
       
+          <li><a href="../generation.html">Generating Music</a> &raquo;</li>
+      
     <li>ga package</li>
       <li class="wy-breadcrumbs-aside">
         
@@ -142,11 +144,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="ga-package">
-<h1>ga package<a class="headerlink" href="#ga-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
+  <div class="section" id="module-ga">
+<span id="ga-package"></span><h1>ga package<a class="headerlink" href="#module-ga" title="Permalink to this headline">¶</a></h1>
+<p>The ga package contains code for the genetic algorithms, including:</p>
+<ul class="simple">
+<li>the main module <cite>ga.py</cite> for running the algorithm,</li>
+<li><cite>chords.py</cite> for creating and analyzing chords / chord progressions,</li>
+<li><cite>fitness.py</cite> for calculating the fitness of an individual chromosome,</li>
+<li><cite>ga_midi.py</cite> for generating MIDI files from the result, and</li>
+<li><cite>mutation.py</cite> for mutating chromosomes throughout the evolution process.</li>
+</ul>
 <div class="section" id="module-ga.chords">
 <span id="ga-chords-module"></span><h2>ga.chords module<a class="headerlink" href="#module-ga.chords" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
@@ -997,9 +1004,6 @@ if pitch cannot be tranposed into given range, prints error message and exits</p
 </dd></dl>
 
 </div>
-<div class="section" id="module-ga">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ga" title="Permalink to this headline">¶</a></h2>
-</div>
 </div>
 
 
@@ -1009,10 +1013,10 @@ if pitch cannot be tranposed into given range, prints error message and exits</p
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="iter.html" class="btn btn-neutral float-right" title="iter package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../baxter.html" class="btn btn-neutral float-right" title="Using Baxter" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="db.html" class="btn btn-neutral" title="db package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../generation.html" class="btn btn-neutral" title="Generating Music" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -81,13 +81,10 @@
             
             
                 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/analyze.html">analyze package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/db.html">db package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/ga.html">ga package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/iter.html">iter package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/utils.html">utils package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/ngram.html">ngram package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../src/artist_performer/artist_performer.html">artist_performer package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/installation.html">Installation on Ubuntu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/training.html">Training the Trigram Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/generation.html">Generating Music</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/baxter.html">Using Baxter</a></li>
 </ul>
 
             
@@ -140,9 +137,13 @@
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">Stores midi files in a directory into DB</span>
 
-<span class="sd">&gt;&gt; ./midi_store.py [optional-folder]</span>
+<span class="sd">python -m db.midi_store [-d data_directory] [-t pool_size] [-u username] [-p password]</span>
 
-<span class="sd">if no folder specified, midi_store.py will store all midi files in current directory</span>
+<span class="sd">where:</span>
+<span class="sd">    - `data_directory` is the location of the MIDI files.</span>
+<span class="sd">    - `pool_size` is the number of databases</span>
+<span class="sd">    - `username` is the database username</span>
+<span class="sd">    - `password` is the database password</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
 <span class="kn">import</span> <span class="nn">os</span><span class="o">,</span><span class="nn">fnmatch</span>

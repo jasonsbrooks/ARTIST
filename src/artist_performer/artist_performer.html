@@ -31,7 +31,8 @@
 
   
     <link rel="top" title="ARTIST 1.0.0 documentation" href="../../index.html"/>
-        <link rel="prev" title="ngram package" href="../artist_generator/ngram.html"/> 
+        <link rel="up" title="Using Baxter" href="../baxter.html"/>
+        <link rel="prev" title="Using Baxter" href="../baxter.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -81,19 +82,20 @@
             
             
                 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../artist_generator/analyze.html">analyze package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../artist_generator/db.html">db package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../artist_generator/ga.html">ga package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../artist_generator/iter.html">iter package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../artist_generator/utils.html">utils package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../artist_generator/ngram.html">ngram package</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">artist_performer package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-artist_performer.controller">artist_performer.controller module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-artist_performer.learner">artist_performer.learner module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-artist_performer.performer">artist_performer.performer module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-artist_performer.publisher">artist_performer.publisher module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-artist_performer">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation on Ubuntu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../training.html">Training the Trigram Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generation.html">Generating Music</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../baxter.html">Using Baxter</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">artist_performer package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-artist_performer.controller">artist_performer.controller module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-artist_performer.learner">artist_performer.learner module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-artist_performer.performer">artist_performer.performer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-artist_performer.publisher">artist_performer.publisher module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../baxter.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../baxter.html#improv">Improv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../baxter.html#scripts">Scripts</a></li>
 </ul>
 </li>
 </ul>
@@ -126,6 +128,8 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../../index.html">Docs</a> &raquo;</li>
       
+          <li><a href="../baxter.html">Using Baxter</a> &raquo;</li>
+      
     <li>artist_performer package</li>
       <li class="wy-breadcrumbs-aside">
         
@@ -140,11 +144,51 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="artist-performer-package">
-<h1>artist_performer package<a class="headerlink" href="#artist-performer-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
+  <div class="section" id="module-artist_performer">
+<span id="artist-performer-package"></span><h1>artist_performer package<a class="headerlink" href="#module-artist_performer" title="Permalink to this headline">¶</a></h1>
+<p>The artist_performer packages contains the principle code for controlling Baxter, including:</p>
+<ul class="simple">
+<li><cite>controller.py</cite>: a superclass to configure Baxter and its limbs,</li>
+<li><cite>learner.py</cite>: a class to manage the learning of joint positions for various keys,</li>
+<li><cite>performer.py</cite>: a class to manage the performance (actually hitting the notes), and</li>
+<li><cite>publisher.py</cite>: a class to publish notes to the <cite>baxter_artist_notes</cite> topic, which will be heard by the subscriber in <cite>performer.py</cite></li>
+</ul>
+<dl class="data">
+<dt id="artist_performer.ARTIST_PKG_DIR">
+<code class="descclassname">artist_performer.</code><code class="descname">ARTIST_PKG_DIR</code><em class="property"> = '/Users/charlierproctor/Google Drive/yale/CPSC 473/project/ARTIST/src/artist_performer/../..'</em><a class="headerlink" href="#artist_performer.ARTIST_PKG_DIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Location of the baxter_artist/ package</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="artist_performer.ARTIST_SHARE_DIR">
+<code class="descclassname">artist_performer.</code><code class="descname">ARTIST_SHARE_DIR</code><em class="property"> = '/Users/charlierproctor/Google Drive/yale/CPSC 473/project/ARTIST/src/artist_performer/../../share/'</em><a class="headerlink" href="#artist_performer.ARTIST_SHARE_DIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Location of the share/ directory</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="artist_performer.CONFIG_FILENAME">
+<code class="descclassname">artist_performer.</code><code class="descname">CONFIG_FILENAME</code><em class="property"> = '/Users/charlierproctor/Google Drive/yale/CPSC 473/project/ARTIST/src/artist_performer/../../share/conf.json'</em><a class="headerlink" href="#artist_performer.CONFIG_FILENAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Location of the conf.json file with neutral position.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="artist_performer.IMAGE_PATH">
+<code class="descclassname">artist_performer.</code><code class="descname">IMAGE_PATH</code><em class="property"> = '/Users/charlierproctor/Google Drive/yale/CPSC 473/project/ARTIST/src/artist_performer/../../share/images/'</em><a class="headerlink" href="#artist_performer.IMAGE_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Location of the images/ directory</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="artist_performer.KEYS_FILENAME">
+<code class="descclassname">artist_performer.</code><code class="descname">KEYS_FILENAME</code><em class="property"> = '/Users/charlierproctor/Google Drive/yale/CPSC 473/project/ARTIST/src/artist_performer/../../share/keys.json'</em><a class="headerlink" href="#artist_performer.KEYS_FILENAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Location of the keys.json file with the joint positions for each key.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="artist_performer.ROS_ENABLED">
+<code class="descclassname">artist_performer.</code><code class="descname">ROS_ENABLED</code><em class="property"> = False</em><a class="headerlink" href="#artist_performer.ROS_ENABLED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Are we running in a ROS environment?</p>
+</dd></dl>
+
 <div class="section" id="module-artist_performer.controller">
 <span id="artist-performer-controller-module"></span><h2>artist_performer.controller module<a class="headerlink" href="#module-artist_performer.controller" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -532,45 +576,6 @@
 </dd></dl>
 
 </div>
-<div class="section" id="module-artist_performer">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-artist_performer" title="Permalink to this headline">¶</a></h2>
-<dl class="data">
-<dt id="artist_performer.ARTIST_PKG_DIR">
-<code class="descclassname">artist_performer.</code><code class="descname">ARTIST_PKG_DIR</code><em class="property"> = '/Users/charlierproctor/Google Drive/yale/CPSC 473/project/ARTIST/src/artist_performer/../..'</em><a class="headerlink" href="#artist_performer.ARTIST_PKG_DIR" title="Permalink to this definition">¶</a></dt>
-<dd><p>Location of the baxter_artist/ package</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="artist_performer.ARTIST_SHARE_DIR">
-<code class="descclassname">artist_performer.</code><code class="descname">ARTIST_SHARE_DIR</code><em class="property"> = '/Users/charlierproctor/Google Drive/yale/CPSC 473/project/ARTIST/src/artist_performer/../../share/'</em><a class="headerlink" href="#artist_performer.ARTIST_SHARE_DIR" title="Permalink to this definition">¶</a></dt>
-<dd><p>Location of the share/ directory</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="artist_performer.CONFIG_FILENAME">
-<code class="descclassname">artist_performer.</code><code class="descname">CONFIG_FILENAME</code><em class="property"> = '/Users/charlierproctor/Google Drive/yale/CPSC 473/project/ARTIST/src/artist_performer/../../share/conf.json'</em><a class="headerlink" href="#artist_performer.CONFIG_FILENAME" title="Permalink to this definition">¶</a></dt>
-<dd><p>Location of the conf.json file with neutral position.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="artist_performer.IMAGE_PATH">
-<code class="descclassname">artist_performer.</code><code class="descname">IMAGE_PATH</code><em class="property"> = '/Users/charlierproctor/Google Drive/yale/CPSC 473/project/ARTIST/src/artist_performer/../../share/images/'</em><a class="headerlink" href="#artist_performer.IMAGE_PATH" title="Permalink to this definition">¶</a></dt>
-<dd><p>Location of the images/ directory</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="artist_performer.KEYS_FILENAME">
-<code class="descclassname">artist_performer.</code><code class="descname">KEYS_FILENAME</code><em class="property"> = '/Users/charlierproctor/Google Drive/yale/CPSC 473/project/ARTIST/src/artist_performer/../../share/keys.json'</em><a class="headerlink" href="#artist_performer.KEYS_FILENAME" title="Permalink to this definition">¶</a></dt>
-<dd><p>Location of the keys.json file with the joint positions for each key.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="artist_performer.ROS_ENABLED">
-<code class="descclassname">artist_performer.</code><code class="descname">ROS_ENABLED</code><em class="property"> = False</em><a class="headerlink" href="#artist_performer.ROS_ENABLED" title="Permalink to this definition">¶</a></dt>
-<dd><p>Are we running in a ROS environment?</p>
-</dd></dl>
-
-</div>
 </div>
 
 
@@ -581,7 +586,7 @@
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="../artist_generator/ngram.html" class="btn btn-neutral" title="ngram package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../baxter.html" class="btn btn-neutral" title="Using Baxter" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

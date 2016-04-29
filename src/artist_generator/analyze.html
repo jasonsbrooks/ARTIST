@@ -31,8 +31,9 @@
 
   
     <link rel="top" title="ARTIST 1.0.0 documentation" href="../../index.html"/>
-        <link rel="next" title="db package" href="db.html"/>
-        <link rel="prev" title="Welcome to ARTIST’s documentation!" href="../../index.html"/> 
+        <link rel="up" title="Training the Trigram Model" href="../training.html"/>
+        <link rel="next" title="ngram package" href="ngram.html"/>
+        <link rel="prev" title="iter package" href="iter.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -82,19 +83,25 @@
             
             
                 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">analyze package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-analyze.chords">analyze.chords module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-analyze.preference_rules">analyze.preference_rules module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-analyze">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation on Ubuntu</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../training.html">Training the Trigram Model</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../training.html#create-the-databases">Create the Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../training.html#parse-midi-into-database">Parse MIDI into Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../training.html#iterating-through-the-music">Iterating through the Music</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../training.html#harmonic-analysis">Harmonic Analysis</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">analyze package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-analyze.chords">analyze.chords module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-analyze.preference_rules">analyze.preference_rules module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="db.html">db package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ga.html">ga package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="iter.html">iter package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">utils package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ngram.html">ngram package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../artist_performer/artist_performer.html">artist_performer package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../training.html#id1">Training the Trigram Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../training.html#random-utilities">Random Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../generation.html">Generating Music</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../baxter.html">Using Baxter</a></li>
 </ul>
 
             
@@ -125,6 +132,8 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../../index.html">Docs</a> &raquo;</li>
       
+          <li><a href="../training.html">Training the Trigram Model</a> &raquo;</li>
+      
     <li>analyze package</li>
       <li class="wy-breadcrumbs-aside">
         
@@ -139,11 +148,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="analyze-package">
-<h1>analyze package<a class="headerlink" href="#analyze-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
+  <div class="section" id="module-analyze">
+<span id="analyze-package"></span><h1>analyze package<a class="headerlink" href="#module-analyze" title="Permalink to this headline">¶</a></h1>
+<p>The analyze package handles the harmonic analysis.</p>
+<ul class="simple">
+<li><cite>chords.py</cite> contains the principle analysis runner (dynamic programming).</li>
+<li><cite>preference_rules.py</cite> contains the preference rules.</li>
+</ul>
 <div class="section" id="module-analyze.chords">
 <span id="analyze-chords-module"></span><h2>analyze.chords module<a class="headerlink" href="#module-analyze.chords" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -403,9 +414,6 @@ in their Melisma Music Analyzer: <a class="reference external" href="http://www.
 </dd></dl>
 
 </div>
-<div class="section" id="module-analyze">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-analyze" title="Permalink to this headline">¶</a></h2>
-</div>
 </div>
 
 
@@ -415,10 +423,10 @@ in their Melisma Music Analyzer: <a class="reference external" href="http://www.
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="db.html" class="btn btn-neutral float-right" title="db package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="ngram.html" class="btn btn-neutral float-right" title="ngram package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../../index.html" class="btn btn-neutral" title="Welcome to ARTIST’s documentation!" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="iter.html" class="btn btn-neutral" title="iter package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

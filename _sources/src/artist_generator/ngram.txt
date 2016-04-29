@@ -1,8 +1,10 @@
 ngram package
 =============
 
-Submodules
-----------
+.. automodule:: ngram
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 ngram.generate module
 ---------------------
@@ -28,11 +30,3 @@ ngram.train module
     :undoc-members:
     :show-inheritance:
 
-
-Module contents
----------------
-
-.. automodule:: ngram
-    :members:
-    :undoc-members:
-    :show-inheritance:

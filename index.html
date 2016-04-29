@@ -31,7 +31,7 @@
 
   
     <link rel="top" title="ARTIST 1.0.0 documentation" href="#"/>
-        <link rel="next" title="analyze package" href="src/artist_generator/analyze.html"/> 
+        <link rel="next" title="Installation on Ubuntu" href="src/installation.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -81,13 +81,10 @@
             
             
                 <ul>
-<li class="toctree-l1"><a class="reference internal" href="src/artist_generator/analyze.html">analyze package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="src/artist_generator/db.html">db package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="src/artist_generator/ga.html">ga package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="src/artist_generator/iter.html">iter package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="src/artist_generator/utils.html">utils package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="src/artist_generator/ngram.html">ngram package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="src/artist_performer/artist_performer.html">artist_performer package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="src/installation.html">Installation on Ubuntu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="src/training.html">Training the Trigram Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="src/generation.html">Generating Music</a></li>
+<li class="toctree-l1"><a class="reference internal" href="src/baxter.html">Using Baxter</a></li>
 </ul>
 
             
@@ -134,69 +131,97 @@
             
   <div class="section" id="welcome-to-artist-s-documentation">
 <h1>Welcome to ARTIST&#8217;s documentation!<a class="headerlink" href="#welcome-to-artist-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Contents:</p>
+<p>For installation and basic usage instructtions, take a look at:</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="src/artist_generator/analyze.html">analyze package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/analyze.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/analyze.html#module-analyze.chords">analyze.chords module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/analyze.html#module-analyze.preference_rules">analyze.preference_rules module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/analyze.html#module-analyze">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="src/installation.html">Installation on Ubuntu</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src/installation.html#install-system-packages">Install System Packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src/installation.html#clone-repository">Clone Repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src/installation.html#install-python-packages-using-pip">Install Python Packages using PIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src/installation.html#install-python-midi-package">Install Python-MIDI Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src/installation.html#setup-python-path">Setup Python Path</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="src/artist_generator/db.html">db package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/db.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/db.html#module-db.exceptions">db.exceptions module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/db.html#module-db.helpers">db.helpers module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/db.html#module-db.midi_store">db.midi_store module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/db.html#module-db.note">db.note module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/db.html#module-db.reset">db.reset module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/db.html#module-db.song">db.song module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/db.html#module-db.track">db.track module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/db.html#module-db">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="src/training.html">Training the Trigram Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src/training.html#create-the-databases">Create the Databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src/training.html#parse-midi-into-database">Parse MIDI into Database</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/db.html">db package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/db.html#db-exceptions-module">db.exceptions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/db.html#module-db.helpers">db.helpers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/db.html#module-db.midi_store">db.midi_store module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/db.html#module-db.note">db.note module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/db.html#module-db.reset">db.reset module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/db.html#module-db.song">db.song module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/db.html#module-db.track">db.track module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="src/artist_generator/ga.html">ga package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/ga.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/ga.html#module-ga.chords">ga.chords module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/ga.html#module-ga.fitness">ga.fitness module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/ga.html#module-ga.ga">ga.ga module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/ga.html#ga-ga-midi-module">ga.ga_midi module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/ga.html#module-ga.mutation">ga.mutation module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/ga.html#module-ga">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="src/artist_generator/iter.html">iter package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/iter.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/iter.html#module-iter.chord_iterator">iter.chord_iterator module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/iter.html#module-iter.song_iterator">iter.song_iterator module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/iter.html#module-iter.time_iterator">iter.time_iterator module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/iter.html#module-iter">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src/training.html#iterating-through-the-music">Iterating through the Music</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/iter.html">iter package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/iter.html#module-iter.chord_iterator">iter.chord_iterator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/iter.html#module-iter.song_iterator">iter.song_iterator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/iter.html#module-iter.time_iterator">iter.time_iterator module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="src/artist_generator/utils.html">utils package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/utils.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/utils.html#module-utils.counter">utils.counter module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/utils.html#module-utils.mark_analyzed">utils.mark_analyzed module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/utils.html#module-utils.stats">utils.stats module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/utils.html#module-utils">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="src/artist_generator/ngram.html">ngram package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/ngram.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/ngram.html#module-ngram.generate">ngram.generate module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/ngram.html#module-ngram.ngram_helper">ngram.ngram_helper module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/ngram.html#module-ngram.train">ngram.train module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/ngram.html#module-ngram">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src/training.html#harmonic-analysis">Harmonic Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/analyze.html">analyze package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/analyze.html#module-analyze.chords">analyze.chords module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/analyze.html#module-analyze.preference_rules">analyze.preference_rules module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="src/artist_performer/artist_performer.html">artist_performer package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_performer/artist_performer.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_performer/artist_performer.html#module-artist_performer.controller">artist_performer.controller module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_performer/artist_performer.html#module-artist_performer.learner">artist_performer.learner module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_performer/artist_performer.html#module-artist_performer.performer">artist_performer.performer module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_performer/artist_performer.html#module-artist_performer.publisher">artist_performer.publisher module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_performer/artist_performer.html#module-artist_performer">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src/training.html#id1">Training the Trigram Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ngram.html">ngram package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/ngram.html#module-ngram.generate">ngram.generate module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/ngram.html#module-ngram.ngram_helper">ngram.ngram_helper module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/ngram.html#module-ngram.train">ngram.train module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src/training.html#random-utilities">Random Utilities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/utils.html">utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/utils.html#module-utils.counter">utils.counter module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/utils.html#module-utils.mark_analyzed">utils.mark_analyzed module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/utils.html#module-utils.stats">utils.stats module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src/generation.html">Generating Music</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/ngram.html">ngram package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ngram.html#module-ngram.generate">ngram.generate module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ngram.html#module-ngram.ngram_helper">ngram.ngram_helper module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ngram.html#module-ngram.train">ngram.train module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/ga.html">ga package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ga.html#module-ga.chords">ga.chords module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ga.html#module-ga.fitness">ga.fitness module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ga.html#module-ga.ga">ga.ga module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ga.html#ga-ga-midi-module">ga.ga_midi module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ga.html#module-ga.mutation">ga.mutation module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src/baxter.html">Using Baxter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src/artist_performer/artist_performer.html">artist_performer package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_performer/artist_performer.html#module-artist_performer.controller">artist_performer.controller module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_performer/artist_performer.html#module-artist_performer.learner">artist_performer.learner module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_performer/artist_performer.html#module-artist_performer.performer">artist_performer.performer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src/artist_performer/artist_performer.html#module-artist_performer.publisher">artist_performer.publisher module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src/baxter.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src/baxter.html#improv">Improv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src/baxter.html#scripts">Scripts</a></li>
 </ul>
 </li>
 </ul>
@@ -218,7 +243,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="src/artist_generator/analyze.html" class="btn btn-neutral float-right" title="analyze package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="src/installation.html" class="btn btn-neutral float-right" title="Installation on Ubuntu" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
