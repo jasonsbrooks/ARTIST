@@ -12,6 +12,9 @@ For installation and basic usage instructtions, take a look at:
    :maxdepth: 5
 
    src/installation
+   src/training
+   src/generation
+   src/baxter
 
 For detailed documentation, with further example usage, see:
 
