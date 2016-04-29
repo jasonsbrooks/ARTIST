@@ -1,5 +1,13 @@
 #defaults to 1, 4, 5 chords of classic 12 bar blues
 def create_chord_progression(a_train=False):
+    """Creates a midi chord progression
+    
+    Args:
+        a_train (bool, optional): Defaults at False.  If True, returns chord progression for Take the A Train by Duke Ellington.  Otherwise, returns standard 12-bar blues in C major.
+    
+    Returns:
+        (int, int)[]: Returns chord progression, which is list of (chord_root, dur)
+    """
     chord_progression = []
 
     if not a_train:
@@ -54,6 +62,15 @@ def create_chord_progression(a_train=False):
 
 # given chord (1-7), return list of valid scale notes between 1 and 21
 def get_chord_notes(chord, a_train=False):
+    """Given a chord root, returns list of valid scale notes encoded in extended-duration between 1 and 21
+    
+    Args:
+        chord (int): chord root [1,7]
+        a_train (bool, optional): efaults at False.  If True, returns valid scale notes for Take the A Train by Duke Ellington.  Otherwise, returns valid scale notes for standard 12-bar blues in C major.
+    
+    Returns:
+        TYPE: Description
+    """
     if a_train:
         chord_to_notes = {
             1: [1, 3, 5],  # C

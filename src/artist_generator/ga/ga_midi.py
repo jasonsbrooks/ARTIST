@@ -41,6 +41,15 @@ ed_to_midi_dic_c_maj = {
 # given chord number, returns track object with one measure of that chord in quarter notes
 # currently only gives notes for C major scale
 def create_chord_measure(chord, a_train=False):
+    """given chord number, returns track object with one 4/4 measure of that chord of quarter note durations
+    
+    Args:
+        chord (int): 1-7 representing chord root in scale
+        a_train (bool, optional): Defaults to False.  If True, uses chord progression to a_train, otherwise uses standard blues scales in C major
+    
+    Returns:
+        Midi.Track: midi.Track object that represents chord progression in left hand of a piano.  Can be added directly to midi file for playback
+    """
     track = midi.Track()
     midi_velocity = 80
 
@@ -116,6 +125,16 @@ def create_chord_measure(chord, a_train=False):
 # given chromosome = (fitness, genotype)
 # creates midi file titled the fitness level
 def create_midi_file((fitness, genotype), chord_progression):
+    """creates midi file from given chromosome and chord progression
+    midi file is named based on fitness level and created timestamp.  File created in same directory as ga_midi.py
+    
+    Args:
+        (fitness, genotype) (int, (int, int)[]): encoding for a chromsome.  Fitness is integer representing fitness.  Genotype is list of (pitch, duration) tuples representing each note to be played.
+        chord_progression (: if True, uses chord progression to a_train, otherwise uses standard blues scales in C major
+    
+    Returns:
+        void
+    """
     # Instantiate a MIDI Pattern (contains a list of tracks)
     pattern = midi.Pattern()
     pattern.resolution = 400
