@@ -21,6 +21,14 @@ from chords import create_chord_progression
 #   dotted 16th: 3, dotted 8th: 6, dotted quarter: 12
 # in all, 1, 2, 3, 4, 6, 8, 12, 16
 def choose_duration(simple=False):
+    """Returns a random duration in durk units
+    
+    Args:
+        simple (bool, optional): Defaults at False.  If True, only considers notes of duration 8 or 16 durks.  Otherwise, considers durations in list: [1, 2, 3, 4, 6, 8, 12, 16]
+    
+    Returns:
+        int: duration in unit durks
+    """
     possible_durations = []
     if simple:
         possible_durations = [8, 16]
@@ -33,6 +41,17 @@ def choose_duration(simple=False):
 # returns list of (fitness, genotype)
 # fitness holds junk value (-99)-- fitness function used to evaluate it
 def initialize_chromosomes(n, d, chord_progression, ngram_generate=None):
+    """initializes a list of n chromosomes of musical length d for GA
+    
+    Args:
+        n (int): number of chromosomes to be generated
+        d (int): total duration, in durks, of song (and given chord progression)
+        chord_progression ((int, int)[]): chord progression of song as list of (chord_root, dur)
+        ngram_generate (None, optional): Defaults at None.  If true, then uses ngram pipeline to initialize chromosomes.  Otherwise, randomly initializes.
+    
+    Returns:
+        (int, (int, int)[])[]: Returns list of chromosomes
+    """
     chromosomes = []
     for _ in range(n):  # makes n chromosomes
         fitness = -99
@@ -61,6 +80,14 @@ def initialize_chromosomes(n, d, chord_progression, ngram_generate=None):
 
 # returns weighted choice in choices
 def weighted_choice(choices):
+    """returns weighted choice from list of choices
+    
+    Args:
+        choices ((type, float)[]): list of (choice, weight) tuples 
+    
+    Returns:
+        type: returns choice picked.  Can be of any type
+    """
     total = sum(w for c, w in choices)
     r = random.uniform(0, total)
     upto = 0
@@ -75,6 +102,16 @@ def weighted_choice(choices):
 # deterministic selection of best individual when p =1
 # 1-way tournament (tourn_size = 1) equivalent to random selection
 def tournament_selection(chromosomes, tourn_size, prob):
+    """tournament selection where, given size and probabilty, selects based on weights a winner
+    
+    Args:
+        chromosomes ((int, (int, int)[])[]): List of chromosomes
+        tourn_size (int): size of tournament
+        prob (float): probability used based on classic tournament selection
+    
+    Returns:
+        (int, (int, int)[])[]): winning chromosome from the tournament
+    """
     # first randomly select tourn_size individuals from chromosomes
     competitors = []
     while len(competitors) < tourn_size:
@@ -93,6 +130,16 @@ def tournament_selection(chromosomes, tourn_size, prob):
 # one point crossover
 # returns child chromosome
 def crossover(parent1, parent2, d):
+    """One point crossover
+    
+    Args:
+        parent1 (int, (int, int)[])[]): chromosome of parent1
+        parent2 (int, (int, int)[])[]): chromosome of parent2
+        d (int): Total duration, in durks, of song
+    
+    Returns:
+        ((int, int)[],(int, int)[]): returns two child genotypes in form (genotype1, genotype2)
+    """
     genotype1 = parent1[1]
     genotype2 = parent2[1]
 
@@ -144,6 +191,18 @@ def crossover(parent1, parent2, d):
 # population of size n
 # returns list of chromosomes in descending order by fitness (highest fitness first)
 def ga(chord_progression, n=40, num_iter=200, prob_local=.5, ngram_generate=None):
+    """genetic algorithm
+    
+    Args:
+        chord_progression ((int, int)[]): chord progression which is a list of (chord_root, duration)
+        n (int, optional): Defaults at 40.  Population size.
+        num_iter (int, optional): Defaults at 200.  Specifies number of iterations of GA before termination
+        prob_local (float, optional): Defaults at .5.  Probability of mutations
+        ngram_generate (None, optional): Defaults at None.  If True, use ngram to initialize population.  Otherwise, randomly initialize.
+    
+    Returns:
+        (int, (int, int)[]))[]: Chromosome list of final generation in the genetic algorithm
+    """
     d = sum([d for (_, d) in chord_progression])  # d is total duration of song
     chromosome_list = initialize_chromosomes(n, d, chord_progression, ngram_generate=ngram_generate)  # list of (fitness, genotype)
     elitism_coef = 25  # how many elites to keep in each round
@@ -201,6 +260,16 @@ def ga(chord_progression, n=40, num_iter=200, prob_local=.5, ngram_generate=None
     return chromosome_list
 
 def run(ngram_generate=None,num_iter=800):
+    """runs genetic algorithm in main.  Creates midi file with jazz improvisation of winning chromosome.
+    Also prints out relevant information.
+    
+    Args:
+        ngram_generate (None, optional): Defaults at None.  If True, use ngram to initialize population.  Otherwise, randomly initialize.
+        num_iter (int, optional): Defaults at 200.  Specifies number of iterations of GA before termination
+    
+    Returns:
+        TYPE: Description
+    """
     # hard coded chord progression for 12 bar blues
     chord_progression = create_chord_progression()  # list of (chord, duration)
     # chromosomes = ga(chord_progression, n=40, num_iter=800, prob_local=.2)

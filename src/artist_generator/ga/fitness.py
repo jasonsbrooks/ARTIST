@@ -1,7 +1,3 @@
-'''
-really need to add countour fitness check
-'''
-
 from chords import get_chord_notes
 
 
@@ -9,6 +5,15 @@ from chords import get_chord_notes
 # returns pitch being played at that durk point and whether or not pitch ends perfectly on time
 # can also take chord_progression instead of genotype and return chord
 def get_pitch_at_time(genotype, time):
+    """given genotype and durk time point, returns pitch being played at that durk point and whether or not pitch ends perfectly on time
+    
+    Args:
+        genotype ((int, int)[]): genotype of chromosome, which is list of (pitch, dur)
+        time (int): time point in durks
+    
+    Returns:
+        (int, bool): (pitch, end_on_time) where pitch is [1,21] and end_on_time represents whether or not the pitch ends perfectly at the time point time.
+    """
     pitch = -9999
     dur_running_total = 0
     end_on_time = False
@@ -27,6 +32,16 @@ def get_pitch_at_time(genotype, time):
 # returns total penalty for large intervals
 # max_interval = 9, weight = -20
 def large_intervals(genotype, max_interval=9, weight=20):
+    """takes genotype and gives fitness penalty for large intervals 
+    
+    Args:
+        genotype ((int, int)[]): list of tuples (pitch, dur) representing genotype of a chromosome
+        max_interval (int, optional): Defaults at 9.  Defines max interval before penalty begins
+        weight (int, optional): Defaults at 20.  Defines penalty/reward rate
+    
+    Returns:
+        int: aggregate fitness value based on large intervals
+    """
     total = 0
     for i, _ in enumerate(genotype):
         if i != 0:
@@ -38,6 +53,15 @@ def large_intervals(genotype, max_interval=9, weight=20):
 # absolute pitch intervals
 # pattern must be 5 notes in length
 def pattern_matching(genotype, weight=20):
+    """fitness function handling absolute pitch intervals
+    
+    Args:
+        genotype ((int, int)[]): list of tuples (pitch, dur) representing genotype of a chromosome
+        weight (int, optional): Defaults at 20.  Defines penalty/reward rate
+    
+    Returns:
+        int: aggregate fitness value based on pattern matching
+    """
     # pattern_len = 3
     pattern_len = 5
     genotype_len = len(genotype)
@@ -63,6 +87,16 @@ def pattern_matching(genotype, weight=20):
 # Weighting: consonant suspension (+10), dissonant suspension (-20),
 # no suspension (+5), a rest (+5)
 def suspensions(genotype, chord_progression, weight=20):
+    """fitness function handling suspensions
+    
+    Args:
+        genotype ((int, int)[]): list of tuples (pitch, dur) representing genotype of a chromosome
+        chord_progression ((int, int)[]): chord progression of song as list of (chord_root, dur)
+        weight (int, optional): Defaults at 20.  Defines penalty/reward rate
+    
+    Returns:
+        int: aggregate fitness value based on suspensions
+    """
     total = 0
     total_dur = 0
     for i, (chord_root, chord_dur) in enumerate(chord_progression):
@@ -88,6 +122,16 @@ def suspensions(genotype, chord_progression, weight=20):
 # DANGER: assumes each chord in chord_progression spans entire measure
 # AND that all chords are the same duration
 def downbeat(genotype, chord_progression, weight=20):
+    """fitness function handling downbeats
+    
+    Args:
+        genotype ((int, int)[]): list of tuples (pitch, dur) representing genotype of a chromosome
+        chord_progression ((int, int)[]): chord progression of song as list of (chord_root, dur)
+        weight (int, optional): Defaults at 20.  Defines penalty/reward rate
+    
+    Returns:
+        int: aggregate fitness value based on downbeats
+    """
     total = 0
     total_dur = 0
     for i, (chord_root, chord_dur) in enumerate(chord_progression):
@@ -109,6 +153,16 @@ def downbeat(genotype, chord_progression, weight=20):
 # DANGER: assumes each chord in chord_progression spans entire measure
 # AND that all chords are the same duration
 def halfbar(genotype, chord_progression, weight=20):
+    """fitness function handling halfbars
+    
+    Args:
+        genotype ((int, int)[]): list of tuples (pitch, dur) representing genotype of a chromosome
+        chord_progression ((int, int)[]): chord progression of song as list of (chord_root, dur)
+        weight (int, optional): Defaults at 20.  Defines penalty/reward rate
+    
+    Returns:
+        int: aggregate fitness value based on halfbars
+    """
     d = sum([d for (_, d) in chord_progression])
     total = 0
     total_dur = chord_progression[0][1]/2  # DANGER: ASSUMES that all chords are the same duration
@@ -131,6 +185,17 @@ def halfbar(genotype, chord_progression, weight=20):
 # simplified version from paper:
 # if long note: chord note (+10), non-chord note (-20), rest (-20)
 def longnote(genotype, chord_progression, weight=20, long_note=8):
+    """fitness function handling long notes
+    
+    Args:
+        genotype ((int, int)[]): list of tuples (pitch, dur) representing genotype of a chromosome
+        chord_progression ((int, int)[]): chord progression of song as list of (chord_root, dur)
+        weight (int, optional): Defaults at 20.  Defines penalty/reward rate
+        long_note (int, optional): Defaults at 8.  Defines limit for what constitutes a "long note" (anything >= to long_note is considered "long")
+    
+    Returns:
+        int: aggregate fitness value based on long notes
+    """
     total = 0
     total_dur = 0
     for i, (ed, dur) in enumerate(genotype):
@@ -148,6 +213,15 @@ def longnote(genotype, chord_progression, weight=20, long_note=8):
 
 # penalize all shorter than 8th note
 def penalize_short(genotype, weight=20):
+    """fitness function handling short notes
+    
+    Args:
+        genotype ((int, int)[]): list of tuples (pitch, dur) representing genotype of a chromosome
+        weight (int, optional): Defaults at 20.  Defines penalty/reward rate
+    
+    Returns:
+        int: aggregate fitness value based on short notes
+    """
     total = 0
     for i, (ed, dur) in enumerate(genotype):
         if dur < 4:
@@ -160,6 +234,15 @@ def penalize_short(genotype, weight=20):
 # DANGER: this is terrible
 # also reward off-beat pulse
 def penalize_off_pulse(genotype, weight=20):
+    """fitness function handling off pulse notes
+    
+    Args:
+        genotype ((int, int)[]): list of tuples (pitch, dur) representing genotype of a chromosome
+        weight (int, optional): Defaults at 20.  Defines penalty/reward rate
+    
+    Returns:
+        int: aggregate fitness value based on off pulse notes
+    """
     total = 0
     total_dur = 0
     for i, (ed, dur) in enumerate(genotype):
@@ -173,6 +256,15 @@ def penalize_off_pulse(genotype, weight=20):
 
 # reward last note if it is root
 def end_on_root(genotype, weight=20):
+    """fitness function handling last note
+    
+    Args:
+        genotype ((int, int)[]): list of tuples (pitch, dur) representing genotype of a chromosome
+        weight (int, optional): Defaults at 20.  Defines penalty/reward rate
+    
+    Returns:
+        int: aggregate fitness value based on last note
+    """
     total = 0
     if genotype[-1][0] == 1 or genotype[-1][0] == 8 or genotype[-1][0] == 15:
         total += weight * 1
@@ -184,6 +276,16 @@ def end_on_root(genotype, weight=20):
 # returns fitness value for that genotype
 # Detailed: prints (total, Dic containing detailed breakdown)
 def calc_fitness(genotype, chord_progression, detailed=False):
+    """calculates and returns total fitness based on a given genotype and chord progression
+    
+    Args:
+        genotype ((int, int)[]): list of tuples (pitch, dur) representing genotype of a chromosome
+        chord_progression ((int, int)[]): chord progression of song as list of (chord_root, dur)
+        detailed (bool, optional): Defaults at False.  If True, prints to console detailed fitness breakdown.  Otherwise, prints nothing
+    
+    Returns:
+        int: total fitness of the given genotype for particular chord progression
+    """
     li = large_intervals(genotype,10)
     pm = pattern_matching(genotype, weight=10)
     su = suspensions(genotype, chord_progression)
