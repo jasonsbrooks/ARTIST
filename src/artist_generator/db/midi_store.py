@@ -3,9 +3,13 @@
 '''
 Stores midi files in a directory into DB
 
->> ./midi_store.py [optional-folder]
+python -m db.midi_store [-d data_directory] [-t pool_size] [-u username] [-p password]
 
-if no folder specified, midi_store.py will store all midi files in current directory
+where:
+    - `data_directory` is the location of the MIDI files.
+    - `pool_size` is the number of databases
+    - `username` is the database username
+    - `password` is the database password
 '''
 
 import os,fnmatch
