@@ -1,305 +1,116 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Welcome to ARTIST’s documentation! &mdash; ARTIST 1.0.0 documentation</title>
-  
-
-  
-  
-
-  
-
-  
-  
-    
-
-  
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-    <link rel="top" title="ARTIST 1.0.0 documentation" href="#"/>
-        <link rel="next" title="Installation on Ubuntu" href="src/installation.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+	<meta charset="UTF-8">
+	<title>ARTIST - A Real Time Improvisation System | CPSC 473 | Yale University</title>
+	<link rel="stylesheet" href="css/home.css">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/parallax.min.js"></script>
 </head>
+<body>
 
-<body class="wy-body-for-nav" role="document">
-
-  <div class="wy-grid-for-nav">
-
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
-            <a href="#" class="icon icon-home"> ARTIST
-          
-
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                1.0
-              </div>
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+<div class="navbar">
+	<section class="navbarHeader"><a href="/"><img id="logo" src="img/logo2-black.png"></a></section>
+	<section class="mainNavbar">
+		<a class="navlink scrollToDiv aboutLink" href="#" data-target="about">ABOUT</a>
+		<a class="navlink scrollToDiv pricingLink" href="#" data-target="resources">RESOURCES</a>
+		<a class="navlink scrollToDiv contactLink" href="#" data-target="team">THE TEAM</a>
+	</section>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-                <ul>
-<li class="toctree-l1"><a class="reference internal" href="src/installation.html">Installation on Ubuntu</a></li>
-<li class="toctree-l1"><a class="reference internal" href="src/training.html">Training the Trigram Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="src/generation.html">Generating Music</a></li>
-<li class="toctree-l1"><a class="reference internal" href="src/baxter.html">Using Baxter</a></li>
-</ul>
-
-            
-          
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="#">ARTIST</a>
-      </nav>
-
-
-      
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          
-
- 
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-  <ul class="wy-breadcrumbs">
-    <li><a href="#">Docs</a> &raquo;</li>
-      
-    <li>Welcome to ARTIST&#8217;s documentation!</li>
-      <li class="wy-breadcrumbs-aside">
-        
-          
-            <a href="_sources/index.txt" rel="nofollow"> View page source</a>
-          
-        
-      </li>
-  </ul>
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
-  <div class="section" id="welcome-to-artist-s-documentation">
-<h1>Welcome to ARTIST&#8217;s documentation!<a class="headerlink" href="#welcome-to-artist-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>For installation and basic usage instructtions, take a look at:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="src/installation.html">Installation on Ubuntu</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="src/installation.html#install-system-packages">Install System Packages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/installation.html#clone-repository">Clone Repository</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/installation.html#install-python-packages-using-pip">Install Python Packages using PIP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/installation.html#install-python-midi-package">Install Python-MIDI Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/installation.html#setup-python-path">Setup Python Path</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="src/training.html">Training the Trigram Model</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="src/training.html#create-the-databases">Create the Databases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/training.html#parse-midi-into-database">Parse MIDI into Database</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/db.html">db package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/db.html#db-exceptions-module">db.exceptions module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/db.html#module-db.helpers">db.helpers module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/db.html#module-db.midi_store">db.midi_store module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/db.html#module-db.note">db.note module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/db.html#module-db.reset">db.reset module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/db.html#module-db.song">db.song module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/db.html#module-db.track">db.track module</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="src/training.html#iterating-through-the-music">Iterating through the Music</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/iter.html">iter package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/iter.html#module-iter.chord_iterator">iter.chord_iterator module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/iter.html#module-iter.song_iterator">iter.song_iterator module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/iter.html#module-iter.time_iterator">iter.time_iterator module</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="src/training.html#harmonic-analysis">Harmonic Analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/analyze.html">analyze package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/analyze.html#module-analyze.chords">analyze.chords module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/analyze.html#module-analyze.preference_rules">analyze.preference_rules module</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="src/training.html#id1">Training the Trigram Model</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ngram.html">ngram package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/ngram.html#module-ngram.generate">ngram.generate module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/ngram.html#module-ngram.ngram_helper">ngram.ngram_helper module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/ngram.html#module-ngram.train">ngram.train module</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="src/training.html#random-utilities">Random Utilities</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/utils.html">utils package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/utils.html#module-utils.counter">utils.counter module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/utils.html#module-utils.mark_analyzed">utils.mark_analyzed module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="src/artist_generator/utils.html#module-utils.stats">utils.stats module</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="src/generation.html">Generating Music</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/ngram.html">ngram package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ngram.html#module-ngram.generate">ngram.generate module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ngram.html#module-ngram.ngram_helper">ngram.ngram_helper module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ngram.html#module-ngram.train">ngram.train module</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_generator/ga.html">ga package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ga.html#module-ga.chords">ga.chords module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ga.html#module-ga.fitness">ga.fitness module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ga.html#module-ga.ga">ga.ga module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ga.html#ga-ga-midi-module">ga.ga_midi module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_generator/ga.html#module-ga.mutation">ga.mutation module</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="src/baxter.html">Using Baxter</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="src/artist_performer/artist_performer.html">artist_performer package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_performer/artist_performer.html#module-artist_performer.controller">artist_performer.controller module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_performer/artist_performer.html#module-artist_performer.learner">artist_performer.learner module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_performer/artist_performer.html#module-artist_performer.performer">artist_performer.performer module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="src/artist_performer/artist_performer.html#module-artist_performer.publisher">artist_performer.publisher module</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="src/baxter.html#training">Training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/baxter.html#improv">Improv</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src/baxter.html#scripts">Scripts</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
-</ul>
+<div class="hero">
+	<img id="large-logo" src="img/logo2-white-fulltext.png">
+	<a class="aboutLink scrollToDiv" href="#" data-target="about"><div class="arrow animated bounce" id="arrow-down"></div></a>
 </div>
 
 
-           </div>
-          </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="src/installation.html" class="btn btn-neutral float-right" title="Installation on Ubuntu" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
+<section id="about">
+  <div id="about-title">
+    <h1>ABOUT</h1>
+  </div>
+  <div id="about-content">
+    <div class="letter">
+		<p>As robots become more integrated in human life, their effectiveness will increasingly depend on their ability to seamlessly communicate with human counterparts. ARTIST aims to tackle this problem of human-robot communication in the domain of jazz improvisation. We present a system that can dynamically, appropriately, and creatively play with human jazz musicians.</p>
+
+    <p>Music in general, especially jazz, lives within a series of constraints. For example, when selecting notes during improvisation, a player typically chooses within the chord and mode. Furthermore, with the goal of performing on a robotics platform, there are limitations on the sequences of notes and durations that can be played.</p>
+
+    <p>DARPA has already shown interest in similar jazz improvisation systems with the expectation that examining this problem in a restricted domain will produce insights that can be applied to military robotics.  We hope that engineering ARTIST will not only result in the development of a novel jazz improvisation technology, but will also inform broader areas of human-robot communication for future research.</p>
+
+    <p>ARTIST works in a six stage pipeline. First, large repositories of Musical Instrument Digital Interface (MIDI) files are mined from Internet sources, each of which contains a computational representation of the composed jazz song. The chord progressions are extracted from the various songs and a trigram model is used to extract frequent patterns. Via a novel algorithmic pipeline, jazz improvisation is generated for a given chord using a combination of a statistical trigram model and a genetic algorithm. Finally, the improvisation is played via a robotic performer through a set of generated position transformations.</p>
+
+		
+	</div>
+  </div>
+</section>
+
+<section id="resources">
+  <div id="resources-title">
+    <h1>Resources</h1>
+  </div>
+  <div id="resources-content">
+    <ul>
+      <li><a class="form-link" target="_blank" href="https://github.com/jasonsbrooks/ARTIST">Github Repository</a></li>
+      <li>Documentation:</li>
+      <li>Databases:</li>
+      <li>Trained N-Gram Model:</li>
+      <li>Sample MIDI Files:</li>
+      <li>Videos:</li>
+      <li>Presentations:</li>
+    </ul>
+  </div>
+  </div>
+</section>
+
+
+
+
+
+<section id="team">
+  <div id="team-title">
+    <h1>The Team</h1>
+  </div>
+  <div id="team-members">
+    <p>Research on ARTIST was conducted at Yale University by three undergraduates as part of CPSC 473: Intelligent Robotics Lab. The work was advised by <a class="form-link" target="_blank" href="http://scazlab.yale.edu/people/brian-scassellati">Professor Brian Scassellati</a> in the <a class="form-link" target="_blank" href="http://scazlab.yale.edu">Scaz Lab</a>.</p>
+    <div id="team-leadership">
+      <article>
+        <img src="img/jason.png" alt="" />
+            <p class="person-name">Jason Brooks</p>
+            <p class="person-title">DC '16</p>
+      </article>
+      <article>
+        <img src="img/kevin.png" alt="" />
+            <p class="person-name">Kevin Jiang</p>
+            <p class="person-title">DC '16</p>
+      </article>
+      <article>
+        <img src="img/charlie.png" alt="" />
+            <p class="person-name">Charlie Proctor</p>
+            <p class="person-title">TD '17</p>
+      </article>
+      <div class="clearer"></div>
     </div>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &copy; Copyright 2016, Jason Brooks, Kevin Jiang, and Charles Proctor.
-
-    </p>
+    <br>
+    <div class="clearer"></div>
+    <div id="team-contributions">
+		<p>Jason primarily worked on hardware-related tasks, including the interaction between the learning algorithm and <a class="form-link" target="_blank" href="http://www.rethinkrobotics.com/baxter/">Baxter</a>, getting Baxter to play notes on the xylophone, and mallet design for the robot. He also built this site, was the resident music expert for early stage algorithm evaluation. Kevin built the genetic algorithm pipeline that is the final step in generating MIDI tracks and Baxter tracks. He constructed the MIDI parser module that enables storage of MIDI files in an actionable format for harmonic analysis and n-gram seeding. On the hardware side, Charlie wrote the training program for Baxter to allow it to play on any xylophone. He also wrote the harmonic analyzer, the ngram model, and helped piece together the machine learning pipeline.
+		</p>
+    </div>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+</section>
 
-</footer>
+<section id="footer">
+</section>
 
-        </div>
-      </div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    </section>
+  ga('create', 'UA-61565238-1', 'auto');
+  ga('send', 'pageview');
 
-  </div>
-  
-
-
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'1.0.0',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
-      });
-  </script>
-   
+</script>
 
 </body>
 </html>

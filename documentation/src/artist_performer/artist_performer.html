@@ -1,0 +1,647 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>artist_performer package &mdash; ARTIST 1.0.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ARTIST 1.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Using Baxter" href="../baxter.html"/>
+        <link rel="prev" title="Using Baxter" href="../baxter.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ARTIST
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation on Ubuntu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../training.html">Training the Trigram Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generation.html">Generating Music</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../baxter.html">Using Baxter</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">artist_performer package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-artist_performer.controller">artist_performer.controller module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-artist_performer.learner">artist_performer.learner module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-artist_performer.performer">artist_performer.performer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-artist_performer.publisher">artist_performer.publisher module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../baxter.html#training">Training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../baxter.html#improv">Improv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../baxter.html#scripts">Scripts</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ARTIST</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../baxter.html">Using Baxter</a> &raquo;</li>
+      
+    <li>artist_performer package</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/src/artist_performer/artist_performer.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-artist_performer">
+<span id="artist-performer-package"></span><h1>artist_performer package<a class="headerlink" href="#module-artist_performer" title="Permalink to this headline">¶</a></h1>
+<p>The artist_performer packages contains the principle code for controlling Baxter, including:</p>
+<ul class="simple">
+<li><cite>controller.py</cite>: a superclass to configure Baxter and its limbs,</li>
+<li><cite>learner.py</cite>: a class to manage the learning of joint positions for various keys,</li>
+<li><cite>performer.py</cite>: a class to manage the performance (actually hitting the notes), and</li>
+<li><cite>publisher.py</cite>: a class to publish notes to the <cite>baxter_artist_notes</cite> topic, which will be heard by the subscriber in <cite>performer.py</cite></li>
+</ul>
+<dl class="data">
+<dt id="artist_performer.ARTIST_PKG_DIR">
+<code class="descclassname">artist_performer.</code><code class="descname">ARTIST_PKG_DIR</code><em class="property"> = '/Users/charlierproctor/Google Drive/yale/CPSC 473/project/ARTIST/src/artist_performer/../..'</em><a class="headerlink" href="#artist_performer.ARTIST_PKG_DIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Location of the baxter_artist/ package</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="artist_performer.ARTIST_SHARE_DIR">
+<code class="descclassname">artist_performer.</code><code class="descname">ARTIST_SHARE_DIR</code><em class="property"> = '/Users/charlierproctor/Google Drive/yale/CPSC 473/project/ARTIST/src/artist_performer/../../share/'</em><a class="headerlink" href="#artist_performer.ARTIST_SHARE_DIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Location of the share/ directory</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="artist_performer.CONFIG_FILENAME">
+<code class="descclassname">artist_performer.</code><code class="descname">CONFIG_FILENAME</code><em class="property"> = '/Users/charlierproctor/Google Drive/yale/CPSC 473/project/ARTIST/src/artist_performer/../../share/conf.json'</em><a class="headerlink" href="#artist_performer.CONFIG_FILENAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Location of the conf.json file with neutral position.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="artist_performer.IMAGE_PATH">
+<code class="descclassname">artist_performer.</code><code class="descname">IMAGE_PATH</code><em class="property"> = '/Users/charlierproctor/Google Drive/yale/CPSC 473/project/ARTIST/src/artist_performer/../../share/images/'</em><a class="headerlink" href="#artist_performer.IMAGE_PATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Location of the images/ directory</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="artist_performer.KEYS_FILENAME">
+<code class="descclassname">artist_performer.</code><code class="descname">KEYS_FILENAME</code><em class="property"> = '/Users/charlierproctor/Google Drive/yale/CPSC 473/project/ARTIST/src/artist_performer/../../share/keys.json'</em><a class="headerlink" href="#artist_performer.KEYS_FILENAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Location of the keys.json file with the joint positions for each key.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="artist_performer.ROS_ENABLED">
+<code class="descclassname">artist_performer.</code><code class="descname">ROS_ENABLED</code><em class="property"> = False</em><a class="headerlink" href="#artist_performer.ROS_ENABLED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Are we running in a ROS environment?</p>
+</dd></dl>
+
+<div class="section" id="module-artist_performer.controller">
+<span id="artist-performer-controller-module"></span><h2>artist_performer.controller module<a class="headerlink" href="#module-artist_performer.controller" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="artist_performer.controller.BaxterController">
+<em class="property">class </em><code class="descclassname">artist_performer.controller.</code><code class="descname">BaxterController</code><a class="reference internal" href="../../_modules/artist_performer/controller.html#BaxterController"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.controller.BaxterController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Superclass for controlling Baxter. Initializes various joints, manages shutdown and set_neutral.</p>
+<dl class="method">
+<dt id="artist_performer.controller.BaxterController.clean_shutdown">
+<code class="descname">clean_shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/controller.html#BaxterController.clean_shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.controller.BaxterController.clean_shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exits example cleanly by disabling robot</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.controller.BaxterController.set_neutral">
+<code class="descname">set_neutral</code><span class="sig-paren">(</span><em>on=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/controller.html#BaxterController.set_neutral"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.controller.BaxterController.set_neutral" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move both arms to the neutral position</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>on</strong> &#8211; whether to perform the action (useful in button callbacks)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-artist_performer.learner">
+<span id="artist-performer-learner-module"></span><h2>artist_performer.learner module<a class="headerlink" href="#module-artist_performer.learner" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="artist_performer.learner.Keys">
+<em class="property">class </em><code class="descclassname">artist_performer.learner.</code><code class="descname">Keys</code><a class="reference internal" href="../../_modules/artist_performer/learner.html#Keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.learner.Keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Maintain the dictionary of key mappings</p>
+<dl class="method">
+<dt id="artist_performer.learner.Keys.save_left">
+<code class="descname">save_left</code><span class="sig-paren">(</span><em>note</em>, <em>angles</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/learner.html#Keys.save_left"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.learner.Keys.save_left" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a note with certain joint angles on the left arm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>note</strong> (<em>int</em>) &#8211; the note to save</li>
+<li><strong>angles</strong> &#8211; the joint position</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.learner.Keys.save_neutral">
+<code class="descname">save_neutral</code><span class="sig-paren">(</span><em>arm</em>, <em>angles</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/learner.html#Keys.save_neutral"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.learner.Keys.save_neutral" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a new neutral position</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>arm</strong> &#8211; which arm are we recording for</li>
+<li><strong>angles</strong> &#8211; the joint position</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.learner.Keys.save_right">
+<code class="descname">save_right</code><span class="sig-paren">(</span><em>note</em>, <em>angles</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/learner.html#Keys.save_right"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.learner.Keys.save_right" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a note with certain joint angles on the right arm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>note</strong> (<em>int</em>) &#8211; the note to save</li>
+<li><strong>angles</strong> &#8211; the joint position</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.learner.Keys.write">
+<code class="descname">write</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/learner.html#Keys.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.learner.Keys.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the keys dictionary to the appropriate file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="artist_performer.learner.Learner">
+<em class="property">class </em><code class="descclassname">artist_performer.learner.</code><code class="descname">Learner</code><a class="reference internal" href="../../_modules/artist_performer/learner.html#Learner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.learner.Learner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#artist_performer.controller.BaxterController" title="artist_performer.controller.BaxterController"><code class="xref py py-class docutils literal"><span class="pre">artist_performer.controller.BaxterController</span></code></a></p>
+<p>Learn the position of keys on the xylophone.</p>
+<dl class="method">
+<dt id="artist_performer.learner.Learner.clean_shutdown">
+<code class="descname">clean_shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/learner.html#Learner.clean_shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.learner.Learner.clean_shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make sure to always write the keys dictionary to a file before shutting down.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.learner.Learner.get_joint_angles">
+<code class="descname">get_joint_angles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/learner.html#Learner.get_joint_angles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.learner.Learner.get_joint_angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the joint angles of the right / left arm.</p>
+<p>Returns (tuple): joint angles.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.learner.Learner.init_leds">
+<code class="descname">init_leds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/learner.html#Learner.init_leds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.learner.Learner.init_leds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn the LEDs on / off as appropriate</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.learner.Learner.left_button_press">
+<code class="descname">left_button_press</code><span class="sig-paren">(</span><em>on=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/learner.html#Learner.left_button_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.learner.Learner.left_button_press" title="Permalink to this definition">¶</a></dt>
+<dd><p>Record a left button press.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>on</strong> &#8211; if the button is depressed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.learner.Learner.left_wheel_change">
+<code class="descname">left_wheel_change</code><span class="sig-paren">(</span><em>change</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/learner.html#Learner.left_wheel_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.learner.Learner.left_wheel_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the notes and send images to display</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>change</strong> &#8211; amount the left wheel has changed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.learner.Learner.right_button_press">
+<code class="descname">right_button_press</code><span class="sig-paren">(</span><em>on=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/learner.html#Learner.right_button_press"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.learner.Learner.right_button_press" title="Permalink to this definition">¶</a></dt>
+<dd><p>Record a right button press.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>on</strong> &#8211; if the button is depressed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.learner.Learner.right_wheel_change">
+<code class="descname">right_wheel_change</code><span class="sig-paren">(</span><em>change</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/learner.html#Learner.right_wheel_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.learner.Learner.right_wheel_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the notes and send images to display</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>change</strong> &#8211; amount the right wheel has changed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.learner.Learner.send_note">
+<code class="descname">send_note</code><span class="sig-paren">(</span><em>note</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/learner.html#Learner.send_note"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.learner.Learner.send_note" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send the image corresponding to a given note to the display</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>note</strong> (<em>int</em>) &#8211; number of the note to send</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-artist_performer.performer">
+<span id="artist-performer-performer-module"></span><h2>artist_performer.performer module<a class="headerlink" href="#module-artist_performer.performer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="artist_performer.performer.NoteSubscriber">
+<em class="property">class </em><code class="descclassname">artist_performer.performer.</code><code class="descname">NoteSubscriber</code><span class="sig-paren">(</span><em>q</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/performer.html#NoteSubscriber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.performer.NoteSubscriber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></p>
+<p>Subscribe to the baxter_artist_notes rostopic, listening for new notes to play.</p>
+<p>Add them to the queue when received.</p>
+<dl class="method">
+<dt id="artist_performer.performer.NoteSubscriber.on_receive_note">
+<code class="descname">on_receive_note</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/performer.html#NoteSubscriber.on_receive_note"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.performer.NoteSubscriber.on_receive_note" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback for when a note message is received. Add the note to the queue of notes to play.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>baxter_artist.msg.Note</em>) &#8211; the message received (a note)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.performer.NoteSubscriber.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/performer.html#NoteSubscriber.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.performer.NoteSubscriber.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the thread, subscribing the the baxter_artist_notes topic.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="artist_performer.performer.Performer">
+<em class="property">class </em><code class="descclassname">artist_performer.performer.</code><code class="descname">Performer</code><a class="reference internal" href="../../_modules/artist_performer/performer.html#Performer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.performer.Performer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#artist_performer.controller.BaxterController" title="artist_performer.controller.BaxterController"><code class="xref py py-class docutils literal"><span class="pre">artist_performer.controller.BaxterController</span></code></a></p>
+<p>Manage the performance.</p>
+<dl class="method">
+<dt id="artist_performer.performer.Performer.avoid_black_key">
+<code class="descname">avoid_black_key</code><span class="sig-paren">(</span><em>arm</em>, <em>current_pos</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/performer.html#Performer.avoid_black_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.performer.Performer.avoid_black_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Avoid the black keys when moving.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>arm</strong> (<em>str</em>) &#8211; the arm moving.</li>
+<li><strong>current_pos</strong> &#8211; current position of the arm.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.performer.Performer.checkJointPositions">
+<code class="descname">checkJointPositions</code><span class="sig-paren">(</span><em>target_pos</em>, <em>arm</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/performer.html#Performer.checkJointPositions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.performer.Performer.checkJointPositions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify that the joint positions are with a certain delta of the target.
+:param target_pos: the target position to hit
+:param arm: which arm
+:type arm: str</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">whether the arm is within the desired range.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.performer.Performer.flick">
+<code class="descname">flick</code><span class="sig-paren">(</span><em>arm</em>, <em>current_pos</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/performer.html#Performer.flick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.performer.Performer.flick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flick the arm down to hit a specific key.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>arm</strong> (<em>str</em>) &#8211; the arm to flick</li>
+<li><strong>current_pos</strong> &#8211; the current joint anagles of the arm. return here when done</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.performer.Performer.get_joint_angles">
+<code class="descname">get_joint_angles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/performer.html#Performer.get_joint_angles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.performer.Performer.get_joint_angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the joint angles of the left / right arm as a tuple.</p>
+<p>Returns (tuple): the arm joint angles.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.performer.Performer.play_left_note_now">
+<code class="descname">play_left_note_now</code><span class="sig-paren">(</span><em>note</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/performer.html#Performer.play_left_note_now"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.performer.Performer.play_left_note_now" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play a note with the right arm immediately (no waiting)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>note</strong> (<em>int</em>) &#8211; the note to play</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.performer.Performer.play_note">
+<code class="descname">play_note</code><span class="sig-paren">(</span><em>note</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/performer.html#Performer.play_note"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.performer.Performer.play_note" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play a note (arm undetermined as of now). Wait until the note should be played.
+:param note: the note to play
+:type note: baxter_artist.msg.Note</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.performer.Performer.play_right_note_now">
+<code class="descname">play_right_note_now</code><span class="sig-paren">(</span><em>note</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/performer.html#Performer.play_right_note_now"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.performer.Performer.play_right_note_now" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play a note with the right arm immediately (no waiting)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>note</strong> (<em>int</em>) &#8211; the note to play</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.performer.Performer.send_note">
+<code class="descname">send_note</code><span class="sig-paren">(</span><em>note</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/performer.html#Performer.send_note"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.performer.Performer.send_note" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send the image corresponding to a given note to the display</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>note</strong> (<em>int</em>) &#8211; number of the note to send</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.performer.Performer.subscribe">
+<code class="descname">subscribe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/performer.html#Performer.subscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.performer.Performer.subscribe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subscribe to the baxter_artist_notes rostopic.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-artist_performer.publisher">
+<span id="artist-performer-publisher-module"></span><h2>artist_performer.publisher module<a class="headerlink" href="#module-artist_performer.publisher" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="artist_performer.publisher.NotePublisher">
+<em class="property">class </em><code class="descclassname">artist_performer.publisher.</code><code class="descname">NotePublisher</code><a class="reference internal" href="../../_modules/artist_performer/publisher.html#NotePublisher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.publisher.NotePublisher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Publish notes to the baxter_artist_notes rostopic</p>
+<dl class="method">
+<dt id="artist_performer.publisher.NotePublisher.pub_note">
+<code class="descname">pub_note</code><span class="sig-paren">(</span><em>pitch</em>, <em>starttime</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/publisher.html#NotePublisher.pub_note"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.publisher.NotePublisher.pub_note" title="Permalink to this definition">¶</a></dt>
+<dd><p>Publish a note to the rostopic</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pitch</strong> (<em>int</em>) &#8211; the pitch of the note to play</li>
+<li><strong>starttime</strong> (<em>rospy.Time</em>) &#8211; when the note should be played.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="artist_performer.publisher.NotePublisher.pub_notes">
+<code class="descname">pub_notes</code><span class="sig-paren">(</span><em>notes</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/artist_performer/publisher.html#NotePublisher.pub_notes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#artist_performer.publisher.NotePublisher.pub_notes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Publish a series of notes to the rostopic
+:param notes: array of (pitch,dur) pairs to publish to the rostopic</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../baxter.html" class="btn btn-neutral" title="Using Baxter" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Jason Brooks, Kevin Jiang, and Charles Proctor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
