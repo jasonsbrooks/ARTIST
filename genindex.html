@@ -83,9 +83,11 @@
                 <ul>
 <li class="toctree-l1"><a class="reference internal" href="src/artist_generator/analyze.html">analyze package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="src/artist_generator/db.html">db package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="src/artist_generator/ga.html">ga package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="src/artist_generator/iter.html">iter package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="src/artist_generator/utils.html">utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="src/artist_generator/ngram.html">ngram package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="src/artist_performer/artist_performer.html">artist_performer package</a></li>
 </ul>
 
             
@@ -137,6 +139,7 @@
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
@@ -175,8 +178,6 @@
   <dt><a href="src/artist_generator/analyze.html#analyze.chords.HarmonicAnalyzer.analyze">analyze() (analyze.chords.HarmonicAnalyzer method)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="src/artist_generator/analyze.html#module-analyze.chords">analyze.chords (module)</a>
   </dt>
@@ -189,11 +190,51 @@
   <dt><a href="src/artist_generator/db.html#db.song.Song.analyzed">analyzed (db.song.Song attribute)</a>
   </dt>
 
+      
+  <dt><a href="src/artist_performer/artist_performer.html#module-artist_performer">artist_performer (module)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="src/artist_performer/artist_performer.html#module-artist_performer.controller">artist_performer.controller (module)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#module-artist_performer.learner">artist_performer.learner (module)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#module-artist_performer.performer">artist_performer.performer (module)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#module-artist_performer.publisher">artist_performer.publisher (module)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.ARTIST_PKG_DIR">ARTIST_PKG_DIR (in module artist_performer)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.ARTIST_SHARE_DIR">ARTIST_SHARE_DIR (in module artist_performer)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.performer.Performer.avoid_black_key">avoid_black_key() (artist_performer.performer.Performer method)</a>
+  </dt>
+
   </dl></td>
 </tr></table>
 
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.controller.BaxterController">BaxterController (class in artist_performer.controller)</a>
+  </dt>
+
+  </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="src/artist_generator/analyze.html#analyze.preference_rules.beat_strength">beat_strength() (in module analyze.preference_rules)</a>
@@ -210,11 +251,23 @@
   </dt>
 
       
+  <dt><a href="src/artist_generator/ga.html#ga.fitness.calc_fitness">calc_fitness() (in module ga.fitness)</a>
+  </dt>
+
+      
   <dt><a href="src/artist_generator/ngram.html#ngram.generate.NgramGenerator.calc_note_val">calc_note_val() (ngram.generate.NgramGenerator method)</a>
   </dt>
 
       
   <dt><a href="src/artist_generator/db.html#db.track.Track.channel">channel (db.track.Track attribute)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.performer.Performer.checkJointPositions">checkJointPositions() (artist_performer.performer.Performer method)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.ga.choose_duration">choose_duration() (in module ga.ga)</a>
   </dt>
 
       
@@ -233,10 +286,24 @@
   <dt><a href="src/artist_generator/analyze.html#analyze.chords.ChordSpan">ChordSpan (class in analyze.chords)</a>
   </dt>
 
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.controller.BaxterController.clean_shutdown">clean_shutdown() (artist_performer.controller.BaxterController method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.learner.Learner.clean_shutdown">(artist_performer.learner.Learner method)</a>
+  </dt>
+
+      </dl></dd>
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="src/artist_generator/analyze.html#analyze.preference_rules.compatibility">compatibility() (in module analyze.preference_rules)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.CONFIG_FILENAME">CONFIG_FILENAME (in module artist_performer)</a>
   </dt>
 
       
@@ -256,7 +323,23 @@
   </dt>
 
       
+  <dt><a href="src/artist_generator/ga.html#ga.ga_midi.create_chord_measure">create_chord_measure() (in module ga.ga_midi)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.chords.create_chord_progression">create_chord_progression() (in module ga.chords)</a>
+  </dt>
+
+      
   <dt><a href="src/artist_generator/db.html#db.reset.create_many">create_many() (in module db.reset)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.ga_midi.create_midi_file">create_midi_file() (in module ga.ga_midi)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.ga.crossover">crossover() (in module ga.ga)</a>
   </dt>
 
   </dl></td>
@@ -300,6 +383,10 @@
   </dt>
 
       
+  <dt><a href="src/artist_generator/ga.html#ga.fitness.downbeat">downbeat() (in module ga.fitness)</a>
+  </dt>
+
+      
   <dt><a href="src/artist_generator/db.html#db.reset.drop">drop() (in module db.reset)</a>
   </dt>
 
@@ -329,6 +416,10 @@
   <dt><a href="src/artist_generator/db.html#db.note.Note.end">end (db.note.Note attribute)</a>
   </dt>
 
+      
+  <dt><a href="src/artist_generator/ga.html#ga.fitness.end_on_root">end_on_root() (in module ga.fitness)</a>
+  </dt>
+
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
@@ -338,11 +429,55 @@
   </dl></td>
 </tr></table>
 
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.performer.Performer.flick">flick() (artist_performer.performer.Performer method)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="src/artist_generator/ga.html#module-ga">ga (module)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.ga.ga">ga() (in module ga.ga)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#module-ga.chords">ga.chords (module)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#module-ga.fitness">ga.fitness (module)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#module-ga.ga">ga.ga (module)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#module-ga.ga_midi">ga.ga_midi (module)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#module-ga.mutation">ga.mutation (module)</a>
+  </dt>
+
+      
   <dt><a href="src/artist_generator/ngram.html#ngram.generate.generate">generate() (in module ngram.generate)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="src/artist_generator/ga.html#ga.chords.get_chord_notes">get_chord_notes() (in module ga.chords)</a>
   </dt>
 
       
@@ -350,13 +485,29 @@
   </dt>
 
       
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.learner.Learner.get_joint_angles">get_joint_angles() (artist_performer.learner.Learner method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.performer.Performer.get_joint_angles">(artist_performer.performer.Performer method)</a>
+  </dt>
+
+      </dl></dd>
+      
   <dt><a href="src/artist_generator/db.html#db.helpers.Runner.get_note_events">get_note_events() (db.helpers.Runner method)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="src/artist_generator/db.html#db.helpers.Runner.get_notes">get_notes() (db.helpers.Runner method)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.fitness.get_pitch_at_time">get_pitch_at_time() (in module ga.fitness)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.mutation.get_random_start_end">get_random_start_end() (in module ga.mutation)</a>
   </dt>
 
       
@@ -368,6 +519,12 @@
 
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="src/artist_generator/ga.html#ga.fitness.halfbar">halfbar() (in module ga.fitness)</a>
+  </dt>
+
+  </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="src/artist_generator/analyze.html#analyze.chords.HarmonicAnalyzer">HarmonicAnalyzer (class in analyze.chords)</a>
@@ -394,7 +551,19 @@
 
       </dl></dd>
       
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.IMAGE_PATH">IMAGE_PATH (in module artist_performer)</a>
+  </dt>
+
+      
   <dt><a href="src/artist_generator/utils.html#utils.counter.Counter.incrementAndGet">incrementAndGet() (utils.counter.Counter method)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.learner.Learner.init_leds">init_leds() (artist_performer.learner.Learner method)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.ga.initialize_chromosomes">initialize_chromosomes() (in module ga.ga)</a>
   </dt>
 
       
@@ -409,6 +578,8 @@
   <dt><a href="src/artist_generator/db.html#db.track.Track.instr_name">instr_name (db.track.Track attribute)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="src/artist_generator/db.html#db.exceptions.InvalidKeySignature">InvalidKeySignature</a>
   </dt>
@@ -417,8 +588,6 @@
   <dt><a href="src/artist_generator/db.html#db.helpers.Runner.is_instr_track">is_instr_track() (db.helpers.Runner method)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="src/artist_generator/db.html#db.note.Note.iso_pitch">iso_pitch (db.note.Note attribute)</a>
   </dt>
@@ -457,10 +626,18 @@
   <dt><a href="src/artist_generator/db.html#db.track.Track.key_sig_top">key_sig_top (db.track.Track attribute)</a>
   </dt>
 
+      
+  <dt><a href="src/artist_generator/ngram.html#ngram.ngram_helper.key_transpose_pitch">key_transpose_pitch() (in module ngram.ngram_helper)</a>
+  </dt>
+
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="src/artist_generator/ngram.html#ngram.ngram_helper.key_transpose_pitch">key_transpose_pitch() (in module ngram.ngram_helper)</a>
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.learner.Keys">Keys (class in artist_performer.learner)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.KEYS_FILENAME">KEYS_FILENAME (in module artist_performer)</a>
   </dt>
 
   </dl></td>
@@ -474,13 +651,37 @@
   </dt>
 
       
+  <dt><a href="src/artist_generator/ga.html#ga.fitness.large_intervals">large_intervals() (in module ga.fitness)</a>
+  </dt>
+
+      
   <dt><a href="src/artist_generator/analyze.html#analyze.chords.ChordSpan.last_ts">last_ts() (analyze.chords.ChordSpan method)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.learner.Learner">Learner (class in artist_performer.learner)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.learner.Learner.left_button_press">left_button_press() (artist_performer.learner.Learner method)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.learner.Learner.left_wheel_change">left_wheel_change() (artist_performer.learner.Learner method)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.mutation.local_mutation">local_mutation() (in module ga.mutation)</a>
+  </dt>
+
+      
   <dt><a href="src/artist_generator/analyze.html#analyze.preference_rules.lof_difference">lof_difference() (in module analyze.preference_rules)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.fitness.longnote">longnote() (in module ga.fitness)</a>
   </dt>
 
   </dl></td>
@@ -511,10 +712,46 @@
   <dt><a href="src/artist_generator/db.html#db.note.Note.measure">measure (db.note.Note attribute)</a>
   </dt>
 
+      
+  <dt><a href="src/artist_generator/db.html#db.helpers.Runner.midi_to_song">midi_to_song() (db.helpers.Runner method)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.mutation.mut1">mut1() (in module ga.mutation)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.mutation.mut2">mut2() (in module ga.mutation)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.mutation.mut3">mut3() (in module ga.mutation)</a>
+  </dt>
+
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="src/artist_generator/db.html#db.helpers.Runner.midi_to_song">midi_to_song() (db.helpers.Runner method)</a>
+  <dt><a href="src/artist_generator/ga.html#ga.mutation.mut4">mut4() (in module ga.mutation)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.mutation.mut5">mut5() (in module ga.mutation)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.mutation.mut6">mut6() (in module ga.mutation)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.mutation.mut7">mut7() (in module ga.mutation)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.mutation.mut8">mut8() (in module ga.mutation)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.mutation.mutate">mutate() (in module ga.mutation)</a>
   </dt>
 
   </dl></td>
@@ -557,14 +794,18 @@
   <dt><a href="src/artist_generator/ngram.html#module-ngram.train">ngram.train (module)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="src/artist_generator/ngram.html#ngram.generate.NgramGenerator">NgramGenerator (class in ngram.generate)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="src/artist_generator/db.html#db.note.Note">Note (class in db.note)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.publisher.NotePublisher">NotePublisher (class in artist_performer.publisher)</a>
   </dt>
 
       
@@ -581,6 +822,10 @@
   </dt>
 
       </dl></dd>
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.performer.NoteSubscriber">NoteSubscriber (class in artist_performer.performer)</a>
+  </dt>
+
   </dl></td>
 </tr></table>
 
@@ -592,11 +837,33 @@
   </dt>
 
   </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.performer.NoteSubscriber.on_receive_note">on_receive_note() (artist_performer.performer.NoteSubscriber method)</a>
+  </dt>
+
+  </dl></td>
 </tr></table>
 
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="src/artist_generator/ga.html#ga.fitness.pattern_matching">pattern_matching() (in module ga.fitness)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.fitness.penalize_off_pulse">penalize_off_pulse() (in module ga.fitness)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.fitness.penalize_short">penalize_short() (in module ga.fitness)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.performer.Performer">Performer (class in artist_performer.performer)</a>
+  </dt>
+
       
   <dt><a href="src/artist_generator/db.html#db.note.Note.pitch">pitch (db.note.Note attribute)</a>
   </dt>
@@ -605,14 +872,34 @@
   <dt><a href="src/artist_generator/ngram.html#ngram.ngram_helper.pitch_to_str">pitch_to_str() (in module ngram.ngram_helper)</a>
   </dt>
 
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.performer.Performer.play_left_note_now">play_left_note_now() (artist_performer.performer.Performer method)</a>
+  </dt>
+
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.performer.Performer.play_note">play_note() (artist_performer.performer.Performer method)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.performer.Performer.play_right_note_now">play_right_note_now() (artist_performer.performer.Performer method)</a>
+  </dt>
+
       
   <dt><a href="src/artist_generator/db.html#db.song.Song.ppqn">ppqn (db.song.Song attribute)</a>
   </dt>
 
       
   <dt><a href="src/artist_generator/analyze.html#analyze.chords.ChordSpan.pr_score">pr_score() (analyze.chords.ChordSpan method)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.publisher.NotePublisher.pub_note">pub_note() (artist_performer.publisher.NotePublisher method)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.publisher.NotePublisher.pub_notes">pub_notes() (artist_performer.publisher.NotePublisher method)</a>
   </dt>
 
   </dl></td>
@@ -627,6 +914,14 @@
 
       
   <dt><a href="src/artist_generator/analyze.html#analyze.chords.ChordSpan.remove">remove() (analyze.chords.ChordSpan method)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.learner.Learner.right_button_press">right_button_press() (artist_performer.learner.Learner method)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.learner.Learner.right_wheel_change">right_wheel_change() (artist_performer.learner.Learner method)</a>
   </dt>
 
       
@@ -648,12 +943,24 @@
   </dt>
 
       
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.ROS_ENABLED">ROS_ENABLED (in module artist_performer)</a>
+  </dt>
+
+      
   <dt><a href="src/artist_generator/analyze.html#analyze.chords.HarmonicAnalyzer.run">run() (analyze.chords.HarmonicAnalyzer method)</a>
   </dt>
 
       <dd><dl>
         
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.performer.NoteSubscriber.run">(artist_performer.performer.NoteSubscriber method)</a>
+  </dt>
+
+        
   <dt><a href="src/artist_generator/db.html#db.helpers.Runner.run">(db.helpers.Runner method)</a>
+  </dt>
+
+        
+  <dt><a href="src/artist_generator/ga.html#ga.ga.run">(in module ga.ga)</a>
   </dt>
 
         
@@ -672,6 +979,32 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.learner.Keys.save_left">save_left() (artist_performer.learner.Keys method)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.learner.Keys.save_neutral">save_neutral() (artist_performer.learner.Keys method)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.learner.Keys.save_right">save_right() (artist_performer.learner.Keys method)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.learner.Learner.send_note">send_note() (artist_performer.learner.Learner method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.performer.Performer.send_note">(artist_performer.performer.Performer method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.controller.BaxterController.set_neutral">set_neutral() (artist_performer.controller.BaxterController method)</a>
+  </dt>
+
+      
   <dt><a href="src/artist_generator/db.html#db.song.Song">Song (class in db.song)</a>
   </dt>
 
@@ -679,6 +1012,8 @@
   <dt><a href="src/artist_generator/db.html#db.track.Track.song">song (db.track.Track attribute)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="src/artist_generator/db.html#db.track.Track.song_id">song_id (db.track.Track attribute)</a>
   </dt>
@@ -687,8 +1022,6 @@
   <dt><a href="src/artist_generator/iter.html#iter.song_iterator.SongIterator">SongIterator (class in iter.song_iterator)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="src/artist_generator/db.html#db.note.Note.start">start (db.note.Note attribute)</a>
   </dt>
@@ -705,6 +1038,14 @@
       </dl></dd>
       
   <dt><a href="src/artist_generator/utils.html#utils.stats.stat">stat() (in module utils.stats)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.performer.Performer.subscribe">subscribe() (artist_performer.performer.Performer method)</a>
+  </dt>
+
+      
+  <dt><a href="src/artist_generator/ga.html#ga.fitness.suspensions">suspensions() (in module ga.fitness)</a>
   </dt>
 
   </dl></td>
@@ -741,6 +1082,10 @@
   <dt><a href="src/artist_generator/db.html#db.song.Song.title">title (db.song.Song attribute)</a>
   </dt>
 
+      
+  <dt><a href="src/artist_generator/ga.html#ga.ga.tournament_selection">tournament_selection() (in module ga.ga)</a>
+  </dt>
+
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
@@ -773,6 +1118,10 @@
   </dt>
 
       </dl></dd>
+      
+  <dt><a href="src/artist_generator/ga.html#ga.mutation.transpose_pitch">transpose_pitch() (in module ga.mutation)</a>
+  </dt>
+
       
   <dt><a href="src/artist_generator/ngram.html#ngram.train.RomanTrainer.transposed_triple">transposed_triple() (ngram.train.RomanTrainer method)</a>
   </dt>
@@ -818,9 +1167,21 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="src/artist_generator/ngram.html#ngram.train.RomanTrainer.write">write() (ngram.train.RomanTrainer method)</a>
+  <dt><a href="src/artist_generator/ga.html#ga.ga.weighted_choice">weighted_choice() (in module ga.ga)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="src/artist_performer/artist_performer.html#artist_performer.learner.Keys.write">write() (artist_performer.learner.Keys method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="src/artist_generator/ngram.html#ngram.train.RomanTrainer.write">(ngram.train.RomanTrainer method)</a>
+  </dt>
+
+      </dl></dd>
   </dl></td>
 </tr></table>
 

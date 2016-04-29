@@ -1,0 +1,1073 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ga package &mdash; ARTIST 1.0.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ARTIST 1.0.0 documentation" href="../../index.html"/>
+        <link rel="next" title="iter package" href="iter.html"/>
+        <link rel="prev" title="db package" href="db.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ARTIST
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="analyze.html">analyze package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="db.html">db package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ga package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ga.chords">ga.chords module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ga.fitness">ga.fitness module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ga.ga">ga.ga module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ga-ga-midi-module">ga.ga_midi module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ga.mutation">ga.mutation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ga">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="iter.html">iter package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ngram.html">ngram package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../artist_performer/artist_performer.html">artist_performer package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ARTIST</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+    <li>ga package</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/src/artist_generator/ga.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ga-package">
+<h1>ga package<a class="headerlink" href="#ga-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-ga.chords">
+<span id="ga-chords-module"></span><h2>ga.chords module<a class="headerlink" href="#module-ga.chords" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="ga.chords.create_chord_progression">
+<code class="descclassname">ga.chords.</code><code class="descname">create_chord_progression</code><span class="sig-paren">(</span><em>a_train=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/chords.html#create_chord_progression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.chords.create_chord_progression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a midi chord progression</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a_train</strong> (<em>bool, optional</em>) &#8211; Defaults at False.  If True, returns chord progression for Take the A Train by Duke Ellington.  Otherwise, returns standard 12-bar blues in C major.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Returns chord progression, which is list of (chord_root, dur)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(int, int)[]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.chords.get_chord_notes">
+<code class="descclassname">ga.chords.</code><code class="descname">get_chord_notes</code><span class="sig-paren">(</span><em>chord</em>, <em>a_train=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/chords.html#get_chord_notes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.chords.get_chord_notes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a chord root, returns list of valid scale notes encoded in extended-duration between 1 and 21</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>chord</strong> (<em>int</em>) &#8211; chord root [1,7]</li>
+<li><strong>a_train</strong> (<em>bool, optional</em>) &#8211; efaults at False.  If True, returns valid scale notes for Take the A Train by Duke Ellington.  Otherwise, returns valid scale notes for standard 12-bar blues in C major.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Description</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">TYPE</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ga.fitness">
+<span id="ga-fitness-module"></span><h2>ga.fitness module<a class="headerlink" href="#module-ga.fitness" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="ga.fitness.calc_fitness">
+<code class="descclassname">ga.fitness.</code><code class="descname">calc_fitness</code><span class="sig-paren">(</span><em>genotype</em>, <em>chord_progression</em>, <em>detailed=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/fitness.html#calc_fitness"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.fitness.calc_fitness" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates and returns total fitness based on a given genotype and chord progression</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>chord_progression</strong> (<em>(int, int</em>) &#8211; chord progression of song as list of (chord_root, dur)</li>
+<li><strong>detailed</strong> (<em>bool, optional</em>) &#8211; Defaults at False.  If True, prints to console detailed fitness breakdown.  Otherwise, prints nothing</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">total fitness of the given genotype for particular chord progression</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.fitness.downbeat">
+<code class="descclassname">ga.fitness.</code><code class="descname">downbeat</code><span class="sig-paren">(</span><em>genotype</em>, <em>chord_progression</em>, <em>weight=20</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/fitness.html#downbeat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.fitness.downbeat" title="Permalink to this definition">¶</a></dt>
+<dd><p>fitness function handling downbeats</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>chord_progression</strong> (<em>(int, int</em>) &#8211; chord progression of song as list of (chord_root, dur)</li>
+<li><strong>weight</strong> (<em>int, optional</em>) &#8211; Defaults at 20.  Defines penalty/reward rate</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">aggregate fitness value based on downbeats</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.fitness.end_on_root">
+<code class="descclassname">ga.fitness.</code><code class="descname">end_on_root</code><span class="sig-paren">(</span><em>genotype</em>, <em>weight=20</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/fitness.html#end_on_root"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.fitness.end_on_root" title="Permalink to this definition">¶</a></dt>
+<dd><p>fitness function handling last note</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>weight</strong> (<em>int, optional</em>) &#8211; Defaults at 20.  Defines penalty/reward rate</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">aggregate fitness value based on last note</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.fitness.get_pitch_at_time">
+<code class="descclassname">ga.fitness.</code><code class="descname">get_pitch_at_time</code><span class="sig-paren">(</span><em>genotype</em>, <em>time</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/fitness.html#get_pitch_at_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.fitness.get_pitch_at_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>given genotype and durk time point, returns pitch being played at that durk point and whether or not pitch ends perfectly on time</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; genotype of chromosome, which is list of (pitch, dur)</li>
+<li><strong>time</strong> (<em>int</em>) &#8211; time point in durks</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">(pitch, end_on_time) where pitch is [1,21] and end_on_time represents whether or not the pitch ends perfectly at the time point time.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(int, bool)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.fitness.halfbar">
+<code class="descclassname">ga.fitness.</code><code class="descname">halfbar</code><span class="sig-paren">(</span><em>genotype</em>, <em>chord_progression</em>, <em>weight=20</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/fitness.html#halfbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.fitness.halfbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>fitness function handling halfbars</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>chord_progression</strong> (<em>(int, int</em>) &#8211; chord progression of song as list of (chord_root, dur)</li>
+<li><strong>weight</strong> (<em>int, optional</em>) &#8211; Defaults at 20.  Defines penalty/reward rate</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">aggregate fitness value based on halfbars</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.fitness.large_intervals">
+<code class="descclassname">ga.fitness.</code><code class="descname">large_intervals</code><span class="sig-paren">(</span><em>genotype</em>, <em>max_interval=9</em>, <em>weight=20</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/fitness.html#large_intervals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.fitness.large_intervals" title="Permalink to this definition">¶</a></dt>
+<dd><p>takes genotype and gives fitness penalty for large intervals</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>max_interval</strong> (<em>int, optional</em>) &#8211; Defaults at 9.  Defines max interval before penalty begins</li>
+<li><strong>weight</strong> (<em>int, optional</em>) &#8211; Defaults at 20.  Defines penalty/reward rate</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">aggregate fitness value based on large intervals</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.fitness.longnote">
+<code class="descclassname">ga.fitness.</code><code class="descname">longnote</code><span class="sig-paren">(</span><em>genotype</em>, <em>chord_progression</em>, <em>weight=20</em>, <em>long_note=8</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/fitness.html#longnote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.fitness.longnote" title="Permalink to this definition">¶</a></dt>
+<dd><p>fitness function handling long notes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>chord_progression</strong> (<em>(int, int</em>) &#8211; chord progression of song as list of (chord_root, dur)</li>
+<li><strong>weight</strong> (<em>int, optional</em>) &#8211; Defaults at 20.  Defines penalty/reward rate</li>
+<li><strong>long_note</strong> (<em>int, optional</em>) &#8211; Defaults at 8.  Defines limit for what constitutes a &#8220;long note&#8221; (anything &gt;= to long_note is considered &#8220;long&#8221;)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">aggregate fitness value based on long notes</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.fitness.pattern_matching">
+<code class="descclassname">ga.fitness.</code><code class="descname">pattern_matching</code><span class="sig-paren">(</span><em>genotype</em>, <em>weight=20</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/fitness.html#pattern_matching"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.fitness.pattern_matching" title="Permalink to this definition">¶</a></dt>
+<dd><p>fitness function handling absolute pitch intervals</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>weight</strong> (<em>int, optional</em>) &#8211; Defaults at 20.  Defines penalty/reward rate</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">aggregate fitness value based on pattern matching</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.fitness.penalize_off_pulse">
+<code class="descclassname">ga.fitness.</code><code class="descname">penalize_off_pulse</code><span class="sig-paren">(</span><em>genotype</em>, <em>weight=20</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/fitness.html#penalize_off_pulse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.fitness.penalize_off_pulse" title="Permalink to this definition">¶</a></dt>
+<dd><p>fitness function handling off pulse notes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>weight</strong> (<em>int, optional</em>) &#8211; Defaults at 20.  Defines penalty/reward rate</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">aggregate fitness value based on off pulse notes</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.fitness.penalize_short">
+<code class="descclassname">ga.fitness.</code><code class="descname">penalize_short</code><span class="sig-paren">(</span><em>genotype</em>, <em>weight=20</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/fitness.html#penalize_short"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.fitness.penalize_short" title="Permalink to this definition">¶</a></dt>
+<dd><p>fitness function handling short notes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>weight</strong> (<em>int, optional</em>) &#8211; Defaults at 20.  Defines penalty/reward rate</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">aggregate fitness value based on short notes</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.fitness.suspensions">
+<code class="descclassname">ga.fitness.</code><code class="descname">suspensions</code><span class="sig-paren">(</span><em>genotype</em>, <em>chord_progression</em>, <em>weight=20</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/fitness.html#suspensions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.fitness.suspensions" title="Permalink to this definition">¶</a></dt>
+<dd><p>fitness function handling suspensions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>chord_progression</strong> (<em>(int, int</em>) &#8211; chord progression of song as list of (chord_root, dur)</li>
+<li><strong>weight</strong> (<em>int, optional</em>) &#8211; Defaults at 20.  Defines penalty/reward rate</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">aggregate fitness value based on suspensions</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ga.ga">
+<span id="ga-ga-module"></span><h2>ga.ga module<a class="headerlink" href="#module-ga.ga" title="Permalink to this headline">¶</a></h2>
+<p>Notes:
+1) rest encoded by -1</p>
+<p>to do
+0) find easy way to categorize notes in chord vs notes not in chord to...
+1) finish all fitness function parameters
+2) try the following duration probabilities: 70 quarter, 20 eighth, 10 sixteenth
+3) mut3 is a bit overpowering right now...</p>
+<dl class="function">
+<dt id="ga.ga.choose_duration">
+<code class="descclassname">ga.ga.</code><code class="descname">choose_duration</code><span class="sig-paren">(</span><em>simple=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/ga.html#choose_duration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.ga.choose_duration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a random duration in durk units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>simple</strong> (<em>bool, optional</em>) &#8211; Defaults at False.  If True, only considers notes of duration 8 or 16 durks.  Otherwise, considers durations in list: [1, 2, 3, 4, 6, 8, 12, 16]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">duration in unit durks</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.ga.crossover">
+<code class="descclassname">ga.ga.</code><code class="descname">crossover</code><span class="sig-paren">(</span><em>parent1</em>, <em>parent2</em>, <em>d</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/ga.html#crossover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.ga.crossover" title="Permalink to this definition">¶</a></dt>
+<dd><p>One point crossover</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>parent1</strong> (<em>int, (int, int</em>) &#8211; chromosome of parent1</li>
+<li><strong>parent2</strong> (<em>int, (int, int</em>) &#8211; chromosome of parent2</li>
+<li><strong>d</strong> (<em>int</em>) &#8211; Total duration, in durks, of song</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(</strong> &#8211; returns two child genotypes in form (genotype1, genotype2)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int, int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.ga.ga">
+<code class="descclassname">ga.ga.</code><code class="descname">ga</code><span class="sig-paren">(</span><em>chord_progression</em>, <em>n=40</em>, <em>num_iter=200</em>, <em>prob_local=0.5</em>, <em>ngram_generate=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/ga.html#ga"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.ga.ga" title="Permalink to this definition">¶</a></dt>
+<dd><p>genetic algorithm</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>chord_progression</strong> (<em>(int, int</em>) &#8211; chord progression which is a list of (chord_root, duration)</li>
+<li><strong>n</strong> (<em>int, optional</em>) &#8211; Defaults at 40.  Population size.</li>
+<li><strong>num_iter</strong> (<em>int, optional</em>) &#8211; Defaults at 200.  Specifies number of iterations of GA before termination</li>
+<li><strong>prob_local</strong> (<em>float, optional</em>) &#8211; Defaults at .5.  Probability of mutations</li>
+<li><strong>ngram_generate</strong> (<em>None, optional</em>) &#8211; Defaults at None.  If True, use ngram to initialize population.  Otherwise, randomly initialize.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(int,</strong> &#8211; Chromosome list of final generation in the genetic algorithm</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int, int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.ga.initialize_chromosomes">
+<code class="descclassname">ga.ga.</code><code class="descname">initialize_chromosomes</code><span class="sig-paren">(</span><em>n</em>, <em>d</em>, <em>chord_progression</em>, <em>ngram_generate=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/ga.html#initialize_chromosomes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.ga.initialize_chromosomes" title="Permalink to this definition">¶</a></dt>
+<dd><p>initializes a list of n chromosomes of musical length d for GA</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>n</strong> (<em>int</em>) &#8211; number of chromosomes to be generated</li>
+<li><strong>d</strong> (<em>int</em>) &#8211; total duration, in durks, of song (and given chord progression)</li>
+<li><strong>chord_progression</strong> (<em>(int, int</em>) &#8211; chord progression of song as list of (chord_root, dur)</li>
+<li><strong>ngram_generate</strong> (<em>None, optional</em>) &#8211; Defaults at None.  If true, then uses ngram pipeline to initialize chromosomes.  Otherwise, randomly initializes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(int,</strong> &#8211; Returns list of chromosomes</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int, int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.ga.run">
+<code class="descclassname">ga.ga.</code><code class="descname">run</code><span class="sig-paren">(</span><em>ngram_generate=None</em>, <em>num_iter=800</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/ga.html#run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.ga.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs genetic algorithm in main.  Creates midi file with jazz improvisation of winning chromosome.
+Also prints out relevant information.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ngram_generate</strong> (<em>None, optional</em>) &#8211; Defaults at None.  If True, use ngram to initialize population.  Otherwise, randomly initialize.</li>
+<li><strong>num_iter</strong> (<em>int, optional</em>) &#8211; Defaults at 200.  Specifies number of iterations of GA before termination</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Description</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">TYPE</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.ga.tournament_selection">
+<code class="descclassname">ga.ga.</code><code class="descname">tournament_selection</code><span class="sig-paren">(</span><em>chromosomes</em>, <em>tourn_size</em>, <em>prob</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/ga.html#tournament_selection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.ga.tournament_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>tournament selection where, given size and probabilty, selects based on weights a winner</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>chromosomes</strong> (<em>(int, (int, int</em>) &#8211; List of chromosomes</li>
+<li><strong>tourn_size</strong> (<em>int</em>) &#8211; size of tournament</li>
+<li><strong>prob</strong> (<em>float</em>) &#8211; probability used based on classic tournament selection</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(int,</strong> &#8211; winning chromosome from the tournament</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int, int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.ga.weighted_choice">
+<code class="descclassname">ga.ga.</code><code class="descname">weighted_choice</code><span class="sig-paren">(</span><em>choices</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/ga.html#weighted_choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.ga.weighted_choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns weighted choice from list of choices</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>choices</strong> (<em>(type, float</em>) &#8211; list of (choice, weight) tuples</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">returns choice picked.  Can be of any type</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">type</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="ga-ga-midi-module">
+<h2>ga.ga_midi module<a class="headerlink" href="#ga-ga-midi-module" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-ga.ga_midi"></span><p>Note: by default, 100 ticks is a quarter note
+thus:
+8th: 50 ticks
+16th: 25 ticks
+32nd: 12.5 ticks</p>
+<p>If 400 ticks is a quarter note
+8th: 200
+16th: 100
+32nd: 50</p>
+<dl class="function">
+<dt id="ga.ga_midi.create_chord_measure">
+<code class="descclassname">ga.ga_midi.</code><code class="descname">create_chord_measure</code><span class="sig-paren">(</span><em>chord</em>, <em>a_train=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/ga_midi.html#create_chord_measure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.ga_midi.create_chord_measure" title="Permalink to this definition">¶</a></dt>
+<dd><p>given chord number, returns track object with one 4/4 measure of that chord of quarter note durations</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>chord</strong> (<em>int</em>) &#8211; 1-7 representing chord root in scale</li>
+<li><strong>a_train</strong> (<em>bool, optional</em>) &#8211; Defaults to False.  If True, uses chord progression to a_train, otherwise uses standard blues scales in C major</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">midi.Track object that represents chord progression in left hand of a piano.  Can be added directly to midi file for playback</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Midi.Track</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.ga_midi.create_midi_file">
+<code class="descclassname">ga.ga_midi.</code><code class="descname">create_midi_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/ga_midi.html#create_midi_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.ga_midi.create_midi_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates midi file from given chromosome and chord progression
+midi file is named based on fitness level and created timestamp.  File created in same directory as ga_midi.py</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype)</strong> (<em>(fitness,</em>) &#8211; encoding for a chromsome.  Fitness is integer representing fitness.  Genotype is list of (pitch, duration) tuples representing each note to be played.</li>
+<li><strong>(</strong> (<em>chord_progression</em>) &#8211; if True, uses chord progression to a_train, otherwise uses standard blues scales in C major</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">void</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ga.mutation">
+<span id="ga-mutation-module"></span><h2>ga.mutation module<a class="headerlink" href="#module-ga.mutation" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="ga.mutation.get_random_start_end">
+<code class="descclassname">ga.mutation.</code><code class="descname">get_random_start_end</code><span class="sig-paren">(</span><em>len_genotype</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/mutation.html#get_random_start_end"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.mutation.get_random_start_end" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets a random start and end type for genotype
+used to get start and end times for fragments, used in mutations</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>len_genotype</strong> (<em>int</em>) &#8211; length of genotype list</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">tuple of two integers representing randomly generated (start_index, end_index)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(int, int)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.mutation.local_mutation">
+<code class="descclassname">ga.mutation.</code><code class="descname">local_mutation</code><span class="sig-paren">(</span><em>chromosome</em>, <em>d</em>, <em>prob_local=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/mutation.html#local_mutation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.mutation.local_mutation" title="Permalink to this definition">¶</a></dt>
+<dd><p>mutates chromosome in one of many ways locally</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>chromosome</strong> (<em>(int, (int, int</em>) &#8211; Chromosome is a tuple of (fitness, genotype).  Genotype is a list of tuples (pitch, dur) representing music to be played</li>
+<li><strong>d</strong> (<em>int</em>) &#8211; Length, in durks, representing total length of the full song</li>
+<li><strong>prob_local</strong> (<em>float, optional</em>) &#8211; Defaults to .5.  Probability that any mutation will happen</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">returns new randomly mutated genotype</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(int, int)[]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.mutation.mut1">
+<code class="descclassname">ga.mutation.</code><code class="descname">mut1</code><span class="sig-paren">(</span><em>genotype</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/mutation.html#mut1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.mutation.mut1" title="Permalink to this definition">¶</a></dt>
+<dd><p>transpose chromosome fragment by random number of degrees from [-5, 5] inclusive</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>start_index</strong> (<em>int</em>) &#8211; index where fragment begins</li>
+<li><strong>end_index</strong> (<em>int</em>) &#8211; index where fragment ends</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">returns new genotype with mutated fragment</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(int, int)[]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.mutation.mut2">
+<code class="descclassname">ga.mutation.</code><code class="descname">mut2</code><span class="sig-paren">(</span><em>genotype</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/mutation.html#mut2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.mutation.mut2" title="Permalink to this definition">¶</a></dt>
+<dd><p>permutes chromosome fragment randomly in time</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>start_index</strong> (<em>int</em>) &#8211; index where fragment begins</li>
+<li><strong>end_index</strong> (<em>int</em>) &#8211; index where fragment ends</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">returns new genotype with mutated fragment</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(int, int)[]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.mutation.mut3">
+<code class="descclassname">ga.mutation.</code><code class="descname">mut3</code><span class="sig-paren">(</span><em>genotype</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/mutation.html#mut3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.mutation.mut3" title="Permalink to this definition">¶</a></dt>
+<dd><p>sorts chromosome fragment into either ascending or descending pitch</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>start_index</strong> (<em>int</em>) &#8211; index where fragment begins</li>
+<li><strong>end_index</strong> (<em>int</em>) &#8211; index where fragment ends</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">returns new genotype with mutated fragment</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(int, int)[]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.mutation.mut4">
+<code class="descclassname">ga.mutation.</code><code class="descname">mut4</code><span class="sig-paren">(</span><em>genotype</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/mutation.html#mut4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.mutation.mut4" title="Permalink to this definition">¶</a></dt>
+<dd><p>reverses chromosome fragment in time</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>start_index</strong> (<em>int</em>) &#8211; index where fragment begins</li>
+<li><strong>end_index</strong> (<em>int</em>) &#8211; index where fragment ends</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">returns new genotype with mutated fragment</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(int, int)[]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.mutation.mut5">
+<code class="descclassname">ga.mutation.</code><code class="descname">mut5</code><span class="sig-paren">(</span><em>genotype</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/mutation.html#mut5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.mutation.mut5" title="Permalink to this definition">¶</a></dt>
+<dd><p>changes few pitches in chromosome fragment while maintaing the same rhythm</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>start_index</strong> (<em>int</em>) &#8211; index where fragment begins</li>
+<li><strong>end_index</strong> (<em>int</em>) &#8211; index where fragment ends</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">returns new genotype with mutated fragment</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(int, int)[]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.mutation.mut6">
+<code class="descclassname">ga.mutation.</code><code class="descname">mut6</code><span class="sig-paren">(</span><em>genotype</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/mutation.html#mut6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.mutation.mut6" title="Permalink to this definition">¶</a></dt>
+<dd><p>one-note mutation which changes pitch of all notes in fragment up or down by 1</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>start_index</strong> (<em>int</em>) &#8211; index where fragment begins</li>
+<li><strong>end_index</strong> (<em>int</em>) &#8211; index where fragment ends</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">returns new genotype with mutated fragment</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(int, int)[]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.mutation.mut7">
+<code class="descclassname">ga.mutation.</code><code class="descname">mut7</code><span class="sig-paren">(</span><em>genotype</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/mutation.html#mut7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.mutation.mut7" title="Permalink to this definition">¶</a></dt>
+<dd><p>concatenates contiguous rests and identical pitches in chromosome fragment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>start_index</strong> (<em>int</em>) &#8211; index where fragment begins</li>
+<li><strong>end_index</strong> (<em>int</em>) &#8211; index where fragment ends</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">returns new genotype with mutated fragment</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(int, int)[]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.mutation.mut8">
+<code class="descclassname">ga.mutation.</code><code class="descname">mut8</code><span class="sig-paren">(</span><em>genotype</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/mutation.html#mut8"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.mutation.mut8" title="Permalink to this definition">¶</a></dt>
+<dd><p>inserts randomly chosen fragment to a different position in the same chromosome genotype</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>genotype</strong> (<em>(int, int</em>) &#8211; list of tuples (pitch, dur) representing genotype of a chromosome</li>
+<li><strong>start_index</strong> (<em>int</em>) &#8211; index where fragment begins</li>
+<li><strong>end_index</strong> (<em>int</em>) &#8211; index where fragment ends</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">returns new genotype with mutated fragment</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(int, int)[]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.mutation.mutate">
+<code class="descclassname">ga.mutation.</code><code class="descname">mutate</code><span class="sig-paren">(</span><em>chromosome</em>, <em>d</em>, <em>prob_local=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/mutation.html#mutate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.mutation.mutate" title="Permalink to this definition">¶</a></dt>
+<dd><p>given chromosome, returns mutated chromosome
+calls local_mutation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>chromosome</strong> (<em>(int, (int, int</em>) &#8211; Chromosome is a tuple of (fitness, genotype).  Genotype is a list of tuples (pitch, dur) representing music to be played</li>
+<li><strong>d</strong> (<em>int</em>) &#8211; Length, in durks, representing total length of the full song</li>
+<li><strong>prob_local</strong> (<em>float, optional</em>) &#8211; Defaults to .5.  Probability that any mutation will happen</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a genotype, which is a list of tuples (pitch, dur)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(int, int)[]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ga.mutation.transpose_pitch">
+<code class="descclassname">ga.mutation.</code><code class="descname">transpose_pitch</code><span class="sig-paren">(</span><em>pitch</em>, <em>lo</em>, <em>hi</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ga/mutation.html#transpose_pitch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ga.mutation.transpose_pitch" title="Permalink to this definition">¶</a></dt>
+<dd><p>transposes given pitch to be same pitch within range [lo,hi] inclusive
+if pitch cannot be tranposed into given range, prints error message and exits</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pitch</strong> (<em>int</em>) &#8211; pitch to be transposed</li>
+<li><strong>lo</strong> (<em>int</em>) &#8211; lower bound of transpose range</li>
+<li><strong>hi</strong> (<em>int</em>) &#8211; higher bound of transpose range</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">succesfully transposed pitch</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ga">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ga" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="iter.html" class="btn btn-neutral float-right" title="iter package" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="db.html" class="btn btn-neutral" title="db package" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Jason Brooks, Kevin Jiang, and Charles Proctor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

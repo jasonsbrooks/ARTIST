@@ -83,9 +83,11 @@
                 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/analyze.html">analyze package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/db.html">db package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/ga.html">ga package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/iter.html">iter package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/utils.html">utils package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/ngram.html">ngram package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_performer/artist_performer.html">artist_performer package</a></li>
 </ul>
 
             
@@ -149,7 +151,7 @@
 <span class="kn">from</span> <span class="nn">ngram_helper</span> <span class="kn">import</span> <span class="n">pitch_to_str</span>
 <span class="kn">from</span> <span class="nn">audiolazy</span> <span class="kn">import</span> <span class="n">midi2str</span>
 <span class="kn">from</span> <span class="nn">optparse</span> <span class="kn">import</span> <span class="n">OptionParser</span>
-<span class="kn">import</span> <span class="nn">ga</span>
+<span class="kn">from</span> <span class="nn">artist_generator</span> <span class="kn">import</span> <span class="n">ga</span>
 
 <span class="n">DURKS_PER_MEASURE</span> <span class="o">=</span> <span class="mi">32</span>
 <span class="sd">&quot;&quot;&quot;int: Number of durks per measure.&quot;&quot;&quot;</span>
@@ -267,13 +269,16 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">last_two</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
 
             <span class="c1"># and move forward in time</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">durk</span> <span class="o">+=</span> <span class="mi">4</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">durk</span> <span class="o">+=</span> <span class="mi">8</span>
 
             <span class="c1"># calculate 1-&gt;7 value</span>
             <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_note_val</span><span class="p">(</span><span class="n">pitch</span><span class="o">.</span><span class="n">pitchClass</span><span class="p">)</span>
             <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rn</span><span class="o">.</span><span class="n">figure</span><span class="p">,</span> <span class="n">pitch</span><span class="p">,</span> <span class="n">val</span>
 
-            <span class="k">return</span> <span class="n">val</span>
+            <span class="c1"># TODO: calc_note_val should return between 0,21 rather than </span>
+            <span class="c1"># randomly adding 0,7,14.</span>
+            <span class="n">octave_add</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">14</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">val</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">octave_add</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">StopIteration</span><span class="p">()</span></div></div>
 
@@ -298,7 +303,7 @@
     <span class="n">cp</span> <span class="o">=</span> <span class="n">construct_roman_numerals</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">cp</span><span class="p">)</span>
     <span class="n">generator</span> <span class="o">=</span> <span class="n">NgramGenerator</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">cp</span><span class="p">,</span><span class="n">o_model_dir</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="p">[(</span><span class="n">note</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">note</span> <span class="ow">in</span> <span class="n">generator</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[(</span><span class="n">note</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span> <span class="k">for</span> <span class="n">note</span> <span class="ow">in</span> <span class="n">generator</span><span class="p">]</span>
 
 <div class="viewcode-block" id="generate"><a class="viewcode-back" href="../../src/artist_generator/ngram.html#ngram.generate.generate">[docs]</a><span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="n">model_dir</span><span class="p">,</span><span class="n">chord_progression</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>

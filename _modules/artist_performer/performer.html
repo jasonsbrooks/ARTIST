@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>artist_performer.performer &mdash; ARTIST 1.0.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ARTIST 1.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ARTIST
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/analyze.html">analyze package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/db.html">db package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/ga.html">ga package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/iter.html">iter package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/utils.html">utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_generator/ngram.html">ngram package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../src/artist_performer/artist_performer.html">artist_performer package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">ARTIST</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>artist_performer.performer</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for artist_performer.performer</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">copy</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">json</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">threading</span><span class="o">,</span> <span class="nn">signal</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">Queue</span> <span class="kn">import</span> <span class="n">Queue</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">ROS_ENABLED</span>
+
+<span class="k">if</span> <span class="n">ROS_ENABLED</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">rospy</span><span class="o">,</span> <span class="nn">cv2</span><span class="o">,</span> <span class="nn">cv_bridge</span>
+    <span class="kn">from</span> <span class="nn">baxter_dataflow</span> <span class="kn">import</span> <span class="n">wait_for</span>
+
+    <span class="kn">from</span> <span class="nn">sensor_msgs.msg</span> <span class="kn">import</span> <span class="p">(</span>
+        <span class="n">Image</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="kn">import</span> <span class="nn">baxter_artist.msg</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">BaxterController</span><span class="p">,</span> <span class="n">KEYS_FILENAME</span><span class="p">,</span> <span class="n">IMAGE_PATH</span>
+
+<div class="viewcode-block" id="NoteSubscriber"><a class="viewcode-back" href="../../src/artist_performer/artist_performer.html#artist_performer.performer.NoteSubscriber">[docs]</a><span class="k">class</span> <span class="nc">NoteSubscriber</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Subscribe to the baxter_artist_notes rostopic, listening for new notes to play.</span>
+
+<span class="sd">    Add them to the queue when received.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">q</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the NoteSubscriber</span>
+<span class="sd">        Args:</span>
+<span class="sd">            q: the queue of notes. add here when receiving a new note</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">q</span>
+
+<div class="viewcode-block" id="NoteSubscriber.on_receive_note"><a class="viewcode-back" href="../../src/artist_performer/artist_performer.html#artist_performer.performer.NoteSubscriber.on_receive_note">[docs]</a>    <span class="k">def</span> <span class="nf">on_receive_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback for when a note message is received. Add the note to the queue of notes to play.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data (baxter_artist.msg.Note): the message received (a note)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s2">&quot;receive - pitch: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">pitch</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NoteSubscriber.run"><a class="viewcode-back" href="../../src/artist_performer/artist_performer.html#artist_performer.performer.NoteSubscriber.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Start the thread, subscribing the the baxter_artist_notes topic.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">Subscriber</span><span class="p">(</span><span class="s2">&quot;baxter_artist_notes&quot;</span><span class="p">,</span> <span class="n">baxter_artist</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">Note</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_receive_note</span><span class="p">)</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">spin</span><span class="p">()</span></div></div>
+
+<div class="viewcode-block" id="Performer"><a class="viewcode-back" href="../../src/artist_performer/artist_performer.html#artist_performer.performer.Performer">[docs]</a><span class="k">class</span> <span class="nc">Performer</span><span class="p">(</span><span class="n">BaxterController</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manage the performance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs the instrument like a boss</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BaxterController</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prev_left_note</span> <span class="o">=</span> <span class="mi">52</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prev_right_note</span> <span class="o">=</span> <span class="mi">61</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">KEYS_FILENAME</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">keys</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">right_notes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left_notes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+
+<div class="viewcode-block" id="Performer.flick"><a class="viewcode-back" href="../../src/artist_performer/artist_performer.html#artist_performer.performer.Performer.flick">[docs]</a>    <span class="k">def</span> <span class="nf">flick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">arm</span><span class="p">,</span><span class="n">current_pos</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Flick the arm down to hit a specific key.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            arm (str): the arm to flick</span>
+<span class="sd">            current_pos: the current joint anagles of the arm. return here when done</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">down_pos</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">current_pos</span><span class="p">)</span>
+        <span class="n">down_pos</span><span class="p">[</span><span class="n">arm</span> <span class="o">+</span> <span class="s2">&quot;_w1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_pos</span><span class="p">[</span><span class="n">arm</span> <span class="o">+</span> <span class="s2">&quot;_w1&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.8</span>
+
+        <span class="n">arm_obj</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left_arm</span> <span class="k">if</span> <span class="n">arm</span> <span class="o">==</span> <span class="s2">&quot;left&quot;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_arm</span><span class="p">)</span>
+
+        <span class="n">arm_obj</span><span class="o">.</span><span class="n">set_joint_positions</span><span class="p">(</span><span class="n">down_pos</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.15</span><span class="p">)</span>
+        <span class="n">arm_obj</span><span class="o">.</span><span class="n">set_joint_positions</span><span class="p">(</span><span class="n">current_pos</span><span class="p">)</span></div>
+
+        <span class="c1"># wait_for(lambda: self.checkJointPositions(down_pos, arm), rate=4, timeout=2.0, raise_on_error=False, body=arm_obj.set_joint_positions(down_pos))</span>
+        <span class="c1"># wait_for(lambda: self.checkJointPositions(current_pos, arm), rate=4, timeout=2.0, raise_on_error=False, body=arm_obj.set_joint_positions(current_pos))</span>
+
+<div class="viewcode-block" id="Performer.avoid_black_key"><a class="viewcode-back" href="../../src/artist_performer/artist_performer.html#artist_performer.performer.Performer.avoid_black_key">[docs]</a>    <span class="k">def</span> <span class="nf">avoid_black_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">current_pos</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Avoid the black keys when moving.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            arm (str): the arm moving.</span>
+<span class="sd">            current_pos: current position of the arm.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">inter_pos</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">current_pos</span><span class="p">)</span>
+        <span class="n">inter_pos</span><span class="p">[</span><span class="n">arm</span> <span class="o">+</span> <span class="s2">&quot;_s1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_pos</span><span class="p">[</span><span class="n">arm</span> <span class="o">+</span> <span class="s2">&quot;_s1&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="n">arm_obj</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left_arm</span> <span class="k">if</span> <span class="n">arm</span> <span class="o">==</span> <span class="s2">&quot;left&quot;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_arm</span><span class="p">)</span>
+
+        <span class="n">arm_obj</span><span class="o">.</span><span class="n">set_joint_positions</span><span class="p">(</span><span class="n">inter_pos</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Performer.get_joint_angles"><a class="viewcode-back" href="../../src/artist_performer/artist_performer.html#artist_performer.performer.Performer.get_joint_angles">[docs]</a>    <span class="k">def</span> <span class="nf">get_joint_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the joint angles of the left / right arm as a tuple.</span>
+
+<span class="sd">        Returns (tuple): the arm joint angles.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">left_arm</span><span class="o">.</span><span class="n">joint_angles</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_arm</span><span class="o">.</span><span class="n">joint_angles</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Performer.send_note"><a class="viewcode-back" href="../../src/artist_performer/artist_performer.html#artist_performer.performer.Performer.send_note">[docs]</a>    <span class="k">def</span> <span class="nf">send_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">note</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Send the image corresponding to a given note to the display</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            note (int): number of the note to send</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">IMAGE_PATH</span><span class="p">,</span> <span class="s2">&quot;notes/&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">note</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">logerr</span><span class="p">(</span><span class="s2">&quot;Not Found: &quot;</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="n">rospy</span><span class="o">.</span><span class="n">logdebug</span><span class="p">(</span><span class="s2">&quot;[send_note] </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+        <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">cv_bridge</span><span class="o">.</span><span class="n">CvBridge</span><span class="p">()</span><span class="o">.</span><span class="n">cv2_to_imgmsg</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;bgr8&quot;</span><span class="p">)</span>
+        <span class="n">pub</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Publisher</span><span class="p">(</span><span class="s1">&#39;/robot/xdisplay&#39;</span><span class="p">,</span> <span class="n">Image</span><span class="p">,</span> <span class="n">latch</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">queue_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">pub</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Performer.play_right_note_now"><a class="viewcode-back" href="../../src/artist_performer/artist_performer.html#artist_performer.performer.Performer.play_right_note_now">[docs]</a>    <span class="k">def</span> <span class="nf">play_right_note_now</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">note</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Play a note with the right arm immediately (no waiting)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            note (int): the note to play</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_note</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">note</span><span class="p">))</span>
+
+        <span class="n">total_sleep</span> <span class="o">=</span> <span class="mf">0.5</span>
+        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">note</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">74</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">62</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">58</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prev_right_note</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">74</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">62</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">58</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">avoid_black_key</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_arm</span><span class="o">.</span><span class="n">joint_angles</span><span class="p">())</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+            <span class="n">total_sleep</span> <span class="o">-=</span> <span class="mf">0.25</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">right_arm</span><span class="o">.</span><span class="n">set_joint_positions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">note</span><span class="p">)],</span> <span class="n">raw</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">note</span><span class="p">)</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prev_right_note</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s2">&quot;Making two motions since notes are too far apart&quot;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+            <span class="n">total_sleep</span> <span class="o">-=</span> <span class="mf">0.25</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">right_arm</span><span class="o">.</span><span class="n">set_joint_positions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">note</span><span class="p">)],</span> <span class="n">raw</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="c1"># time.sleep(1)</span>
+        <span class="c1"># self.right_arm.set_joint_positions(self.keys[&quot;right&quot;][str(note)], raw=True)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">total_sleep</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flick</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">note</span><span class="p">)])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prev_right_note</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">note</span><span class="p">)</span></div>
+        <span class="c1"># time.sleep(2)</span>
+        <span class="c1"># wait_for(lambda: self.checkJointPositions(self.keys[&quot;right&quot;][str(note)], &quot;right&quot;), rate=4, raise_on_error=False, timeout=2.0, body=self.right_arm.set_joint_positions(self.keys[&quot;right&quot;][str(note)], raw=True))</span>
+        <span class="c1"># wait_for(lambda: self.checkJointPositions(self.keys[&quot;right&quot;][str(note)], &quot;right&quot;), rate=4, raise_on_error=False, timeout=2.0, body=self.flick(&quot;right&quot;, self.keys[&quot;right&quot;][str(note)]))</span>
+
+<div class="viewcode-block" id="Performer.play_left_note_now"><a class="viewcode-back" href="../../src/artist_performer/artist_performer.html#artist_performer.performer.Performer.play_left_note_now">[docs]</a>    <span class="k">def</span> <span class="nf">play_left_note_now</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">note</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Play a note with the right arm immediately (no waiting)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            note (int): the note to play</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_note</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">note</span><span class="p">))</span>
+
+        <span class="n">total_sleep</span> <span class="o">=</span> <span class="mf">0.5</span>
+        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">note</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">48</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">62</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prev_left_note</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">48</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">62</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">avoid_black_key</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">left_arm</span><span class="o">.</span><span class="n">joint_angles</span><span class="p">())</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+            <span class="n">total_sleep</span> <span class="o">-=</span> <span class="mf">0.25</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">left_arm</span><span class="o">.</span><span class="n">set_joint_positions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">note</span><span class="p">)],</span> <span class="n">raw</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">note</span><span class="p">)</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prev_left_note</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s2">&quot;Making two motions since notes are too far apart&quot;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+            <span class="n">total_sleep</span> <span class="o">-=</span> <span class="mf">0.25</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">left_arm</span><span class="o">.</span><span class="n">set_joint_positions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">note</span><span class="p">)],</span> <span class="n">raw</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">total_sleep</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flick</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">note</span><span class="p">)])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prev_left_note</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">note</span><span class="p">)</span></div>
+        <span class="c1"># wait_for(lambda: self.checkJointPositions(self.keys[&quot;left&quot;][str(note)], &quot;left&quot;), rate=4, raise_on_error=False, timeout=2.0, body=self.left_arm.set_joint_positions(self.keys[&quot;left&quot;][str(note)], raw=True))</span>
+        <span class="c1"># wait_for(lambda: self.checkJointPositions(self.keys[&quot;left&quot;][str(note)], &quot;left&quot;), rate=4, raise_on_error=False, timeout=2.0, body=self.flick(&quot;left&quot;, self.keys[&quot;left&quot;][str(note)]))</span>
+
+
+<div class="viewcode-block" id="Performer.play_note"><a class="viewcode-back" href="../../src/artist_performer/artist_performer.html#artist_performer.performer.Performer.play_note">[docs]</a>    <span class="k">def</span> <span class="nf">play_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">note</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Play a note (arm undetermined as of now). Wait until the note should be played.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            note (baxter_artist.msg.Note): the note to play</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sleep_time</span> <span class="o">=</span> <span class="n">note</span><span class="o">.</span><span class="n">starttime</span> <span class="o">-</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="c1"># # we&#39;ve missed the opportunity to play this note</span>
+        <span class="c1"># if sleep_time.to_nsec() &lt; 0:</span>
+        <span class="c1">#     rospy.loginfo(&quot;PASSED A NOTE&quot;)</span>
+        <span class="c1">#     return</span>
+
+        <span class="c1"># # sleep until we can play it</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">sleep_time</span><span class="p">)</span>
+
+        <span class="c1"># rospy.loginfo(&quot;playing: &quot; + str(note.pitch))</span>
+        <span class="k">if</span> <span class="n">note</span><span class="o">.</span><span class="n">pitch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_notes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">play_right_note_now</span><span class="p">(</span><span class="n">note</span><span class="o">.</span><span class="n">pitch</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">note</span><span class="o">.</span><span class="n">pitch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">left_notes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">play_left_note_now</span><span class="p">(</span><span class="n">note</span><span class="o">.</span><span class="n">pitch</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s2">&quot;Note with no corresponding key tried to play. Check yo_self.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Performer.subscribe"><a class="viewcode-back" href="../../src/artist_performer/artist_performer.html#artist_performer.performer.Performer.subscribe">[docs]</a>    <span class="k">def</span> <span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Subscribe to the baxter_artist_notes rostopic.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">subscriber</span> <span class="o">=</span> <span class="n">NoteSubscriber</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
+        <span class="n">subscriber</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">subscriber</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s2">&quot;[subscribe] NoteSubscriber listening for notes.&quot;</span><span class="p">)</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">note</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="n">rospy</span><span class="o">.</span><span class="n">loginfo</span><span class="p">(</span><span class="s2">&quot;dequeue: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">note</span><span class="o">.</span><span class="n">pitch</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">play_note</span><span class="p">(</span><span class="n">note</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
+
+        <span class="n">subscriber</span><span class="o">.</span><span class="n">join</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Performer.checkJointPositions"><a class="viewcode-back" href="../../src/artist_performer/artist_performer.html#artist_performer.performer.Performer.checkJointPositions">[docs]</a>    <span class="k">def</span> <span class="nf">checkJointPositions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_pos</span><span class="p">,</span> <span class="n">arm</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Verify that the joint positions are with a certain delta of the target.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            target_pos: the target position to hit</span>
+<span class="sd">            arm (str): which arm</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: whether the arm is within the desired range.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">current_joint_positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">left_arm</span><span class="o">.</span><span class="n">joint_angles</span><span class="p">()</span>
+
+        <span class="c1"># update if curious about the other arm</span>
+        <span class="k">if</span> <span class="n">arm</span> <span class="o">==</span> <span class="s1">&#39;right&#39;</span><span class="p">:</span>
+            <span class="n">current_joint_positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">right_arm</span><span class="o">.</span><span class="n">joint_angles</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">target_pos</span><span class="p">:</span>
+            <span class="n">difference</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">target_pos</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">-</span> <span class="n">current_joint_positions</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="c1"># print &quot;checked %s with difference %f&quot; %(key, difference)</span>
+            <span class="k">if</span> <span class="n">difference</span> <span class="o">&gt;</span> <span class="mf">0.01</span><span class="p">:</span>
+                <span class="c1"># print &quot;%s IS TOO FAR OFF!&quot; %(key)</span>
+                <span class="c1"># print &quot;returning false&quot;</span>
+                <span class="k">return</span> <span class="bp">False</span>
+        <span class="c1"># print &quot;returning true&quot;</span>
+        <span class="k">return</span> <span class="bp">True</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Jason Brooks, Kevin Jiang, and Charles Proctor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
