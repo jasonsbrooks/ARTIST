@@ -22,8 +22,9 @@ from collections import deque
 
 from sqlalchemy import desc, asc
 
-from db import Song, Track, Note, get_sessions, InvalidKeySignature
+from db import Song, Track, Note, get_sessions
 from ngram_helper import key_transpose_pitch
+from exceptions import InvalidKeySignature
 
 NUM_NOTES = 128
 
