@@ -1,8 +1,10 @@
 ga package
 ==========
 
-Submodules
-----------
+.. automodule:: ga
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 ga.chords module
 ----------------
@@ -44,11 +46,3 @@ ga.mutation module
     :undoc-members:
     :show-inheritance:
 
-
-Module contents
----------------
-
-.. automodule:: ga
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,8 +1,11 @@
 iter package
 ============
 
-Submodules
-----------
+.. automodule:: iter
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 iter.chord_iterator module
 --------------------------
@@ -28,11 +31,3 @@ iter.time_iterator module
     :undoc-members:
     :show-inheritance:
 
-
-Module contents
----------------
-
-.. automodule:: iter
-    :members:
-    :undoc-members:
-    :show-inheritance:

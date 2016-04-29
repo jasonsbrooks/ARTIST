@@ -1,8 +1,10 @@
 analyze package
 ===============
 
-Submodules
-----------
+.. automodule:: analyze
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 analyze.chords module
 ---------------------
@@ -16,15 +18,6 @@ analyze.preference_rules module
 -------------------------------
 
 .. automodule:: analyze.preference_rules
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: analyze
     :members:
     :undoc-members:
     :show-inheritance:

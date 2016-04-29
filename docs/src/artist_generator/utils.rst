@@ -1,8 +1,11 @@
 utils package
 =============
 
-Submodules
-----------
+.. automodule:: utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 utils.counter module
 --------------------
@@ -28,11 +31,3 @@ utils.stats module
     :undoc-members:
     :show-inheritance:
 
-
-Module contents
----------------
-
-.. automodule:: utils
-    :members:
-    :undoc-members:
-    :show-inheritance:
