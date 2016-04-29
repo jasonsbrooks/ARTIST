@@ -44,7 +44,7 @@ To do so, simply source the appropriate shell script under our `setup/` folder. 
 source setup/setup.bash
 ```
 
-# Data Processing to Train the Trigram Model
+# Training the Trigram Model
 
 ## Create the Databases
 
@@ -96,7 +96,7 @@ sudo -u postgres python -m ngram.train -o OUTDIR -t NUM
 
 where `OUTDIR` is where you wish to save the models and `NUM` is the number of databases, as before. This should complete is < 15 min.
 
-# Generating Music using the Trigram / GA
+# Generating Music
 
 Finally, we are ready to generate music. If you wish to directly generate MIDI files, run:
 
