@@ -9,6 +9,14 @@ After running the ``./baxter.sh`` script and ``catkin make`` in the root
 of your ``ros_ws``, you should be good to go! We've written a series of
 simple launch scripts for deploying the key pieces of our projects.
 
+Further information can be found in the ``artist_performer`` package, where
+all the code for controlling Baxter lives:
+
+.. toctree::
+	:maxdepth: 4
+
+	artist_performer/artist_performer
+	
 Training
 --------
 

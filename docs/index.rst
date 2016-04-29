@@ -16,13 +16,6 @@ For installation and basic usage instructtions, take a look at:
    src/generation
    src/baxter
 
-For detailed documentation, with further example usage, see:
-
-.. toctree::
-   :maxdepth: 5
-
-   src/modules
-
 
 Indices and tables
 ==================

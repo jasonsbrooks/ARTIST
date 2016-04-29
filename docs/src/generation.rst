@@ -19,3 +19,18 @@ the ``utils/gen_many.sh`` Bash script.
 
 To dump all generated databases to files, take a look at
 ``utils/dump.sh``.
+
+For more information on the ngram model, see
+
+.. toctree::
+	:maxdepth: 4
+
+	artist_generator/ngram
+
+For more information on the genetic algorithm, see
+
+.. toctree::
+	:maxdepth: 4
+
+	artist_generator/ga
+
