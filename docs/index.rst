@@ -18,6 +18,8 @@ Contents:
    src/artist_generator/utils
    src/artist_generator/ngram
 
+   src/artist_performer/artist_performer.rst
+
 
 Indices and tables
 ==================
