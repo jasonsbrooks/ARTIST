@@ -5,6 +5,9 @@ from baxter_interface import CHECK_VERSION
 from . import CONFIG_FILENAME
 
 class BaxterController(object):
+    """
+    Superclass for controlling Baxter. Initializes various joints, manages shutdown and set_neutral.
+    """
     def __init__(self):
         """
         Initialize control with Baxter
@@ -42,6 +45,9 @@ class BaxterController(object):
     def set_neutral(self,on=True):
         """
         Move both arms to the neutral position
+
+        Args:
+            on: whether to perform the action (useful in button callbacks)
         """
         if not on:
             return False
