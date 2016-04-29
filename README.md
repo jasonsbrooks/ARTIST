@@ -34,6 +34,16 @@ cd ../
 sudo -H rm -rf python-midi/
 ```
 
+## Setup Python Path
+
+If you wish to run any scripts without ROS / Baxter setup (ie, the ML pipeline), you'll need to first configure the Python path appropriately, so that Python can find the `artist_generator` and `artist_performer` packages.
+
+To do so, simply source the appropriate shell script under our `setup/` folder. For example, if you use Bash, run:
+
+```
+source setup/setup.bash
+```
+
 # Data Processing to Train the Trigram Model
 
 ## Create the Databases
