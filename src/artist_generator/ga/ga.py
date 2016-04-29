@@ -280,7 +280,7 @@ def run(ngram_generate=None,num_iter=800):
     # print "Num durks: " + str(sum([d for (_, d) in chromosomes[1][1]]))
     print "Best Genotype: \n" + str(chromosomes[0][1])
     print "Detailed Fitness: " + str(calc_fitness(chromosomes[0][1], chord_progression, detailed=True))
-    pass
+    return chromosomes[0][1]
 
 
 if __name__ == "__main__":

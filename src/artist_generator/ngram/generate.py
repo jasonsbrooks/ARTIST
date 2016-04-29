@@ -16,7 +16,7 @@ import sys,random,pdb,os,music21
 from ngram_helper import pitch_to_str
 from audiolazy import midi2str
 from optparse import OptionParser
-import ga
+from artist_generator import ga
 
 DURKS_PER_MEASURE = 32
 """int: Number of durks per measure."""
@@ -140,7 +140,10 @@ class NgramGenerator():
             val = self.calc_note_val(pitch.pitchClass)
             print self.key, self.rn.figure, pitch, val
 
-            return val
+            # TODO: calc_note_val should return between 0,21 rather than 
+            # randomly adding 0,7,14.
+            octave_add = [0,7,14]
+            return val + random.choice(octave_add)
         else:
             raise StopIteration()
 

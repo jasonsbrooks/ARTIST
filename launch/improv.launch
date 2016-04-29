@@ -1,0 +1,4 @@
+<launch>
+  <node name="performer" pkg="baxter_artist" type="performer.py" output="screen" />
+  <node name="improv" pkg="baxter_artist" type="improv.py" output="screen" />
+</launch>
