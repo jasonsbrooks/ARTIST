@@ -556,6 +556,15 @@ section#team {
   font-family: 'Open Sans', sans-serif;
 }
 
+.bio-link {
+	text-decoration: none;
+}
+
+.bio-link:visited {
+	text-decoration: none;
+	color: inherit;
+}
+
 #team-title {
     padding-top: 60px;
     padding-bottom: 60px;
